@@ -5,11 +5,20 @@ description = "Default template for PDM package"
 authors = [
     {name = "Sujay Jayakar", email = "sujayakar@convex.dev"},
 ]
-dependencies = []
+dependencies = ["ruff>=0.9.4"]
 requires-python = "==3.9.*"
 readme = "README.md"
 license = {text = "MIT"}
 
-
 [tool.pdm]
 distribution = false
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
+
+[dependency-groups]
+dev = [
+    "black>=24.10.0",
+]

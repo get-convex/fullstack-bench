@@ -1,5 +1,13 @@
 {
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
-  "editor.detectIndentation": false
+  "editor.detectIndentation": false,
+  "[python]": {
+    "editor.tabSize": 4
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.ruff": "always",
+    "source.organizeImports.ruff": "always"
+  }
 }
