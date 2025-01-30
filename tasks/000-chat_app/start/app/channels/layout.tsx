@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Sidebar } from '@/components/Sidebar';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 interface Channel {
   id: string;
@@ -16,32 +18,23 @@ export default function ChannelsLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [username, setUsername] = useState<string>('');
+
   const [channels, setChannels] = useState<Channel[]>([
     { id: "general", name: "general" },
     { id: "random", name: "random" },
   ]);
-
-  useEffect(() => {
-    // Check if user is logged in
-    const storedUsername = localStorage.getItem('username');
-    if (!storedUsername) {
-      router.push('/');
-    } else {
-      setUsername(storedUsername);
-    }
-  }, [router]);
-
   const currentChannel = pathname?.split('/').pop() || 'general';
 
   const handleCreateChannel = (id: string, channelName: string) => {
     setChannels([...channels, { id, name: channelName }]);
   };
 
+  const user = useQuery(api.auth.getLoggedInUser);
+
   return (
     <div className="h-screen flex bg-[#151517]">
       <Sidebar
-        username={username}
+        username={user?.name ?? user?.email}
         currentChannel={currentChannel}
         channels={channels}
         onCreateChannel={handleCreateChannel}

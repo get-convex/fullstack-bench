@@ -4,23 +4,23 @@ import { useState, useEffect } from 'react';
 import { use } from 'react';
 import { MessageList, Message } from '@/components/MessageList';
 import { MessageInput } from '@/components/MessageInput';
+import { SignOutButton } from '@/components/SignOutButton';
+import { useAuthActions } from '@convex-dev/auth/react';
+import { useQuery } from 'convex/react';
+import { api } from '@/convex/_generated/api';
 
 export default function ChannelPage({ params }: { params: Promise<{ channelId: string }> }) {
   const resolvedParams = use(params);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [username, setUsername] = useState<string>("");
-
-  useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
-    if (storedUsername) {
-      setUsername(storedUsername);
-    }
-  }, []);
+  const user = useQuery(api.auth.getLoggedInUser);
 
   const handleSendMessage = (content: string) => {
+    if (!user || !user.email) {
+      return;
+    }
     const message: Message = {
       id: Date.now(),
-      user: username,
+      user: user.email,
       content: content,
       timestamp: new Date().toLocaleTimeString(),
       channel: resolvedParams.channelId,
@@ -34,6 +34,7 @@ export default function ChannelPage({ params }: { params: Promise<{ channelId: s
         <div className="flex items-center">
           <span className="text-[#A1A1A3] mr-2">#</span>
           <h2 className="text-lg font-medium text-white">{resolvedParams.channelId}</h2>
+          <SignOutButton />
         </div>
       </div>
 
