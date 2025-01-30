@@ -50,3 +50,10 @@ def tangle(template_dir: Path, task_project_dir: Path, output_dir: Path) -> None
 
     with open(output_dir / "package.json", "w") as f:
         json.dump(merged_package_json, f)
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 4:
+        print("Usage: tangle.py <template_dir> <task_project_dir> <output_dir>")
+        sys.exit(1)
+    tangle(Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3]))
