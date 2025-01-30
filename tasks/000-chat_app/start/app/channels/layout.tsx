@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Sidebar } from '@/components/Sidebar';
+import { createClient } from '@/utils/supabase/client';
+import { User } from '@supabase/supabase-js';
 
 interface Channel {
   id: string;
@@ -16,21 +18,22 @@ export default function ChannelsLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [username, setUsername] = useState<string>('');
+
+  const supabase = createClient();
+
+  const [user, setUser] = useState<undefined | null | User>(undefined);
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    void getUser();
+  }, [supabase]);
+
   const [channels, setChannels] = useState<Channel[]>([
     { id: "general", name: "general" },
     { id: "random", name: "random" },
   ]);
-
-  useEffect(() => {
-    // Check if user is logged in
-    const storedUsername = localStorage.getItem('username');
-    if (!storedUsername) {
-      router.push('/');
-    } else {
-      setUsername(storedUsername);
-    }
-  }, [router]);
 
   const currentChannel = pathname?.split('/').pop() || 'general';
 
@@ -41,7 +44,7 @@ export default function ChannelsLayout({
   return (
     <div className="h-screen flex bg-[#151517]">
       <Sidebar
-        username={username}
+        username={user?.email || undefined}
         currentChannel={currentChannel}
         channels={channels}
         onCreateChannel={handleCreateChannel}
