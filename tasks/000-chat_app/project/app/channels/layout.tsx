@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import { Sidebar } from '@/components/Sidebar';
-import { useUserEmail } from '@/components/WithUserEmail';
+import { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { Sidebar } from "@/components/Sidebar";
+import { useUserEmail } from "@/components/WithUserEmail";
 
 interface Channel {
   id: string;
@@ -23,7 +23,7 @@ export default function ChannelsLayout({
     { id: "random", name: "random" },
   ]);
 
-  const currentChannel = pathname?.split('/').pop() || 'general';
+  const currentChannel = pathname?.split("/").pop() || "general";
 
   const handleCreateChannel = (id: string, channelName: string) => {
     setChannels([...channels, { id, name: channelName }]);
@@ -37,9 +37,7 @@ export default function ChannelsLayout({
         channels={channels}
         onCreateChannel={handleCreateChannel}
       />
-      <div className="flex-1 bg-[#151517]">
-        {children}
-      </div>
+      <div className="flex-1 bg-[#151517]">{children}</div>
     </div>
   );
 }
