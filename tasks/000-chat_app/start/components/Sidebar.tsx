@@ -10,20 +10,20 @@ interface Channel {
 }
 
 interface SidebarProps {
-  username: string;
+  email: string;
   currentChannel: string;
   channels: Channel[];
   onCreateChannel: (id: string, name: string) => void;
 }
 
-export function Sidebar({ username, currentChannel, channels, onCreateChannel }: SidebarProps) {
+export function Sidebar({ email, currentChannel, channels, onCreateChannel }: SidebarProps) {
   const [isCreatingChannel, setIsCreatingChannel] = useState(false);
 
   return (
     <div className="w-[280px] border-r border-[#26262b] bg-[#151517] text-[#E1E1E3] p-4">
       <div className="mb-8">
         <h2 className="text-sm font-medium text-[#A1A1A3]">Welcome,</h2>
-        <h1 className="text-lg font-medium text-white">{username}</h1>
+        <h1 className="text-lg font-medium text-white">{email}</h1>
       </div>
 
       <div className="flex justify-between items-center mb-3 group">

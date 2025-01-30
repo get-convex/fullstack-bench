@@ -4,23 +4,17 @@ import { useState, useEffect } from 'react';
 import { use } from 'react';
 import { MessageList, Message } from '@/components/MessageList';
 import { MessageInput } from '@/components/MessageInput';
+import { useUserEmail } from '@/components/WithUserEmail';
 
 export default function ChannelPage({ params }: { params: Promise<{ channelId: string }> }) {
   const resolvedParams = use(params);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [username, setUsername] = useState<string>("");
-
-  useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
-    if (storedUsername) {
-      setUsername(storedUsername);
-    }
-  }, []);
+  const email = useUserEmail();
 
   const handleSendMessage = (content: string) => {
     const message: Message = {
       id: Date.now(),
-      user: username,
+      user: email,
       content: content,
       timestamp: new Date().toLocaleTimeString(),
       channel: resolvedParams.channelId,

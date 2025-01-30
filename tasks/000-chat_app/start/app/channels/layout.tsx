@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Sidebar } from '@/components/Sidebar';
+import { useUserEmail } from '@/components/WithUserEmail';
 
 interface Channel {
   id: string;
@@ -16,21 +17,11 @@ export default function ChannelsLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [username, setUsername] = useState<string>('');
+  const email = useUserEmail();
   const [channels, setChannels] = useState<Channel[]>([
     { id: "general", name: "general" },
     { id: "random", name: "random" },
   ]);
-
-  useEffect(() => {
-    // Check if user is logged in
-    const storedUsername = localStorage.getItem('username');
-    if (!storedUsername) {
-      router.push('/');
-    } else {
-      setUsername(storedUsername);
-    }
-  }, [router]);
 
   const currentChannel = pathname?.split('/').pop() || 'general';
 
@@ -41,7 +32,7 @@ export default function ChannelsLayout({
   return (
     <div className="h-screen flex bg-[#151517]">
       <Sidebar
-        username={username}
+        email={email}
         currentChannel={currentChannel}
         channels={channels}
         onCreateChannel={handleCreateChannel}

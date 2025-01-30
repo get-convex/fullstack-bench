@@ -3,10 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-interface LoginFormProps {
-  onLogin?: (username: string) => void;
-}
-
 export function LoginForm() {
   const [username, setUsername] = useState<string>("");
   const router = useRouter();
@@ -63,3 +59,4 @@ export function LoginForm() {
     </div>
   );
 }
+
