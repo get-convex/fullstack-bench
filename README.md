@@ -1,3 +1,5 @@
+# fullstack-bench
+
 This is a (quite manual) eval for filling in the backend given a frontend app.
 
 For each task, we have a Next.js app filled out that implements the given functionality
@@ -10,7 +12,7 @@ The template is generic and doesn't include any task-specific logic, however.
 We call this layering "tangling" (in homage to TeX), where we take a given task and given
 backend and create a directory as a starting point for Cursor.
 
-# Installation
+## Installation
 
 ```
 pdm install
@@ -30,9 +32,7 @@ state management.
 Finally, a "tangling" process links the two together, making a task for filling out the
 backend from a given task and backend.
 
-# Setup
-
-## Convex template
+### Convex template
 
 ```
 cd templates/convex
@@ -42,7 +42,9 @@ bunx convex dev
 
 Check that the `.env.local` file is present.
 
-## Supabase template
+- [ ] TODO: We need to set up Convex auth on the deployment.
+
+### Supabase template
 
 ```
 cd templates/supabase
@@ -56,12 +58,13 @@ NEXT_PUBLIC_SUPABASE_URL=https://...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 ```
 
-# Running a test
+## Running a test
 
-First, tangle the desired task and backend into a directory within the repo root.
+First, tangle the desired task and backend into a directory within the `results` directory.
 
 ```
-pdm run python -m tangle templates/supabase tasks/001-todo_app/project 001-todo_app-supabase
+mkdir -p results/2025-01-31/todo_app
+pdm run python -m tangle templates/supabase tasks/001-todo_app/project results/2025-01-31/todo_app/supabase
 ```
 
 Then, start a Cursor Composer session, using the `TASK.md` in the task directory and including the
@@ -69,5 +72,4 @@ backend-specific guidelines copied into the test directory.
 
 I usually record my screen during this session and intervene as little as possible.
 
-Then, after grading, I usually write a `GRADING.txt` file and commit the output directory and grading file
-to a branch. This is all still very manual and takes ~30m per test.
+Then, after grading, I usually write a `GRADING.txt` file into the result directory. This is all still very manual and takes ~30m per test.

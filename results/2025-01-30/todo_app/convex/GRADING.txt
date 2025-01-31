@@ -1,0 +1,27 @@
+Time: 17:13
+
+# Interventions
+- 08:28: Told it I was still seeing example data.
+- 11:27: Told it was seeing a syntax error in the task page with a screenshot.
+- 12:18: Told it comments weren't rendering the user email correctly.
+- 13:13: Told it the same issue was happening with the assignee dropdown.
+- 14:09: Screenshot of React hook rules violation.
+- 16:51: Told it the same user issue was happening with the top-left banner.
+
+# Grading
+- Membership check for listing all projects a user is a member of
+  is incorrect. Hallucinates `.eq` checking if a userID is in
+  an array.
+  ```
+  // Query projects where user is either creator or member
+  const projects = await ctx.db
+    .query("projects")
+    .withIndex("by_member", (q) => q.eq("members", [userId]))
+    .collect();
+  ```
+
+- All other authorization checks look correct.
+
+# To Fix
+- Add UI elements for inviting and removing users from a project
+- Add some guidelines for keeping all data fetching out of the components/ directory?
