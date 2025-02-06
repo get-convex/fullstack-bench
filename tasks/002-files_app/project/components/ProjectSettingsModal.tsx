@@ -28,6 +28,12 @@ interface ProjectSettingsModalProps {
     memberId: string,
     role: Member["role"]
   ) => void;
+  updateProjectMetadata: (
+    projectId: string,
+    name?: string,
+    description?: string,
+    emoji?: string
+  ) => void;
 
   initialTab?: "details" | "members" | "invite";
 }
@@ -42,17 +48,23 @@ export default function ProjectSettingsModal({
   addMemberToProject,
   removeMemberFromProject,
   updateProjectMemberRole,
+  updateProjectMetadata,
   initialTab = "details",
 }: ProjectSettingsModalProps) {
   const [selectedTab, setSelectedTab] = useState(initialTab);
-  const [editedProject, setEditedProject] = useState(project);
+  const [editedProject, setEditedProject] = useState<Partial<Project>>({});
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [inviteType, setInviteType] = useState<"user" | "group">("user");
   const [selectedInviteId, setSelectedInviteId] = useState("");
   const [inviteRole, setInviteRole] = useState<Member["role"]>("member");
 
   const handleSave = () => {
-    // onUpdateProject(editedProject);
+    updateProjectMetadata(
+      project.id,
+      editedProject.name,
+      editedProject.description,
+      editedProject.emoji
+    );
     onClose();
   };
 
@@ -216,7 +228,9 @@ export default function ProjectSettingsModal({
                                 <div className="bg-[#1C1C1F] rounded-lg shadow-xl ring-1 ring-black ring-opacity-5">
                                   <Picker
                                     data={data}
-                                    onEmojiSelect={(emoji: any) => {
+                                    onEmojiSelect={(emoji: {
+                                      native: string;
+                                    }) => {
                                       setEditedProject((prev) => ({
                                         ...prev,
                                         emoji: emoji.native,

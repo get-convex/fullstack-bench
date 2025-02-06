@@ -52,13 +52,6 @@ export default function GroupPage() {
     router.push("/workspace-admin/groups");
   };
 
-  const handleRemoveMember = (
-    memberId: string,
-    memberType: "user" | "group"
-  ) => {
-    removeMemberFromGroup(groupId, memberId);
-  };
-
   return (
     <div className="min-h-screen bg-[#0D1117]">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -162,62 +155,94 @@ export default function GroupPage() {
 
 function MemberRow({ group, member }: { group: Group; member: Member }) {
   if (member.subject.type === "user") {
-    const user = useUser(member.subject.userId);
-    if (!user) {
-      throw new Error("User not found");
-    }
     return (
-      <div
-        key={`${member.subject.type}-${member.subject.userId}`}
-        className="px-6 py-4 flex items-center justify-between"
-      >
-        <div className="flex items-center space-x-3">
-          <UserIcon className="w-5 h-5 text-gray-400" />
-          <span className="text-gray-300">{user.email}</span>
-        </div>
-        <div className="flex items-center space-x-2">
-          <span className="text-sm text-gray-500 capitalize">
-            {member.role}
-          </span>
-          <button
-            onClick={() => removeMemberFromGroup(group.id, member.id)}
-            className="text-gray-400 hover:text-red-400 ml-4"
-            title="Remove Member"
-          >
-            <TrashIcon className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
+      <UserRow
+        member={member}
+        group={group}
+        memberUserId={member.subject.userId}
+      />
     );
   } else if (member.subject.type === "group") {
-    const subgroup = useGroup(member.subject.groupId);
-    if (!subgroup) {
-      throw new Error("Subgroup not found");
-    }
     return (
-      <div
-        key={`${member.subject.type}-${member.subject.groupId}`}
-        className="px-6 py-4 flex items-center justify-between"
-      >
-        <div className="flex items-center space-x-3">
-          <UserGroupIcon className="w-5 h-5 text-gray-400" />
-          <span className="text-gray-300">{subgroup.name}</span>
-        </div>
-        <div className="flex items-center space-x-2">
-          <span className="text-sm text-gray-500 capitalize">
-            {member.role}
-          </span>
-          <button
-            onClick={() => removeMemberFromGroup(group.id, member.id)}
-            className="text-gray-400 hover:text-red-400 ml-4"
-            title="Remove Member"
-          >
-            <TrashIcon className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
+      <GroupRow
+        group={group}
+        member={member}
+        memberGroupId={member.subject.groupId}
+      />
     );
   } else {
     throw new Error("Invalid member type");
   }
+}
+
+function UserRow({
+  member,
+  group,
+  memberUserId,
+}: {
+  member: Member;
+  group: Group;
+  memberUserId: string;
+}) {
+  const user = useUser(memberUserId);
+  if (!user) {
+    throw new Error("User not found");
+  }
+  return (
+    <div
+      key={`${member.subject.type}-${memberUserId}`}
+      className="px-6 py-4 flex items-center justify-between"
+    >
+      <div className="flex items-center space-x-3">
+        <UserIcon className="w-5 h-5 text-gray-400" />
+        <span className="text-gray-300">{user.email}</span>
+      </div>
+      <div className="flex items-center space-x-2">
+        <span className="text-sm text-gray-500 capitalize">{member.role}</span>
+        <button
+          onClick={() => removeMemberFromGroup(group.id, member.id)}
+          className="text-gray-400 hover:text-red-400 ml-4"
+          title="Remove Member"
+        >
+          <TrashIcon className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function GroupRow({
+  group,
+  member,
+  memberGroupId,
+}: {
+  group: Group;
+  member: Member;
+  memberGroupId: string;
+}) {
+  const subgroup = useGroup(memberGroupId);
+  if (!subgroup) {
+    throw new Error("Subgroup not found");
+  }
+  return (
+    <div
+      key={`${member.subject.type}-${memberGroupId}`}
+      className="px-6 py-4 flex items-center justify-between"
+    >
+      <div className="flex items-center space-x-3">
+        <UserGroupIcon className="w-5 h-5 text-gray-400" />
+        <span className="text-gray-300">{subgroup.name}</span>
+      </div>
+      <div className="flex items-center space-x-2">
+        <span className="text-sm text-gray-500 capitalize">{member.role}</span>
+        <button
+          onClick={() => removeMemberFromGroup(group.id, member.id)}
+          className="text-gray-400 hover:text-red-400 ml-4"
+          title="Remove Member"
+        >
+          <TrashIcon className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
 }

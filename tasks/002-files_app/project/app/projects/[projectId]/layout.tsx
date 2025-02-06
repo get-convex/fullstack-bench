@@ -2,7 +2,16 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { addMemberToProject, removeMemberFromProject, updateProjectMemberRole, useProject, useProjectMembers, useUsers, useGroups } from "@/testData";
+import {
+  addMemberToProject,
+  removeMemberFromProject,
+  updateProjectMemberRole,
+  useProject,
+  useProjectMembers,
+  useUsers,
+  useGroups,
+  updateProjectMetadata,
+} from "@/testData";
 import ProjectHeader from "@/components/ProjectHeader";
 import ProjectSettingsModal from "@/components/ProjectSettingsModal";
 
@@ -51,13 +60,7 @@ export default function ProjectLayout({
 
   return (
     <div className="flex flex-col h-full bg-[#0D1117]">
-      <ProjectHeader
-        project={project}
-        onOpenSettings={() => {
-          setSettingsModalTab("details");
-          setIsSettingsModalOpen(true);
-        }}
-      />
+      <ProjectHeader project={project} />
       <div className="flex-1 overflow-auto">{children}</div>
 
       <ProjectSettingsModal
@@ -71,6 +74,7 @@ export default function ProjectLayout({
         addMemberToProject={addMemberToProject}
         removeMemberFromProject={removeMemberFromProject}
         updateProjectMemberRole={updateProjectMemberRole}
+        updateProjectMetadata={updateProjectMetadata}
       />
     </div>
   );

@@ -1,12 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import {
-  Member,
-  useGroup,
-  useGroupMembers,
-  useUser,
-} from "../../../testData";
+import { Member, useGroup, useGroupMembers, useUser } from "../../../testData";
 import { UserIcon } from "@heroicons/react/24/outline";
 
 export default function GroupPage() {
@@ -60,23 +55,35 @@ export default function GroupPage() {
 }
 
 function GroupMemberRow({ member }: { member: Member }) {
-  let name: string;
   if (member.subject.type === "user") {
     const userId = member.subject.userId;
-    const user = useUser(userId);
-    name = user?.email || "";
+    return <UserRow userId={userId} />;
   } else {
     const groupId = member.subject.groupId;
-    const group = useGroup(groupId);
-    name = group?.name || "";
+    return <GroupRow groupId={groupId} />;
   }
+}
+
+function UserRow({ userId }: { userId: string }) {
+  const user = useUser(userId);
   return (
     <div className="px-6 py-4 flex items-center justify-between">
       <div className="flex items-center space-x-3">
         <UserIcon className="w-5 h-5 text-gray-400" />
-        <span className="text-gray-300">{name}</span>
+        <span className="text-gray-300">{user?.email || ""}</span>
       </div>
-      <span className="text-sm text-gray-500 capitalize">{member.role}</span>
+    </div>
+  );
+}
+
+function GroupRow({ groupId }: { groupId: string }) {
+  const group = useGroup(groupId);
+  return (
+    <div className="px-6 py-4 flex items-center justify-between">
+      <div className="flex items-center space-x-3">
+        <UserIcon className="w-5 h-5 text-gray-400" />
+        <span className="text-gray-300">{group?.name || ""}</span>
+      </div>
     </div>
   );
 }

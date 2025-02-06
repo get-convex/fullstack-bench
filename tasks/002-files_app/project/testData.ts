@@ -70,6 +70,10 @@ export function useProject(projectId: string) {
   return initialProjects[projectId];
 }
 
+export function updateProjectMetadata(projectId: string, name?: string, description?: string, emoji?: string) {
+  console.log(`Unimplemented: Update project metadata for ${projectId} to ${name} ${description} ${emoji}`);
+}
+
 const filesByProjectId: Record<string, Array<File | Directory>> = {
   "project-1": [
     {

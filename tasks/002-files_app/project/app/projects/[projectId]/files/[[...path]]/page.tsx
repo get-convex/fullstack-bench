@@ -7,6 +7,7 @@ import {
   createDirectory,
   renameFile,
   deleteFile,
+  editFile,
 } from "../../../../../testData";
 import DirectoryView from "@/components/DirectoryView";
 import FileView from "@/components/FileView";
@@ -27,6 +28,7 @@ export default function ProjectFilesPage() {
         file={currentFile}
         pathSegments={pathSegments}
         projectId={projectId}
+        handleEditFile={editFile}
       />
     );
   } else {
