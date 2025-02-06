@@ -1,6 +1,6 @@
 "use client";
 
-import { Directory, File } from "@/testData";
+import type { Directory, File } from "@/testData";
 import {
   DocumentIcon,
   FolderIcon,
@@ -17,10 +17,25 @@ import CreateDirectoryModal from "./CreateDirectoryModal";
 export default function DirectoryView(props: {
   projectId: string;
   pathSegments: string[];
-  currentDir: (File | Directory)[];
-  handleNavigateUp: () => void;
-  handleFileClick: (file: File | Directory) => void;
-  handleDeleteFile: (file: File | Directory) => void;
+  currentDirId: string | undefined;
+  dirChildren: (File | Directory)[];
+  handleCreateFile: (
+    projectId: string,
+    dirId: string | undefined,
+    name: string,
+    content: string
+  ) => void;
+  handleCreateDirectory: (
+    projectId: string,
+    dirId: string | undefined,
+    name: string
+  ) => void;
+  handleRenameFile: (
+    projectId: string,
+    fileId: string,
+    newName: string
+  ) => void;
+  handleDeleteFile: (projectId: string, fileId: string) => void;
 }) {
   const [showCreateFileModal, setShowCreateFileModal] = useState(false);
   const [showCreateDirModal, setShowCreateDirModal] = useState(false);
@@ -28,33 +43,12 @@ export default function DirectoryView(props: {
   const [editedName, setEditedName] = useState("");
 
   const handleCreateFile = (name: string, content: string) => {
-    // TODO: Implement file creation with content
-    const newFile: File = {
-      id: crypto.randomUUID(),
-      name,
-      type: "file",
-      content,
-      createdBy: "user1", // TODO: Get from current user
-      createdAt: new Date(),
-      modifiedAt: new Date(),
-      parentId: props.currentDir.find(f => f.type === "directory")?.id || "", // Use empty string as fallback for root
-    };
-    // TODO: Add file to the current directory
+    props.handleCreateFile(props.projectId, props.currentDirId, name, content);
     setShowCreateFileModal(false);
   };
 
   const handleCreateDirectory = (name: string) => {
-    // TODO: Implement directory creation
-    const newDirectory: Directory = {
-      id: crypto.randomUUID(),
-      name,
-      type: "directory",
-      createdBy: "user1", // TODO: Get from current user
-      createdAt: new Date(),
-      modifiedAt: new Date(),
-      parentId: props.currentDir.find(f => f.type === "directory")?.id || "", // Use empty string as fallback for root
-    };
-    // TODO: Add directory to the current directory
+    props.handleCreateDirectory(props.projectId, props.currentDirId, name);
     setShowCreateDirModal(false);
   };
 
@@ -69,11 +63,13 @@ export default function DirectoryView(props: {
       setEditedName("");
       return;
     }
-
-    // TODO: Implement rename functionality
-    // For now, just reset the state
+    props.handleRenameFile(props.projectId, editingFile.id, editedName);
     setEditingFile(null);
     setEditedName("");
+  };
+
+  const handleDeleteFile = (file: File | Directory) => {
+    props.handleDeleteFile(props.projectId, file.id);
   };
 
   return (
@@ -101,7 +97,7 @@ export default function DirectoryView(props: {
 
       {/* File List */}
       <div className="py-2">
-        {props.currentDir.length === 0 ? (
+        {props.dirChildren.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 px-4">
             <FolderPlusIcon className="w-12 h-12 text-gray-600 mb-4" />
             <h3 className="text-sm font-medium text-white mb-1">
@@ -128,7 +124,7 @@ export default function DirectoryView(props: {
             </div>
           </div>
         ) : (
-          props.currentDir.map((file) => (
+          props.dirChildren.map((file) => (
             <div
               key={file.id}
               className="group flex items-center justify-between px-4 py-2 hover:bg-gray-800 transition-colors"
@@ -169,9 +165,7 @@ export default function DirectoryView(props: {
                   ) : (
                     <DocumentIcon className="w-5 h-5 text-gray-400" />
                   )}
-                  <span className="text-sm text-gray-300">
-                    {file.name}
-                  </span>
+                  <span className="text-sm text-gray-300">{file.name}</span>
                 </Link>
               )}
               <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -189,7 +183,7 @@ export default function DirectoryView(props: {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    props.handleDeleteFile(file);
+                    handleDeleteFile(file);
                   }}
                   className="p-1 text-gray-400 hover:text-red-400 inline-flex items-center ml-2"
                   title="Delete"

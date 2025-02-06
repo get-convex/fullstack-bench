@@ -3,6 +3,10 @@
 import { notFound, useParams } from "next/navigation";
 import {
   useFilePath,
+  createFile,
+  createDirectory,
+  renameFile,
+  deleteFile,
 } from "../../../../../testData";
 import DirectoryView from "@/components/DirectoryView";
 import FileView from "@/components/FileView";
@@ -18,15 +22,25 @@ export default function ProjectFilesPage() {
     notFound();
   }
   if (currentFile.type === "file") {
-    return <FileView file={currentFile} pathSegments={pathSegments} projectId={projectId} />
+    return (
+      <FileView
+        file={currentFile}
+        pathSegments={pathSegments}
+        projectId={projectId}
+      />
+    );
   } else {
-    return <DirectoryView
-      projectId={projectId}
-      pathSegments={pathSegments}
-      currentDir={currentFile.children}
-      handleNavigateUp={() => {}}
-      handleFileClick={() => {}}
-      handleDeleteFile={() => {}}
-    />
+    return (
+      <DirectoryView
+        projectId={projectId}
+        pathSegments={pathSegments}
+        currentDirId={currentFile.id}
+        dirChildren={currentFile.children}
+        handleCreateFile={createFile}
+        handleCreateDirectory={createDirectory}
+        handleRenameFile={renameFile}
+        handleDeleteFile={deleteFile}
+      />
+    );
   }
 }

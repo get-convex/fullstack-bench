@@ -150,8 +150,28 @@ export function useFilePath(projectId: string, pathSegments: string[]) {
     return file;
   } else {
     const children = files.filter((f) => f.parentId === current.id);
-    return { type: "directory" as const, children };
+    return { type: "directory" as const, id: current.id, children };
   }
+}
+
+export function createFile(projectId: string, dirId: string | undefined, name: string, content: string) {
+  console.log(`Unimplemented: Create file ${name} with content ${content} in project ${projectId}`);
+}
+
+export function createDirectory(projectId: string, dirId: string | undefined, name: string) {
+  console.log(`Unimplemented: Create directory ${name} in project ${projectId}`);
+}
+
+export function renameFile(projectId: string, fileId: string, newName: string) {
+  console.log(`Unimplemented: Rename file ${fileId} to ${newName} in project ${projectId}`);
+}
+
+export function deleteFile(projectId: string, fileId: string) {
+  console.log(`Unimplemented: Delete file ${fileId} in project ${projectId}`);
+}
+
+export function editFile(projectId: string, fileId: string, content: string) {
+  console.log(`Unimplemented: Edit file ${fileId} in project ${projectId}`);
 }
 
 const initialUsers: User[] = [
