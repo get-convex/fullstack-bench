@@ -1,8 +1,8 @@
 "use client";
 
-import { File } from "@/testData";
-import { DocumentIcon, PencilIcon } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
+import type { File } from "@/testData";
+import { PencilIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 import "highlight.js/styles/default.css";
 import hljs from "highlight.js";
 import javascript from "highlight.js/lib/languages/javascript";

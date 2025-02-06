@@ -4,7 +4,6 @@ import { Fragment, useState } from "react";
 import { Dialog, Transition, Tab } from "@headlessui/react";
 import {
   XMarkIcon,
-  PlusIcon,
   UserIcon,
   UserGroupIcon,
   TrashIcon,

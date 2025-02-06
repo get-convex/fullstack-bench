@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { Member, User, Group } from "../testData";
+import type { Member, User, Group } from "../testData";
 
 interface GroupMembershipModalProps {
   isOpen: boolean;
@@ -87,14 +87,14 @@ export default function GroupMembershipModal({
                   </button>
                 </div>
 
-                <div className="px-6 py-4">
-                  <Dialog.Title className="text-lg font-medium text-white mb-4">
+                <div className="p-6">
+                  <Dialog.Title className="text-xl font-semibold text-white mb-6">
                     Add Members to {group.name}
                   </Dialog.Title>
 
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
                         Type
                       </label>
                       <select
@@ -103,20 +103,20 @@ export default function GroupMembershipModal({
                           setInviteType(e.target.value as "user" | "group");
                           setSelectedInviteId("");
                         }}
-                        className="block w-full rounded-md border-gray-700 bg-[#26262B] text-white shadow-sm focus:border-[#8D2676] focus:ring-[#8D2676] sm:text-sm"
+                        className="block w-full px-3 py-2 bg-[#2D2D30] border border-gray-700 rounded-md text-gray-300 text-sm focus:border-[#8D2676] focus:ring-[#8D2676] focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#1C1C1F] transition-colors"
                       >
                         <option value="user">User</option>
                         <option value="group">Group</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
                         {inviteType === "user" ? "User" : "Group"}
                       </label>
                       <select
                         value={selectedInviteId}
                         onChange={(e) => setSelectedInviteId(e.target.value)}
-                        className="block w-full rounded-md border-gray-700 bg-[#26262B] text-white shadow-sm focus:border-[#8D2676] focus:ring-[#8D2676] sm:text-sm"
+                        className="block w-full px-3 py-2 bg-[#2D2D30] border border-gray-700 rounded-md text-gray-300 text-sm focus:border-[#8D2676] focus:ring-[#8D2676] focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#1C1C1F] transition-colors"
                       >
                         <option value="">Select {inviteType === "user" ? "a user" : "a group"}</option>
                         {inviteType === "user"
@@ -134,11 +134,17 @@ export default function GroupMembershipModal({
                               ))}
                       </select>
                     </div>
-                    <div className="mt-6">
+                    <div className="flex justify-end space-x-3 pt-2">
+                      <button
+                        onClick={onClose}
+                        className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                      >
+                        Cancel
+                      </button>
                       <button
                         onClick={handleAddMember}
                         disabled={!selectedInviteId}
-                        className="w-full rounded-md bg-[#8D2676] px-3 py-2 text-sm text-white hover:bg-[#7A2065] focus:outline-none focus:ring-2 focus:ring-[#8D2676] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-4 py-2 text-sm font-medium bg-[#8D2676] text-white rounded-md hover:bg-[#7A2065] focus:outline-none focus:ring-2 focus:ring-[#8D2676] focus:ring-offset-2 focus:ring-offset-[#1C1C1F] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Add {inviteType === "user" ? "User" : "Group"}
                       </button>

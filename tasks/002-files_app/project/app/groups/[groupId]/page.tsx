@@ -1,16 +1,11 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useState } from "react";
-import Link from "next/link";
 import {
-  Group,
   Member,
-  User,
   useGroup,
   useGroupMembers,
   useUser,
-  useUsers,
 } from "../../../testData";
 import { UserIcon } from "@heroicons/react/24/outline";
 

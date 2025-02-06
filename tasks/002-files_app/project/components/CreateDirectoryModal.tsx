@@ -59,14 +59,14 @@ export default function CreateDirectoryModal({
                   </button>
                 </div>
 
-                <div className="px-6 py-4">
-                  <Dialog.Title className="text-lg font-medium text-white mb-4">
+                <div className="p-6">
+                  <Dialog.Title className="text-xl font-semibold text-white mb-6">
                     Create New Directory
                   </Dialog.Title>
 
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
                         Directory Name
                       </label>
                       <input
@@ -74,24 +74,24 @@ export default function CreateDirectoryModal({
                         value={directoryName}
                         onChange={(e) => setDirectoryName(e.target.value)}
                         placeholder="Enter directory name"
-                        className="block w-full bg-[#1C2128] border-gray-700 rounded-md text-gray-300 text-sm focus:border-[#8D2676] focus:ring-[#8D2676]"
+                        className="block w-full px-3 py-2 bg-[#2D2D30] border border-gray-700 rounded-md text-gray-300 text-sm placeholder-gray-500 focus:border-[#8D2676] focus:ring-[#8D2676] focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#1C1C1F] transition-colors"
                         onKeyDown={(e) => {
                           if (e.key === "Enter") handleCreate();
                           if (e.key === "Escape") onClose();
                         }}
                       />
                     </div>
-                    <div className="mt-6 flex justify-end space-x-3">
+                    <div className="flex justify-end space-x-3 pt-2">
                       <button
                         onClick={onClose}
-                        className="px-3 py-2 text-sm text-gray-400 hover:text-gray-300"
+                        className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors"
                       >
                         Cancel
                       </button>
                       <button
                         onClick={handleCreate}
                         disabled={!directoryName.trim()}
-                        className="px-3 py-2 text-sm bg-[#8D2676] text-white rounded-md hover:bg-[#7A2065] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-4 py-2 text-sm font-medium bg-[#8D2676] text-white rounded-md hover:bg-[#7A2065] focus:outline-none focus:ring-2 focus:ring-[#8D2676] focus:ring-offset-2 focus:ring-offset-[#1C1C1F] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Create Directory
                       </button>
