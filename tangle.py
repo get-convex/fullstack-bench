@@ -5,8 +5,8 @@ from pathlib import Path
 
 ignore_list = [".git", "node_modules", "bun.lockb", "bun.lockb", ".next", "package.json"]
 template_override = {
-    "app/layout.tsx",
     "components/WithUserEmail.tsx",
+    "components/SetupContext.tsx",
 }
 
 def tangle(template_dir: Path, task_project_dir: Path, output_dir: Path) -> None:

@@ -69,7 +69,7 @@ supabase------------------------------------------------------------------------
 
 # Task
 
-The app currently only uses in-memory state management, and we'd like to fill out the backend for this app using Supabase. Read the guidelines for using Supabase in @guidelines.
+The app currently only uses in-memory state management, and we'd like to fill out the backend for this app using Supabase. Read the guidelines for using Supabase in the cursor rules.
 
 Please...
 
@@ -81,10 +81,15 @@ convex--------------------------------------------------------------------------
 
 # Task
 
-The app currently only uses in-memory state management, and we'd like to fill out the backend for this app using Convex. Read the guidelines for writing apps on Convex in @guidelines.
+The app currently only uses in-memory state management, and we'd like to fill out the backend for this app using Convex. Read the guidelines for writing apps on Convex in the cursor rules.
 
 Please...
 
-1. Set up the tables for storing the app's data model.
+1. Set up the tables for storing the app's data model. Do NOT modify the built in authentication tables.
 2. Write queries and mutations for reading and writing the appropriate data.
 3. Wire in these endpoints into the app's UI.
+
+final notes-------------------------------------------------------------------------
+
+You MUST implement all authorization rules, and it is UNACCEPTABLE for users to be able to
+read or write state that they don't have access to.
