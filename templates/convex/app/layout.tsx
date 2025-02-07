@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ConvexClientProvider } from "@/components/ConvexClientProvider";
-import { WithUserEmail } from '@/components/WithUserEmail';
+import { WithUserEmail } from "@/components/WithUserEmail";
 import { Toaster } from "react-hot-toast";
+import { SetupContext } from "@/components/SetupContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,21 +29,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ConvexClientProvider>
-          <WithUserEmail>
-            {children}
-          </WithUserEmail>
-        </ConvexClientProvider>
-        <Toaster position="top-center" toastOptions={{
-          style: {
-            background: '#26262b',
-            color: '#E1E1E3',
-            borderRadius: '6px',
-          },
-          error: {
-            duration: 4000,
-          }
-        }} />
+        <SetupContext>
+          <WithUserEmail>{children}</WithUserEmail>
+        </SetupContext>
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            style: {
+              background: "#26262b",
+              color: "#E1E1E3",
+              borderRadius: "6px",
+            },
+            error: {
+              duration: 4000,
+            },
+          }}
+        />
       </body>
     </html>
   );

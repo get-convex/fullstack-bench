@@ -18,7 +18,7 @@ The app currently only uses in-memory state for its state management.
 - Comments have an author, content (markdown stored as plain text), and a creation time.
 - Comments cannot be edited or deleted.
 
-Read the guidelines for using Supabase in @guidelines.
+Read the guidelines for using Supabase in the cursor rules.
 
 Please...
 
@@ -46,7 +46,7 @@ The app currently only uses in-memory state for its state management.
 - Comments have an author, content (markdown stored as plain text), and a creation time.
 - Comments cannot be edited or deleted.
 
-Read the guidelines for writing apps on Convex in @guidelines.
+Read the guidelines for writing apps on Convex in the cursor rules.
 
 Please...
 

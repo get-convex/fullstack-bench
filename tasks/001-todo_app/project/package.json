@@ -20,6 +20,7 @@
     "react": "^19.0.0",
     "react-day-picker": "^9.5.1",
     "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.1",
     "react-markdown": "^9.0.3",
     "remark-gfm": "^4.0.0"
   },

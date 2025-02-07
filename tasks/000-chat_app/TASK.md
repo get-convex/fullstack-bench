@@ -7,7 +7,7 @@ The app currently only uses in-memory state for its state management.
 - There are multiple channels, and all users have access to all channels.
 - Channels can have messages, and users can post messages into any channel.
 
-Read the guidelines for using Supabase in @guidelines.
+Read the guidelines for using Supabase in the cursor rules.
 
 Please...
 
@@ -24,7 +24,7 @@ The app currently only uses in-memory state for its state management.
 - There are multiple channels, and all users have access to all channels.
 - Channels can have messages, and users can post messages into any channel.
 
-Read the guidelines for writing apps on Convex in @guidelines.
+Read the guidelines for writing apps on Convex in the cursor rules.
 
 Please...
 
