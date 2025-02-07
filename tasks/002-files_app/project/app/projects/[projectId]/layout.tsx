@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import {
   addMemberToProject,
   removeMemberFromProject,
-  updateProjectMemberRole,
   useProject,
   useProjectMembers,
   useUsers,
@@ -73,7 +72,6 @@ export default function ProjectLayout({
         groups={groups}
         addMemberToProject={addMemberToProject}
         removeMemberFromProject={removeMemberFromProject}
-        updateProjectMemberRole={updateProjectMemberRole}
         updateProjectMetadata={updateProjectMetadata}
       />
     </div>

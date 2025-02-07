@@ -1,10 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  useProjects,
-  useGroups,
-} from "../testData";
+import { useProjects, useGroups, useUserByEmail } from "../testData";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import { useUserEmail } from "./WithUserEmail";
 
@@ -12,7 +9,7 @@ export default function Sidebar() {
   const projects = useProjects();
   const userEmail = useUserEmail();
   const groups = useGroups();
-
+  const user = useUserByEmail(userEmail);
   return (
     <div className="w-64 bg-[#0D1117] border-r border-gray-800 p-4 flex flex-col h-screen">
       <div className="flex justify-between items-center mb-4">
@@ -21,12 +18,14 @@ export default function Sidebar() {
           <Link href="/" className="text-sm text-blue-400 hover:text-blue-300">
             Home
           </Link>
-          <Link
-            href="/workspace-admin"
-            className="text-sm text-blue-400 hover:text-blue-300"
-          >
-            Admin
-          </Link>
+          {user?.isAdmin && (
+            <Link
+              href="/workspace-admin"
+              className="text-sm text-blue-400 hover:text-blue-300"
+            >
+              Admin
+            </Link>
+          )}
         </div>
       </div>
 

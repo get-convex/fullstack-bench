@@ -1,5 +1,3 @@
-import { notFound } from "next/navigation";
-
 export interface Project {
   id: string;
   name: string;
@@ -12,9 +10,6 @@ export interface File {
   name: string;
   type: "file";
   content?: string;
-  createdBy: string;
-  createdAt: Date;
-  modifiedAt: Date;
   parentId: string;
 }
 
@@ -22,9 +17,6 @@ export interface Directory {
   id: string;
   name: string;
   type: "directory";
-  createdBy: string;
-  createdAt: Date;
-  modifiedAt: Date;
   parentId?: string;
 }
 
@@ -44,7 +36,6 @@ export interface Member {
   subject:
   | { type: "user"; userId: string }
   | { type: "group"; groupId: string };
-  role: "owner" | "admin" | "member";
 }
 
 const initialProjects: Record<string, Project> = {
@@ -66,6 +57,14 @@ export function useProjects() {
   return Object.values(initialProjects);
 }
 
+export function createProject(name: string, description: string, emoji: string) {
+  console.log(`Unimplemented: Create project ${name} ${description} ${emoji}`);
+}
+
+export function deleteProject(projectId: string) {
+  console.log(`Unimplemented: Delete project ${projectId}`);
+}
+
 export function useProject(projectId: string) {
   return initialProjects[projectId];
 }
@@ -80,18 +79,12 @@ const filesByProjectId: Record<string, Array<File | Directory>> = {
       id: "dir-1",
       name: "src",
       type: "directory",
-      createdBy: "user1",
-      createdAt: new Date(),
-      modifiedAt: new Date(),
     },
     {
       id: "file-1",
       name: "README.md",
       type: "file",
       parentId: "dir-1",
-      createdBy: "user1",
-      createdAt: new Date(),
-      modifiedAt: new Date(),
       content: "# Marketing Website\n\nThis is the main website project.",
     },
     {
@@ -99,9 +92,6 @@ const filesByProjectId: Record<string, Array<File | Directory>> = {
       name: "index.html",
       type: "file",
       parentId: "dir-1",
-      createdBy: "user1",
-      createdAt: new Date(),
-      modifiedAt: new Date(),
       content: "<!DOCTYPE html>\n<html>\n  <head>\n    <title>Home</title>\n  </head>\n  <body>\n    <h1>Welcome</h1>\n  </body>\n</html>",
     },
   ],
@@ -110,18 +100,12 @@ const filesByProjectId: Record<string, Array<File | Directory>> = {
       id: "dir-2",
       name: "app",
       type: "directory",
-      createdBy: "user1",
-      createdAt: new Date(),
-      modifiedAt: new Date(),
     },
     {
       id: "file-3",
       name: "README.md",
       type: "file",
       parentId: "dir-2",
-      createdBy: "user1",
-      createdAt: new Date(),
-      modifiedAt: new Date(),
       content: "# Mobile App\n\nCross-platform mobile application.",
     },
   ],
@@ -132,8 +116,6 @@ export function useFilePath(projectId: string, pathSegments: string[]) {
   // Start with the root.
   let current: { type: "directory", id?: string } | { type: "file", id: string }
     = { type: "directory" };
-
-  console.log(files, pathSegments);
 
   for (const segment of pathSegments) {
     if (current.type !== "directory") {
@@ -181,7 +163,7 @@ export function editFile(projectId: string, fileId: string, content: string) {
 const initialUsers: User[] = [
   {
     id: "user1",
-    email: "john@example.com",
+    email: "test@test.com",
     isAdmin: true,
   },
   {
@@ -193,6 +175,10 @@ const initialUsers: User[] = [
 
 export function useUsers() {
   return initialUsers;
+}
+
+export function useUserByEmail(email: string) {
+  return initialUsers.find(u => u.email === email);
 }
 
 export function useUser(userId: string) {
@@ -250,7 +236,6 @@ const initialGroupMembers: Record<string, Member[]> = {
         type: "user",
         userId: "user1",
       },
-      role: "owner"
     },
     {
       id: "2",
@@ -258,7 +243,6 @@ const initialGroupMembers: Record<string, Member[]> = {
         type: "user",
         userId: "user2",
       },
-      role: "admin"
     },
   ],
   "group2": [
@@ -268,7 +252,6 @@ const initialGroupMembers: Record<string, Member[]> = {
         type: "user",
         userId: "user1",
       },
-      role: "owner"
     },
   ]
 }
@@ -293,7 +276,6 @@ export const initialProjectMembers: Record<string, Member[]> = {
         type: "user",
         userId: "user1",
       },
-      role: "owner",
     },
   ],
   "project-2": [
@@ -303,7 +285,6 @@ export const initialProjectMembers: Record<string, Member[]> = {
         type: "user",
         userId: "user1",
       },
-      role: "owner",
     },
   ],
 };
@@ -318,8 +299,4 @@ export function addMemberToProject(projectId: string, member: Member) {
 
 export function removeMemberFromProject(projectId: string, memberId: string) {
   console.log(`Unimplemented: Remove member ${memberId} from project ${projectId}`);
-}
-
-export function updateProjectMemberRole(projectId: string, memberId: string, role: Member["role"]) {
-  console.log(`Unimplemented: Update member ${memberId} role to ${role} in project ${projectId}`);
 }

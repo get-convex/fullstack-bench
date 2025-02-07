@@ -33,7 +33,6 @@ export default function GroupMembershipModal({
           type: "user",
           userId: selectedInviteId,
         },
-        role: "member",
       };
     } else {
       newMember = {
@@ -42,7 +41,6 @@ export default function GroupMembershipModal({
           type: "group",
           groupId: selectedInviteId,
         },
-        role: "member",
       };
     }
     addMember(group.id, newMember);
@@ -118,20 +116,20 @@ export default function GroupMembershipModal({
                         onChange={(e) => setSelectedInviteId(e.target.value)}
                         className="block w-full px-3 py-2 bg-[#2D2D30] border border-gray-700 rounded-md text-gray-300 text-sm focus:border-[#8D2676] focus:ring-[#8D2676] focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#1C1C1F] transition-colors"
                       >
-                        <option value="">Select {inviteType === "user" ? "a user" : "a group"}</option>
+                        <option value="">
+                          Select {inviteType === "user" ? "a user" : "a group"}
+                        </option>
                         {inviteType === "user"
-                          ? users
-                              .map((user) => (
-                                <option key={user.id} value={user.id}>
-                                  {user.email}
-                                </option>
-                              ))
-                          : groups
-                              .map((group) => (
-                                <option key={group.id} value={group.id}>
-                                  {group.name}
-                                </option>
-                              ))}
+                          ? users.map((user) => (
+                              <option key={user.id} value={user.id}>
+                                {user.email}
+                              </option>
+                            ))
+                          : groups.map((group) => (
+                              <option key={group.id} value={group.id}>
+                                {group.name}
+                              </option>
+                            ))}
                       </select>
                     </div>
                     <div className="flex justify-end space-x-3 pt-2">

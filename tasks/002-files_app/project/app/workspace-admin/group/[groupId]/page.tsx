@@ -198,7 +198,6 @@ function UserRow({
         <span className="text-gray-300">{user.email}</span>
       </div>
       <div className="flex items-center space-x-2">
-        <span className="text-sm text-gray-500 capitalize">{member.role}</span>
         <button
           onClick={() => removeMemberFromGroup(group.id, member.id)}
           className="text-gray-400 hover:text-red-400 ml-4"
@@ -234,7 +233,6 @@ function GroupRow({
         <span className="text-gray-300">{subgroup.name}</span>
       </div>
       <div className="flex items-center space-x-2">
-        <span className="text-sm text-gray-500 capitalize">{member.role}</span>
         <button
           onClick={() => removeMemberFromGroup(group.id, member.id)}
           className="text-gray-400 hover:text-red-400 ml-4"

@@ -9,9 +9,8 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import data from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
 import type { Project, Member, Group, User } from "../testData";
+import EmojiPicker from "./EmojiPicker";
 
 interface ProjectSettingsModalProps {
   isOpen: boolean;
@@ -23,11 +22,6 @@ interface ProjectSettingsModalProps {
 
   addMemberToProject: (projectId: string, member: Member) => void;
   removeMemberFromProject: (projectId: string, memberId: string) => void;
-  updateProjectMemberRole: (
-    projectId: string,
-    memberId: string,
-    role: Member["role"]
-  ) => void;
   updateProjectMetadata: (
     projectId: string,
     name?: string,
@@ -47,16 +41,13 @@ export default function ProjectSettingsModal({
   groups,
   addMemberToProject,
   removeMemberFromProject,
-  updateProjectMemberRole,
   updateProjectMetadata,
   initialTab = "details",
 }: ProjectSettingsModalProps) {
   const [selectedTab, setSelectedTab] = useState(initialTab);
   const [editedProject, setEditedProject] = useState<Partial<Project>>({});
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [inviteType, setInviteType] = useState<"user" | "group">("user");
   const [selectedInviteId, setSelectedInviteId] = useState("");
-  const [inviteRole, setInviteRole] = useState<Member["role"]>("member");
 
   const handleSave = () => {
     updateProjectMetadata(
@@ -88,15 +79,9 @@ export default function ProjectSettingsModal({
               type: "group",
               groupId: subject.id,
             },
-      role: inviteRole,
     };
     addMemberToProject(project.id, newMember);
     setSelectedInviteId("");
-    setInviteRole("member");
-  };
-
-  const handleRoleChange = (memberId: string, newRole: Member["role"]) => {
-    updateProjectMemberRole(project.id, memberId, newRole);
   };
 
   const handleRemoveMember = (memberId: string) => {
@@ -204,52 +189,22 @@ export default function ProjectSettingsModal({
                     <Tab.Panel>
                       <div className="space-y-4">
                         <div className="flex items-start space-x-3">
-                          <div className="relative">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setShowEmojiPicker(!showEmojiPicker)
-                              }
-                              className="inline-flex items-center justify-center w-10 h-10 text-2xl bg-[#26262B] border border-gray-700 rounded-md hover:bg-[#2C2C31] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8D2676]"
-                            >
-                              {editedProject.emoji}
-                            </button>
-                            {showEmojiPicker && (
-                              <div
-                                className="absolute z-[100] mt-1"
-                                style={{
-                                  minWidth: "352px",
-                                  position: "fixed",
-                                  top: "50%",
-                                  left: "50%",
-                                  transform: "translate(-50%, -50%)",
-                                }}
-                              >
-                                <div className="bg-[#1C1C1F] rounded-lg shadow-xl ring-1 ring-black ring-opacity-5">
-                                  <Picker
-                                    data={data}
-                                    onEmojiSelect={(emoji: {
-                                      native: string;
-                                    }) => {
-                                      setEditedProject((prev) => ({
-                                        ...prev,
-                                        emoji: emoji.native,
-                                      }));
-                                      setShowEmojiPicker(false);
-                                    }}
-                                    theme="dark"
-                                  />
-                                </div>
-                              </div>
-                            )}
-                          </div>
+                          <EmojiPicker
+                            emoji={editedProject.emoji ?? project.emoji}
+                            onEmojiSelect={(emoji) =>
+                              setEditedProject((prev) => ({
+                                ...prev,
+                                emoji,
+                              }))
+                            }
+                          />
                           <div className="flex-1">
                             <label className="block text-sm font-medium text-gray-300 mb-1">
                               Name
                             </label>
                             <input
                               type="text"
-                              value={editedProject.name}
+                              value={editedProject.name ?? project.name}
                               onChange={(e) =>
                                 setEditedProject((prev) => ({
                                   ...prev,
@@ -296,7 +251,6 @@ export default function ProjectSettingsModal({
                             member={member}
                             users={users}
                             groups={groups}
-                            handleRoleChange={handleRoleChange}
                             handleRemoveMember={handleRemoveMember}
                           />
                         ))}
@@ -349,21 +303,6 @@ export default function ProjectSettingsModal({
                                 ))}
                           </select>
                         </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-1">
-                            Role
-                          </label>
-                          <select
-                            value={inviteRole}
-                            onChange={(e) =>
-                              setInviteRole(e.target.value as Member["role"])
-                            }
-                            className="block w-full rounded-md border-gray-700 bg-[#26262B] text-white shadow-sm focus:border-[#8D2676] focus:ring-[#8D2676] sm:text-sm"
-                          >
-                            <option value="admin">Admin</option>
-                            <option value="member">Member</option>
-                          </select>
-                        </div>
                         <div className="mt-6">
                           <button
                             onClick={handleInvite}
@@ -390,13 +329,11 @@ function ProjectMemberRow({
   member,
   users,
   groups,
-  handleRoleChange,
   handleRemoveMember,
 }: {
   member: Member;
   users: User[];
   groups: Group[];
-  handleRoleChange: (memberId: string, newRole: Member["role"]) => void;
   handleRemoveMember: (memberId: string) => void;
 }) {
   let name: string;
@@ -420,26 +357,12 @@ function ProjectMemberRow({
         </div>
       </div>
       <div className="ml-3 flex items-center space-x-3">
-        <select
-          value={member.role}
-          onChange={(e) =>
-            handleRoleChange(member.id, e.target.value as Member["role"])
-          }
-          disabled={member.role === "owner"}
-          className="block rounded-md border-gray-700 bg-[#26262B] text-sm text-white shadow-sm focus:border-[#8D2676] focus:ring-[#8D2676] disabled:opacity-50 disabled:cursor-not-allowed"
+        <button
+          onClick={() => handleRemoveMember(member.id)}
+          className="text-gray-400 hover:text-red-600"
         >
-          <option value="owner">Owner</option>
-          <option value="admin">Admin</option>
-          <option value="member">Member</option>
-        </select>
-        {member.role !== "owner" && (
-          <button
-            onClick={() => handleRemoveMember(member.id)}
-            className="text-gray-400 hover:text-red-600"
-          >
-            <TrashIcon className="h-5 w-5" />
-          </button>
-        )}
+          <TrashIcon className="h-5 w-5" />
+        </button>
       </div>
     </div>
   );

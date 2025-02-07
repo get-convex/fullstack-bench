@@ -1,7 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { UserIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import {
+  UserIcon,
+  UserGroupIcon,
+  FolderIcon,
+} from "@heroicons/react/24/outline";
 
 export default function WorkspaceAdminPage() {
   return (
@@ -15,16 +19,14 @@ export default function WorkspaceAdminPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             href="/workspace-admin/users"
             className="flex items-center p-4 bg-[#161B22] rounded-lg hover:bg-gray-800/50 transition-colors"
           >
             <UserIcon className="w-6 h-6 text-gray-400 mr-3" />
             <div>
-              <h3 className="font-medium text-white">
-                Users
-              </h3>
+              <h3 className="font-medium text-white">Users</h3>
               <p className="text-sm text-gray-400">
                 Manage workspace users and permissions
               </p>
@@ -36,11 +38,21 @@ export default function WorkspaceAdminPage() {
           >
             <UserGroupIcon className="w-6 h-6 text-gray-400 mr-3" />
             <div>
-              <h3 className="font-medium text-white">
-                Groups
-              </h3>
+              <h3 className="font-medium text-white">Groups</h3>
               <p className="text-sm text-gray-400">
                 Manage workspace groups and memberships
+              </p>
+            </div>
+          </Link>
+          <Link
+            href="/workspace-admin/projects"
+            className="flex items-center p-4 bg-[#161B22] rounded-lg hover:bg-gray-800/50 transition-colors"
+          >
+            <FolderIcon className="w-6 h-6 text-gray-400 mr-3" />
+            <div>
+              <h3 className="font-medium text-white">Projects</h3>
+              <p className="text-sm text-gray-400">
+                Manage workspace projects and settings
               </p>
             </div>
           </Link>

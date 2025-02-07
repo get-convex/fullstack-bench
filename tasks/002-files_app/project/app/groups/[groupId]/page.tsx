@@ -37,18 +37,6 @@ export default function GroupPage() {
             ))}
           </div>
         </div>
-
-        {/* Group Access Section */}
-        <div className="mt-6 bg-[#161B22] rounded-lg shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-800">
-            <h2 className="text-lg font-medium text-white">Group Access</h2>
-          </div>
-          <div className="p-6">
-            <p className="text-gray-400">
-              View project access and permissions in the workspace admin panel.
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );
