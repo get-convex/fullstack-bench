@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { use } from 'react';
 import { MessageList, Message } from '@/components/MessageList';
 import { MessageInput } from '@/components/MessageInput';

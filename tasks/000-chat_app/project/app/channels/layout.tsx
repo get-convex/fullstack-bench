@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Sidebar } from "@/components/Sidebar";
 import { useUserEmail } from "@/components/WithUserEmail";
 
@@ -15,7 +15,6 @@ export default function ChannelsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
   const pathname = usePathname();
   const email = useUserEmail();
   const [channels, setChannels] = useState<Channel[]>([
