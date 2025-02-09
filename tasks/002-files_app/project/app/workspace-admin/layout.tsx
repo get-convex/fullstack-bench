@@ -1,8 +1,7 @@
 "use client";
 
-import { useUserEmail } from "@/components/WithUserEmail";
+import { useLoggedInUser } from "@/lib/BackendContext";
 import { useIsAdmin } from "@/lib/state/userPermissions";
-import { useUserByEmail } from "@/lib/state/users";
 import { redirect } from "next/navigation";
 
 export default function WorkspaceAdminLayout({
@@ -10,8 +9,7 @@ export default function WorkspaceAdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const email = useUserEmail();
-  const user = useUserByEmail(email);
+  const user = useLoggedInUser();
   if (!user) {
     console.error("User not found");
     redirect("/");

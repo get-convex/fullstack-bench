@@ -5,13 +5,12 @@ import { UserIcon } from "@heroicons/react/24/outline";
 import { useGroup } from "@/lib/state/groups";
 import { useMembers } from "@/lib/state/membership";
 import { Member } from "@/lib/types";
-import { useUser, useUserByEmail } from "@/lib/state/users";
-import { useUserEmail } from "@/components/WithUserEmail";
+import { useUser } from "@/lib/state/users";
+import { useLoggedInUser } from "@/lib/BackendContext";
 
 export default function GroupPage() {
   const params = useParams();
-  const email = useUserEmail();
-  const user = useUserByEmail(email)!;
+  const user = useLoggedInUser();
   const groupId = params.groupId as string;
   const group = useGroup(user.id, groupId);
   const members = useMembers({ type: "group", groupId });
@@ -71,8 +70,7 @@ function UserRow({ userId }: { userId: string }) {
 }
 
 function GroupRow({ groupId }: { groupId: string }) {
-  const email = useUserEmail();
-  const user = useUserByEmail(email)!;
+  const user = useLoggedInUser();
   const group = useGroup(user.id, groupId);
   return (
     <div className="px-6 py-4 flex items-center justify-between">

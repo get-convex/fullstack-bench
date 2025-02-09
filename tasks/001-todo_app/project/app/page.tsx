@@ -4,17 +4,13 @@ import { useState } from "react";
 import { redirect, notFound } from "next/navigation";
 import { CreateProject } from "../components/CreateProject";
 import { addProject, useProjects, useUserByEmail } from "../lib/state";
-import { useUserEmail } from "@/components/WithUserEmail";
+import { useLoggedInUser } from "@/lib/BackendContext";
 
 export default function Home() {
   const [isCreatingProject, setIsCreatingProject] = useState(false);
   const projects = useProjects();
 
-  const email = useUserEmail();
-  const user = useUserByEmail(email);
-  if (!user) {
-    notFound();
-  }
+  const user = useLoggedInUser();
 
   // Redirect to the most recently created project, or show a message if no projects exist
   if (projects.length > 0) {

@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Comment as CommentComponent } from "./Comment";
 import { Comment, User } from "../lib/types";
-import { useUserEmail } from "./WithUserEmail";
 
 interface CommentListProps {
   comments: Comment[];

@@ -7,9 +7,9 @@ import ProjectSettingsModal from "@/components/ProjectSettingsModal";
 import { updateProjectMetadata, useProject } from "@/lib/state/projects";
 import { addMember, removeMember, useMembers } from "@/lib/state/membership";
 import { useGroups } from "@/lib/state/groups";
-import { useUserByEmail, useUsers } from "@/lib/state/users";
+import { useUsers } from "@/lib/state/users";
 import { Member } from "@/lib/types";
-import { useUserEmail } from "@/components/WithUserEmail";
+import { useLoggedInUser } from "@/lib/BackendContext";
 
 export default function ProjectLayout({
   children,
@@ -18,8 +18,7 @@ export default function ProjectLayout({
 }) {
   const params = useParams();
   const projectId = params.projectId as string;
-  const email = useUserEmail();
-  const user = useUserByEmail(email)!;
+  const user = useLoggedInUser();
   const project = useProject(user.id, projectId);
   const projectMembers = useMembers({ type: "project", projectId });
   const users = useUsers();

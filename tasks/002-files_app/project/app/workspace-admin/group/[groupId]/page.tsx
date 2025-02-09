@@ -14,16 +14,15 @@ import Link from "next/link";
 import { removeGroup } from "@/lib/state/groups";
 import { updateGroupName, useGroups } from "@/lib/state/groups";
 import { useGroup } from "@/lib/state/groups";
-import { useUser, useUserByEmail, useUsers } from "@/lib/state/users";
-import { Group, Member } from "@/lib/types";
+import { useUser, useUsers } from "@/lib/state/users";
+import { Member } from "@/lib/types";
 import { addMember, removeMember, useMembers } from "@/lib/state/membership";
-import { useUserEmail } from "@/components/WithUserEmail";
+import { useLoggedInUser } from "@/lib/BackendContext";
 
 export default function GroupPage() {
   const params = useParams();
   const router = useRouter();
-  const email = useUserEmail();
-  const user = useUserByEmail(email)!;
+  const user = useLoggedInUser();
   const groupId = params.groupId as string;
   const group = useGroup(user.id, groupId);
   if (!group) {
@@ -209,8 +208,7 @@ function GroupRow({
   member: Member;
   memberGroupId: string;
 }) {
-  const email = useUserEmail();
-  const user = useUserByEmail(email)!;
+  const user = useLoggedInUser();
   const subgroup = useGroup(user.id, memberGroupId);
   if (!subgroup) {
     throw new Error("Subgroup not found");

@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SetupContext } from "@/components/SetupContext";
-import { WithUserEmail } from "@/components/WithUserEmail";
 import { Toaster } from "react-hot-toast";
 import { ProjectSidebar } from "./ProjectSidebar";
+import { BackendContext } from "@/lib/BackendContext";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -30,15 +29,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SetupContext>
-          <WithUserEmail>
-            <div className="flex h-screen">
-              <ProjectSidebar />
-              {/* Main Content Area */}
-              <div className="flex-1 overflow-auto">{children}</div>
-            </div>
-          </WithUserEmail>
-        </SetupContext>
+        <BackendContext>
+          <div className="flex h-screen">
+            <ProjectSidebar />
+            {/* Main Content Area */}
+            <div className="flex-1 overflow-auto">{children}</div>
+          </div>
+        </BackendContext>
         <Toaster
           position="top-center"
           toastOptions={{

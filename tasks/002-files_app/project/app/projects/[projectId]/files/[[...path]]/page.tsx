@@ -10,18 +10,13 @@ import {
   rename,
   deleteNode,
 } from "@/lib/state/filesystem";
-import { useUserByEmail, useUsersById } from "@/lib/state/users";
-import { useUserEmail } from "@/components/WithUserEmail";
+import { useLoggedInUser } from "@/lib/BackendContext";
 
 export default function ProjectFilesPage() {
   const params = useParams();
   const projectId = params.projectId as string;
   const pathSegments = (params.path as string[]) || [];
-  const email = useUserEmail();
-  const user = useUserByEmail(email);
-  if (!user) {
-    notFound();
-  }
+  const user = useLoggedInUser();
   // Start with the root.
   const node = useFilePath(user.id, projectId, pathSegments);
   if (!node) {

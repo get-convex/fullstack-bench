@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { SetupContext } from "@/components/SetupContext";
-import { WithUserEmail } from "@/components/WithUserEmail";
+import { BackendContext } from "@/lib/BackendContext";
 import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
@@ -29,9 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SetupContext>
-          <WithUserEmail>{children}</WithUserEmail>
-        </SetupContext>
+        <BackendContext>{children}</BackendContext>
         <Toaster
           position="top-center"
           toastOptions={{
