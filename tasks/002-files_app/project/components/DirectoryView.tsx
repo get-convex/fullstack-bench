@@ -19,10 +19,18 @@ export default function DirectoryView(props: {
   pathSegments: string[];
   currentDirId: string | undefined;
   dirChildren: (File | Directory)[];
-  handleCreateFile: (name: string, content: string) => void;
-  handleCreateDirectory: (name: string) => void;
-  handleRenameFile: (fileId: string, newName: string) => void;
-  handleDeleteFile: (projectId: string, fileId: string) => void;
+  handleCreate: (
+    name: string,
+    node: { type: "file"; content: string } | { type: "directory" }
+  ) => Promise<void>;
+  handleRename: (
+    node: { type: "file" | "directory"; id: string },
+    newName: string
+  ) => Promise<void>;
+  handleDelete: (node: {
+    type: "file" | "directory";
+    id: string;
+  }) => Promise<void>;
 }) {
   const [showCreateFileModal, setShowCreateFileModal] = useState(false);
   const [showCreateDirModal, setShowCreateDirModal] = useState(false);
@@ -30,12 +38,12 @@ export default function DirectoryView(props: {
   const [editedName, setEditedName] = useState("");
 
   const handleCreateFile = async (name: string, content: string) => {
-    await props.handleCreateFile(name, content);
+    await props.handleCreate(name, { type: "file", content });
     setShowCreateFileModal(false);
   };
 
   const handleCreateDirectory = async (name: string) => {
-    await props.handleCreateDirectory(name);
+    await props.handleCreate(name, { type: "directory" });
     setShowCreateDirModal(false);
   };
 
@@ -54,13 +62,15 @@ export default function DirectoryView(props: {
       setEditedName("");
       return;
     }
-    await props.handleRenameFile(editingFile.id, editedName);
+    const type = "content" in editingFile ? "file" : "directory";
+    await props.handleRename({ type, id: editingFile.id }, editedName);
     setEditingFile(null);
     setEditedName("");
   };
 
   const handleDeleteFile = (file: File | Directory) => {
-    props.handleDeleteFile(props.projectId, file.id);
+    const type = "content" in file ? "file" : "directory";
+    props.handleDelete({ type, id: file.id });
   };
 
   return (

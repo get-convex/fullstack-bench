@@ -24,6 +24,7 @@ export default function GroupMembershipModal({
   const [selectedInviteId, setSelectedInviteId] = useState("");
 
   const handleAddMember = async () => {
+    console.log("handleAddMember", selectedInviteId, inviteType);
     if (!selectedInviteId) return;
     let subject: Member["subject"];
     if (inviteType === "user") {

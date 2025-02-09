@@ -8,13 +8,17 @@ import { createGroup } from "@/lib/state/groups";
 import { useGroups } from "@/lib/state/groups";
 import { Group } from "@/lib/types";
 import { useMembers } from "@/lib/state/membership";
+import { useUserEmail } from "@/components/WithUserEmail";
+import { useUserByEmail } from "@/lib/state/users";
 
 export default function GroupsPage() {
-  const groups = useGroups();
+  const email = useUserEmail();
+  const user = useUserByEmail(email)!;
+  const groups = useGroups(user.id);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const handleCreateGroup = (name: string) => {
-    createGroup(name);
+    createGroup(user.id, name);
     setShowCreateModal(false);
   };
 

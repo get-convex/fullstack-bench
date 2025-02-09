@@ -6,6 +6,8 @@ import Link from "next/link";
 import EmojiPicker from "@/components/EmojiPicker";
 import { useProjects } from "@/lib/state/projects";
 import { addProject, deleteProject } from "@/lib/state/projects";
+import { useUserEmail } from "@/components/WithUserEmail";
+import { useUserByEmail } from "@/lib/state/users";
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -97,13 +99,15 @@ function CreateProjectModal({
 export default function ProjectsPage() {
   const projects = useProjects();
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const email = useUserEmail();
+  const user = useUserByEmail(email)!;
 
   const handleCreateProject = async (
     name: string,
     description: string,
     emoji: string
   ) => {
-    await addProject(name, description, emoji);
+    await addProject(user.id, name, description, emoji);
     setShowCreateModal(false);
   };
 
@@ -113,7 +117,7 @@ export default function ProjectsPage() {
         "Are you sure you want to delete this project? This action cannot be undone."
       )
     ) {
-      deleteProject(projectId);
+      deleteProject(user.id, projectId);
     }
   };
 

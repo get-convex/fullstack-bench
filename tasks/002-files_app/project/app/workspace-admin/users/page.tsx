@@ -51,12 +51,6 @@ export default function UsersPage() {
                 >
                   Role
                 </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
-                >
-                  Actions
-                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800">

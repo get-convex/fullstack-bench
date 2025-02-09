@@ -50,6 +50,8 @@ export default function ProjectSettingsModal({
   const [inviteType, setInviteType] = useState<"user" | "group">("user");
   const [selectedInviteId, setSelectedInviteId] = useState("");
 
+  console.log("projectMembers", projectMembers);
+
   const handleSave = () => {
     updateProjectMetadata(
       editedProject.name,
@@ -66,6 +68,7 @@ export default function ProjectSettingsModal({
         : { type: "group" as const, groupId: selectedInviteId };
     addMember(subject);
     setSelectedInviteId("");
+    setSelectedTab("members");
   };
 
   return (
@@ -200,7 +203,9 @@ export default function ProjectSettingsModal({
                             Description
                           </label>
                           <textarea
-                            value={editedProject.description}
+                            value={
+                              editedProject.description ?? project.description
+                            }
                             onChange={(e) =>
                               setEditedProject((prev) => ({
                                 ...prev,

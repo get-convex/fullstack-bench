@@ -4,22 +4,26 @@ import { notFound, useParams } from "next/navigation";
 import DirectoryView from "@/components/DirectoryView";
 import FileView from "@/components/FileView";
 import {
-  deleteFile,
-  createDirectory,
-  createFile,
   editFile,
-  renameFile,
   useFilePath,
+  create,
+  rename,
+  deleteNode,
 } from "@/lib/state/filesystem";
-import type { File, Directory } from "@/lib/types";
+import { useUserByEmail, useUsersById } from "@/lib/state/users";
+import { useUserEmail } from "@/components/WithUserEmail";
 
 export default function ProjectFilesPage() {
   const params = useParams();
   const projectId = params.projectId as string;
   const pathSegments = (params.path as string[]) || [];
-
+  const email = useUserEmail();
+  const user = useUserByEmail(email);
+  if (!user) {
+    notFound();
+  }
   // Start with the root.
-  const node = useFilePath(projectId, pathSegments);
+  const node = useFilePath(user.id, projectId, pathSegments);
   if (!node) {
     notFound();
   }
@@ -32,7 +36,7 @@ export default function ProjectFilesPage() {
         pathSegments={pathSegments}
         projectId={projectId}
         handleEditFile={async (content) => {
-          await editFile(node.id, content);
+          await editFile(user.id, node.id, content);
         }}
       />
     );
@@ -43,14 +47,15 @@ export default function ProjectFilesPage() {
         pathSegments={pathSegments}
         currentDirId={node.id}
         dirChildren={node.children}
-        handleCreateFile={async (name, content) => {
-          await createFile(node.id, name, content);
+        handleCreate={async (name, newNode) => {
+          await create(user.id, node.id, name, newNode);
         }}
-        handleCreateDirectory={async (name) => {
-          await createDirectory(node.id, name);
+        handleRename={async (node, newName) => {
+          await rename(user.id, node, newName);
         }}
-        handleRenameFile={renameFile}
-        handleDeleteFile={deleteFile}
+        handleDelete={async (node) => {
+          await deleteNode(user.id, node);
+        }}
       />
     );
   }

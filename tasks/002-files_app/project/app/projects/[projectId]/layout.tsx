@@ -7,8 +7,9 @@ import ProjectSettingsModal from "@/components/ProjectSettingsModal";
 import { updateProjectMetadata, useProject } from "@/lib/state/projects";
 import { addMember, removeMember, useMembers } from "@/lib/state/membership";
 import { useGroups } from "@/lib/state/groups";
-import { useUsers } from "@/lib/state/users";
+import { useUserByEmail, useUsers } from "@/lib/state/users";
 import { Member } from "@/lib/types";
+import { useUserEmail } from "@/components/WithUserEmail";
 
 export default function ProjectLayout({
   children,
@@ -17,10 +18,12 @@ export default function ProjectLayout({
 }) {
   const params = useParams();
   const projectId = params.projectId as string;
-  const project = useProject(projectId);
+  const email = useUserEmail();
+  const user = useUserByEmail(email)!;
+  const project = useProject(user.id, projectId);
   const projectMembers = useMembers({ type: "project", projectId });
   const users = useUsers();
-  const groups = useGroups();
+  const groups = useGroups(user.id);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [settingsModalTab, setSettingsModalTab] = useState<
     "details" | "members"
@@ -54,11 +57,14 @@ export default function ProjectLayout({
   }
 
   const addMemberToProject = async (subject: Member["subject"]) => {
-    await addMember(subject, { type: "project", projectId: project.id });
+    await addMember(user.id, subject, {
+      type: "project",
+      projectId: project.id,
+    });
   };
 
   const removeMemberFromProject = async (memberId: string) => {
-    await removeMember(memberId);
+    await removeMember(user.id, memberId);
   };
 
   const updateProject = async (
@@ -66,7 +72,7 @@ export default function ProjectLayout({
     description?: string,
     emoji?: string
   ) => {
-    await updateProjectMetadata(project.id, name, description, emoji);
+    await updateProjectMetadata(user.id, project.id, name, description, emoji);
   };
 
   return (
