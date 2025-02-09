@@ -1,7 +1,14 @@
 "use client";
 
-import type { File } from "@/testData";
-import { PencilIcon } from "@heroicons/react/24/outline";
+import type { File } from "@/lib/types";
+import {
+  DocumentIcon,
+  FolderIcon,
+  FolderPlusIcon,
+  TrashIcon,
+  PencilIcon,
+} from "@heroicons/react/24/outline";
+import Link from "next/link";
 import { useState } from "react";
 import "highlight.js/styles/default.css";
 import hljs from "highlight.js";
@@ -53,12 +60,12 @@ export default function FileView({
   file: File;
   pathSegments: string[];
   projectId: string;
-  handleEditFile: (projectId: string, fileId: string, content: string) => void;
+  handleEditFile: (content: string) => Promise<void>;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(file.content || "");
 
-  const language = getLanguageFromFilename(file.name);
+  const language = getLanguageFromFilename(file.parentEdge.name);
   const highlighted = hljs.highlight(file.content || "", { language }).value;
 
   return (
@@ -107,8 +114,8 @@ export default function FileView({
             Cancel
           </button>
           <button
-            onClick={() => {
-              handleEditFile(projectId, file.id, editedContent);
+            onClick={async () => {
+              await handleEditFile(editedContent);
               setIsEditing(false);
             }}
             className="px-3 py-2 text-sm bg-[#8D2676] text-white rounded-md hover:bg-[#7A2065] transition-colors"

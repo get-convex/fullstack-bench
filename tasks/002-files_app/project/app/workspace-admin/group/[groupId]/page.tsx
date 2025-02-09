@@ -3,19 +3,6 @@
 import { useState } from "react";
 import { notFound, useParams, useRouter } from "next/navigation";
 import {
-  Group,
-  useGroup,
-  updateGroupName,
-  removeGroup,
-  removeMemberFromGroup,
-  useGroupMembers,
-  Member,
-  useUser,
-  addMemberToGroup,
-  useUsers,
-  useGroups,
-} from "@/testData";
-import {
   UserIcon,
   UserGroupIcon,
   PencilIcon,
@@ -24,6 +11,12 @@ import {
 } from "@heroicons/react/24/outline";
 import GroupMembershipModal from "@/components/GroupMembershipModal";
 import Link from "next/link";
+import { removeGroup } from "@/lib/state/groups";
+import { updateGroupName, useGroups } from "@/lib/state/groups";
+import { useGroup } from "@/lib/state/groups";
+import { useUserByEmail, useUsers } from "@/lib/state/users";
+import { Group, Member } from "@/lib/types";
+import { addMember, removeMember, useMembers } from "@/lib/state/membership";
 
 export default function GroupPage() {
   const params = useParams();
@@ -33,7 +26,7 @@ export default function GroupPage() {
   if (!group) {
     notFound();
   }
-  const groupMembers = useGroupMembers(groupId);
+  const members = useMembers({ type: "group", groupId });
   const users = useUsers();
   const groups = useGroups();
 
@@ -41,15 +34,22 @@ export default function GroupPage() {
   const [editedName, setEditedName] = useState(group.name);
   const [showMembershipModal, setShowMembershipModal] = useState(false);
 
-  const handleUpdateName = () => {
+  const handleUpdateName = async () => {
     if (!editedName.trim()) return;
-    updateGroupName(groupId, editedName.trim());
+    await updateGroupName(groupId, editedName.trim());
     setIsEditingName(false);
   };
 
-  const handleDeleteGroup = () => {
-    removeGroup(groupId);
+  const handleDeleteGroup = async () => {
+    await removeGroup(groupId);
     router.push("/workspace-admin/groups");
+  };
+
+  const addMemberToGroup = async (
+    groupId: string,
+    subject: Member["subject"]
+  ) => {
+    await addMember(subject, { type: "group", groupId });
   };
 
   return (
@@ -129,10 +129,10 @@ export default function GroupPage() {
             <h2 className="text-lg font-medium text-white">Members</h2>
           </div>
           <div className="divide-y divide-gray-800">
-            {groupMembers.map((member) => (
+            {members.map((member) => (
               <MemberRow key={member.id} group={group} member={member} />
             ))}
-            {groupMembers.length === 0 && (
+            {members.length === 0 && (
               <div className="px-6 py-4 text-gray-500 text-center">
                 No members yet
               </div>
@@ -184,7 +184,7 @@ function UserRow({
   group: Group;
   memberUserId: string;
 }) {
-  const user = useUser(memberUserId);
+  const user = useUserByEmail(memberUserId);
   if (!user) {
     throw new Error("User not found");
   }
@@ -199,7 +199,7 @@ function UserRow({
       </div>
       <div className="flex items-center space-x-2">
         <button
-          onClick={() => removeMemberFromGroup(group.id, member.id)}
+          onClick={() => removeMember(member.id)}
           className="text-gray-400 hover:text-red-400 ml-4"
           title="Remove Member"
         >
@@ -234,7 +234,7 @@ function GroupRow({
       </div>
       <div className="flex items-center space-x-2">
         <button
-          onClick={() => removeMemberFromGroup(group.id, member.id)}
+          onClick={() => removeMember(member.id)}
           className="text-gray-400 hover:text-red-400 ml-4"
           title="Remove Member"
         >

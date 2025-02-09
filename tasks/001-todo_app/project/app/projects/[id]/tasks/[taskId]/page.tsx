@@ -1,37 +1,62 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { Sidebar } from "../../../../../components/Sidebar";
-import { TaskDetails } from "../../../../../components/TaskDetails";
-import { CommentList } from "../../../../../components/CommentList";
+import { Sidebar } from "@/components/Sidebar";
+import { TaskDetails } from "@/components/TaskDetails";
+import { CommentList } from "@/components/CommentList";
 import {
   addProject,
   addComment,
-  projects,
-  tasks,
-  comments,
   updateTaskStatus,
   updateTaskAssignee,
   updateTaskDueDate,
-} from "../../../../../lib/testData";
+  useProject,
+  useTask,
+  useComments,
+  useUserByEmail,
+  useProjects,
+  useUsersById,
+  useUsers,
+} from "@/lib/state";
+import { useUserEmail } from "@/components/WithUserEmail";
+import { notFound } from "next/navigation";
 
 export default function TaskPage() {
   const params = useParams();
   const projectId = params.id as string;
   const taskId = params.taskId as string;
 
-  const currentProject = projects.find((p) => p.projectId === projectId);
-  const currentTask = tasks.find((t) => t.taskId === taskId);
-  const taskComments = comments.filter((c) => c.taskId === taskId);
+  const email = useUserEmail();
+  const user = useUserByEmail(email);
+  if (!user) {
+    notFound();
+  }
+
+  const currentProject = useProject(projectId);
+  const currentTask = useTask(taskId);
+  const taskComments = useComments(taskId);
+  const usersById = useUsersById(
+    taskComments.map((comment) => comment.authorId)
+  );
+  const projects = useProjects();
+
+  const users = useUsers();
 
   if (!currentProject || !currentTask) {
-    return <div>Task not found</div>;
+    notFound();
   }
+
+  const postComment = async (content: string) => {
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return addComment(taskId, content, user.id);
+  };
 
   return (
     <div className="flex h-screen bg-[#0C0C0D]">
       <Sidebar
-        email="user@example.com"
+        user={user}
         currentProjectId={projectId}
         projects={projects}
         onCreateProject={addProject}
@@ -55,17 +80,20 @@ export default function TaskPage() {
             </div>
 
             <CommentList
-              taskId={taskId}
               comments={taskComments}
-              onAddComment={addComment}
+              usersById={usersById}
+              onAddComment={postComment}
             />
           </div>
         </div>
         <TaskDetails
           task={currentTask}
-          updateTaskStatus={updateTaskStatus}
-          updateTaskAssignee={updateTaskAssignee}
-          updateTaskDueDate={updateTaskDueDate}
+          users={users}
+          updateTaskStatus={(status) => updateTaskStatus(taskId, status)}
+          updateTaskAssignee={(assigneeId) =>
+            updateTaskAssignee(taskId, assigneeId)
+          }
+          updateTaskDueDate={(dueDate) => updateTaskDueDate(taskId, dueDate)}
         />
       </main>
     </div>

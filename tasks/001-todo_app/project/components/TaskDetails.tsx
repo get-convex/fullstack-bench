@@ -1,11 +1,11 @@
 "use client";
 
 import * as Popover from "@radix-ui/react-popover";
-import { Calendar, Clock, User } from "lucide-react";
+import { Calendar, Clock, User as LucideUser } from "lucide-react";
 import { useState } from "react";
 import { DayPicker } from "react-day-picker";
-import { format, parse } from "date-fns";
-import { Task } from "../lib/types";
+import { format } from "date-fns";
+import { Task, User } from "../lib/types";
 
 const statusColors = {
   Todo: "bg-gray-400",
@@ -17,9 +17,10 @@ const statusColors = {
 
 interface TaskDetailsProps {
   task: Task;
-  updateTaskStatus: (taskId: string, status: Task["status"]) => void;
-  updateTaskAssignee: (taskId: string, assigneeId: string | null) => void;
-  updateTaskDueDate: (taskId: string, dueDate: string) => void;
+  users: User[];
+  updateTaskStatus: (status: Task["status"]) => Promise<void>;
+  updateTaskAssignee: (assigneeId: string | null) => Promise<void>;
+  updateTaskDueDate: (dueDate: number | null) => Promise<void>;
 }
 
 const css = `
@@ -137,6 +138,7 @@ const css = `
 
 export function TaskDetails({
   task,
+  users,
   updateTaskStatus,
   updateTaskAssignee,
   updateTaskDueDate,
@@ -144,11 +146,7 @@ export function TaskDetails({
   const [statusOpen, setStatusOpen] = useState(false);
   const [assigneeOpen, setAssigneeOpen] = useState(false);
   const [dueDateOpen, setDueDateOpen] = useState(false);
-
-  const selectedDate = task.dueDate
-    ? parse(task.dueDate, "yyyy-MM-dd", new Date())
-    : undefined;
-
+  const selectedDate = task.dueDate ? new Date(task.dueDate) : undefined;
   return (
     <>
       <style>{css}</style>
@@ -180,7 +178,7 @@ export function TaskDetails({
                         task.status === status ? "text-white" : "text-[#8A8A8A]"
                       }`}
                       onClick={() => {
-                        updateTaskStatus(task.taskId, status as Task["status"]);
+                        updateTaskStatus(status as Task["status"]);
                       }}
                     >
                       <div
@@ -204,8 +202,9 @@ export function TaskDetails({
           <Popover.Root open={assigneeOpen} onOpenChange={setAssigneeOpen}>
             <Popover.Trigger asChild>
               <button className="w-full px-2 py-1.5 bg-[#1A1A1A] text-[#E1E1E1] text-sm rounded hover:bg-[#242424] focus:outline-none focus:ring-1 focus:ring-[#4A4A4A] transition-colors flex items-center gap-2">
-                <User size={14} className="text-[#8A8A8A]" />
-                {task.assigneeId || "Unassigned"}
+                <LucideUser size={14} className="text-[#8A8A8A]" />
+                {users.find((user) => user.id === task.assigneeId)?.email ||
+                  "Unassigned"}
               </button>
             </Popover.Trigger>
             <Popover.Portal>
@@ -218,24 +217,29 @@ export function TaskDetails({
                     className={`w-full px-2 py-1.5 text-sm rounded flex items-center gap-2 hover:bg-[#242424] transition-colors ${
                       !task.assigneeId ? "text-white" : "text-[#8A8A8A]"
                     }`}
-                    onClick={() => updateTaskAssignee(task.taskId, null)}
+                    onClick={() => updateTaskAssignee(null)}
                   >
-                    <User size={14} />
+                    <LucideUser size={14} />
                     Unassigned
                   </button>
                 </Popover.Close>
                 <Popover.Close asChild>
-                  <button
-                    className={`w-full px-2 py-1.5 text-sm rounded flex items-center gap-2 hover:bg-[#242424] transition-colors ${
-                      task.assigneeId === "user123"
-                        ? "text-white"
-                        : "text-[#8A8A8A]"
-                    }`}
-                    onClick={() => updateTaskAssignee(task.taskId, "user123")}
-                  >
-                    <User size={14} />
-                    user@example.com
-                  </button>
+                  <div className="space-y-1">
+                    {users.map((user) => (
+                      <button
+                        key={user.id}
+                        className={`w-full px-2 py-1.5 text-sm rounded flex items-center gap-2 hover:bg-[#242424] transition-colors ${
+                          task.assigneeId === user.id
+                            ? "text-white"
+                            : "text-[#8A8A8A]"
+                        }`}
+                        onClick={() => updateTaskAssignee(user.id)}
+                      >
+                        <LucideUser size={14} />
+                        {user.email}
+                      </button>
+                    ))}
+                  </div>
                 </Popover.Close>
               </Popover.Content>
             </Popover.Portal>
@@ -269,10 +273,7 @@ export function TaskDetails({
                     selected={selectedDate}
                     onSelect={(date) => {
                       if (date) {
-                        updateTaskDueDate(
-                          task.taskId,
-                          format(date, "yyyy-MM-dd")
-                        );
+                        updateTaskDueDate(date.getTime());
                         setDueDateOpen(false);
                       }
                     }}

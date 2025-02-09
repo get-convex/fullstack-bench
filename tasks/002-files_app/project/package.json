@@ -16,6 +16,7 @@
     "@types/prismjs": "^1.26.5",
     "clsx": "^2.1.1",
     "highlight.js": "^11.11.1",
+    "jotai": "^2.11.3",
     "next": "15.1.6",
     "prismjs": "^1.29.0",
     "react": "^19.0.0",

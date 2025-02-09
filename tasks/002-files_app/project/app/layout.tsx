@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
 import { SetupContext } from "@/components/SetupContext";
 import { WithUserEmail } from "@/components/WithUserEmail";
 import { Toaster } from "react-hot-toast";
+import { ProjectSidebar } from "./ProjectSidebar";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -33,7 +33,7 @@ export default function RootLayout({
         <SetupContext>
           <WithUserEmail>
             <div className="flex h-screen">
-              <Sidebar />
+              <ProjectSidebar />
               {/* Main Content Area */}
               <div className="flex-1 overflow-auto">{children}</div>
             </div>

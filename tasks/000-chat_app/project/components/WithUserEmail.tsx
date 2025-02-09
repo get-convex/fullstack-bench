@@ -3,5 +3,5 @@ export function WithUserEmail(props: { children: React.ReactNode }) {
 }
 
 export function useUserEmail() {
-  return "test@test.com";
+  return "joe@example.com";
 }

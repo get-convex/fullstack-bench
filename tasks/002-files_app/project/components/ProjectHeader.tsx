@@ -1,6 +1,6 @@
 "use client";
 
-import { Project } from "../testData";
+import { Project } from "@/lib/types";
 
 interface ProjectHeaderProps {
   project: Project;

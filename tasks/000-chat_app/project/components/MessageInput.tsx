@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import { useChannel } from "@/lib/state";
+import React, { useState } from "react";
 
 interface MessageInputProps {
   channelId: string;
@@ -9,7 +10,10 @@ interface MessageInputProps {
 
 export function MessageInput({ channelId, onSendMessage }: MessageInputProps) {
   const [newMessage, setNewMessage] = useState("");
-
+  const channel = useChannel(channelId);
+  if (!channel) {
+    throw new Error("Channel not found");
+  }
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newMessage.trim()) {
@@ -27,7 +31,7 @@ export function MessageInput({ channelId, onSendMessage }: MessageInputProps) {
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             className="flex-1 bg-[#26262b] text-white placeholder-[#A1A1A3] px-4 py-2 rounded-l text-sm border border-[#363639] focus:border-[#8D2676] focus:outline-none"
-            placeholder={`Message #${channelId}`}
+            placeholder={`Message #${channel.name}`}
           />
           <button
             type="submit"

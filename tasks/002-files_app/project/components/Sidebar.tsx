@@ -1,15 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useProjects, useGroups, useUserByEmail } from "../testData";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
-import { useUserEmail } from "./WithUserEmail";
+import { Group, Project, User } from "@/lib/types";
 
-export default function Sidebar() {
-  const projects = useProjects();
-  const userEmail = useUserEmail();
-  const groups = useGroups();
-  const user = useUserByEmail(userEmail);
+interface SidebarProps {
+  user: User;
+  isAdmin: boolean;
+  projects: Project[];
+  groups: Group[];
+}
+
+export default function Sidebar(props: SidebarProps) {
   return (
     <div className="w-64 bg-[#0D1117] border-r border-gray-800 p-4 flex flex-col h-screen">
       <div className="flex justify-between items-center mb-4">
@@ -18,7 +20,7 @@ export default function Sidebar() {
           <Link href="/" className="text-sm text-blue-400 hover:text-blue-300">
             Home
           </Link>
-          {user?.isAdmin && (
+          {props.isAdmin && (
             <Link
               href="/workspace-admin"
               className="text-sm text-blue-400 hover:text-blue-300"
@@ -31,7 +33,7 @@ export default function Sidebar() {
 
       {/* Projects List */}
       <div className="space-y-2 flex-1 overflow-y-auto">
-        {projects.map((project) => (
+        {props.projects.map((project) => (
           <Link
             key={project.id}
             href={`/projects/${project.id}`}
@@ -50,7 +52,7 @@ export default function Sidebar() {
       <div className="mt-6 pt-4 border-t border-gray-800">
         <h3 className="text-sm font-medium text-gray-300 mb-3">Groups</h3>
         <div className="space-y-1">
-          {groups.map((group) => (
+          {props.groups.map((group) => (
             <Link
               key={group.id}
               href={`/groups/${group.id}`}
@@ -67,8 +69,11 @@ export default function Sidebar() {
         <div className="flex items-center space-x-3">
           <UserCircleIcon className="w-8 h-8 text-gray-400" />
           <div className="flex-1 min-w-0">
-            <p className="text-sm text-gray-300 truncate" title={userEmail}>
-              {userEmail}
+            <p
+              className="text-sm text-gray-300 truncate"
+              title={props.user.email}
+            >
+              {props.user.email}
             </p>
           </div>
         </div>

@@ -1,13 +1,13 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import type { Member, User, Group } from "../testData";
+import { Member, Group, User } from "@/lib/types";
 
 interface GroupMembershipModalProps {
   isOpen: boolean;
   onClose: () => void;
   group: Group;
-  addMember: (groupId: string, member: Member) => void;
+  addMember: (groupId: string, subject: Member["subject"]) => Promise<void>;
   users: User[];
   groups: Group[];
 }
@@ -23,27 +23,21 @@ export default function GroupMembershipModal({
   const [inviteType, setInviteType] = useState<"user" | "group">("user");
   const [selectedInviteId, setSelectedInviteId] = useState("");
 
-  const handleAddMember = () => {
+  const handleAddMember = async () => {
     if (!selectedInviteId) return;
-    let newMember: Member;
+    let subject: Member["subject"];
     if (inviteType === "user") {
-      newMember = {
-        id: selectedInviteId,
-        subject: {
-          type: "user",
-          userId: selectedInviteId,
-        },
+      subject = {
+        type: "user",
+        userId: selectedInviteId,
       };
     } else {
-      newMember = {
-        id: selectedInviteId,
-        subject: {
-          type: "group",
-          groupId: selectedInviteId,
-        },
+      subject = {
+        type: "group",
+        groupId: selectedInviteId,
       };
     }
-    addMember(group.id, newMember);
+    await addMember(group.id, subject);
     setSelectedInviteId("");
   };
 

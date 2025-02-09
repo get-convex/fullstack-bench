@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useProjects, createProject, deleteProject } from "@/testData";
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import EmojiPicker from "@/components/EmojiPicker";
+import { useProjects } from "@/lib/state/projects";
+import { addProject, deleteProject } from "@/lib/state/projects";
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -97,12 +98,12 @@ export default function ProjectsPage() {
   const projects = useProjects();
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const handleCreateProject = (
+  const handleCreateProject = async (
     name: string,
     description: string,
     emoji: string
   ) => {
-    createProject(name, description, emoji);
+    await addProject(name, description, emoji);
     setShowCreateModal(false);
   };
 
