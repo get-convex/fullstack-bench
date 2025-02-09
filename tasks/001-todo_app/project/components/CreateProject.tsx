@@ -5,14 +5,20 @@ import { Modal } from "./Modal";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import { Smile } from "lucide-react";
-import { Project } from "../lib/types";
 
 interface CreateProjectProps {
-  createProject: (project: Omit<Project, "projectId">) => void;
+  userId: string;
+  createProject: (
+    name: string,
+    emoji: string,
+    description: string,
+    creatorId: string
+  ) => void;
   setIsCreatingProject: (isCreating: boolean) => void;
 }
 
 export function CreateProject({
+  userId,
   createProject,
   setIsCreatingProject,
 }: CreateProjectProps) {
@@ -24,13 +30,7 @@ export function CreateProject({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
-
-    createProject({
-      name: name.trim(),
-      emoji,
-      description: description.trim(),
-      creatorEmail: "user123", // This will be replaced with actual user ID when we add authentication
-    });
+    void createProject(name.trim(), emoji, description.trim(), userId);
     setIsCreatingProject(false);
   };
 

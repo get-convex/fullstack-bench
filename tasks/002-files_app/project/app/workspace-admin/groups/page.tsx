@@ -1,17 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { useGroups, createGroup, Group, useGroupMembers } from "@/testData";
 import { UserGroupIcon } from "@heroicons/react/24/outline";
 import CreateGroupModal from "@/components/CreateGroupModal";
 import Link from "next/link";
+import { createGroup } from "@/lib/state/groups";
+import { useGroups } from "@/lib/state/groups";
+import { Group } from "@/lib/types";
+import { useMembers } from "@/lib/state/membership";
+import { useUserEmail } from "@/components/WithUserEmail";
+import { useUserByEmail } from "@/lib/state/users";
 
 export default function GroupsPage() {
-  const groups = useGroups();
+  const email = useUserEmail();
+  const user = useUserByEmail(email)!;
+  const groups = useGroups(user.id);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   const handleCreateGroup = (name: string) => {
-    createGroup(name);
+    createGroup(user.id, name);
     setShowCreateModal(false);
   };
 
@@ -60,7 +67,9 @@ export default function GroupsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800">
-              {groups.map((group) => <GroupRow key={group.id} group={group} />)}
+              {groups.map((group) => (
+                <GroupRow key={group.id} group={group} />
+              ))}
             </tbody>
           </table>
         </div>
@@ -76,7 +85,7 @@ export default function GroupsPage() {
 }
 
 function GroupRow({ group }: { group: Group }) {
-  const members = useGroupMembers(group.id);
+  const members = useMembers({ type: "group", groupId: group.id });
   return (
     <tr
       key={group.id}

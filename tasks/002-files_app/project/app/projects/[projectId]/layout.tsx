@@ -2,17 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import {
-  addMemberToProject,
-  removeMemberFromProject,
-  useProject,
-  useProjectMembers,
-  useUsers,
-  useGroups,
-  updateProjectMetadata,
-} from "@/testData";
 import ProjectHeader from "@/components/ProjectHeader";
 import ProjectSettingsModal from "@/components/ProjectSettingsModal";
+import { updateProjectMetadata, useProject } from "@/lib/state/projects";
+import { addMember, removeMember, useMembers } from "@/lib/state/membership";
+import { useGroups } from "@/lib/state/groups";
+import { useUserByEmail, useUsers } from "@/lib/state/users";
+import { Member } from "@/lib/types";
+import { useUserEmail } from "@/components/WithUserEmail";
 
 export default function ProjectLayout({
   children,
@@ -21,10 +18,12 @@ export default function ProjectLayout({
 }) {
   const params = useParams();
   const projectId = params.projectId as string;
-  const project = useProject(projectId);
-  const projectMembers = useProjectMembers(projectId);
+  const email = useUserEmail();
+  const user = useUserByEmail(email)!;
+  const project = useProject(user.id, projectId);
+  const projectMembers = useMembers({ type: "project", projectId });
   const users = useUsers();
-  const groups = useGroups();
+  const groups = useGroups(user.id);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [settingsModalTab, setSettingsModalTab] = useState<
     "details" | "members"
@@ -57,6 +56,25 @@ export default function ProjectLayout({
     );
   }
 
+  const addMemberToProject = async (subject: Member["subject"]) => {
+    await addMember(user.id, subject, {
+      type: "project",
+      projectId: project.id,
+    });
+  };
+
+  const removeMemberFromProject = async (memberId: string) => {
+    await removeMember(user.id, memberId);
+  };
+
+  const updateProject = async (
+    name?: string,
+    description?: string,
+    emoji?: string
+  ) => {
+    await updateProjectMetadata(user.id, project.id, name, description, emoji);
+  };
+
   return (
     <div className="flex flex-col h-full bg-[#0D1117]">
       <ProjectHeader project={project} />
@@ -70,9 +88,9 @@ export default function ProjectLayout({
         projectMembers={projectMembers}
         users={users}
         groups={groups}
-        addMemberToProject={addMemberToProject}
-        removeMemberFromProject={removeMemberFromProject}
-        updateProjectMetadata={updateProjectMetadata}
+        addMember={addMemberToProject}
+        removeMember={removeMemberFromProject}
+        updateProjectMetadata={updateProject}
       />
     </div>
   );

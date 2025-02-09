@@ -1,25 +1,32 @@
+export interface User {
+  id: string;
+  email: string;
+}
+
 export interface Project {
-  projectId: string;
+  id: string;
+  createdAt: number;
   name: string;
   emoji: string;
   description: string;
-  creatorEmail: string;
+  creatorId: string;
 }
 
 export interface Task {
-  taskId: string;
+  id: string;
+  createdAt: number;
   projectId: string;
   title: string;
   description: string;
   status: "Todo" | "In Progress" | "In Review" | "Done" | "Canceled";
-  dueDate: string | null;
+  dueDate: number | null;
   assigneeId: string | null;
 }
 
 export interface Comment {
-  commentId: string;
+  id: string;
+  createdAt: number;
   taskId: string;
-  authorEmail: string;
+  authorId: string;
   content: string;
-  createdAt: string;
 }

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { CreateChannel } from './CreateChannel';
+import { useState } from "react";
+import Link from "next/link";
+import { CreateChannel } from "./CreateChannel";
 
 interface Channel {
   id: string;
@@ -13,10 +13,19 @@ interface SidebarProps {
   email: string;
   currentChannel: string;
   channels: Channel[];
-  onCreateChannel: (id: string, name: string) => void;
+  onCreateChannel: (
+    name: string
+  ) => Promise<
+    { type: "success"; channelId: string } | { type: "error"; message: string }
+  >;
 }
 
-export function Sidebar({ email, currentChannel, channels, onCreateChannel }: SidebarProps) {
+export function Sidebar({
+  email,
+  currentChannel,
+  channels,
+  onCreateChannel,
+}: SidebarProps) {
   const [isCreatingChannel, setIsCreatingChannel] = useState(false);
 
   return (
@@ -27,7 +36,9 @@ export function Sidebar({ email, currentChannel, channels, onCreateChannel }: Si
       </div>
 
       <div className="flex justify-between items-center mb-3 group">
-        <h2 className="text-sm font-medium text-[#A1A1A3] tracking-wide uppercase">Channels</h2>
+        <h2 className="text-sm font-medium text-[#A1A1A3] tracking-wide uppercase">
+          Channels
+        </h2>
         <button
           onClick={() => setIsCreatingChannel(true)}
           className="text-sm text-[#A1A1A3] hover:text-white hover:bg-[#26262b] w-6 h-6 rounded flex items-center justify-center transition-colors"

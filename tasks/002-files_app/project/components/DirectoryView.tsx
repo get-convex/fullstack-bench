@@ -1,6 +1,6 @@
 "use client";
 
-import type { Directory, File } from "@/testData";
+import type { Directory, File } from "@/lib/types";
 import {
   DocumentIcon,
   FolderIcon,
@@ -19,57 +19,58 @@ export default function DirectoryView(props: {
   pathSegments: string[];
   currentDirId: string | undefined;
   dirChildren: (File | Directory)[];
-  handleCreateFile: (
-    projectId: string,
-    dirId: string | undefined,
+  handleCreate: (
     name: string,
-    content: string
-  ) => void;
-  handleCreateDirectory: (
-    projectId: string,
-    dirId: string | undefined,
-    name: string
-  ) => void;
-  handleRenameFile: (
-    projectId: string,
-    fileId: string,
+    node: { type: "file"; content: string } | { type: "directory" }
+  ) => Promise<void>;
+  handleRename: (
+    node: { type: "file" | "directory"; id: string },
     newName: string
-  ) => void;
-  handleDeleteFile: (projectId: string, fileId: string) => void;
+  ) => Promise<void>;
+  handleDelete: (node: {
+    type: "file" | "directory";
+    id: string;
+  }) => Promise<void>;
 }) {
   const [showCreateFileModal, setShowCreateFileModal] = useState(false);
   const [showCreateDirModal, setShowCreateDirModal] = useState(false);
   const [editingFile, setEditingFile] = useState<File | Directory | null>(null);
   const [editedName, setEditedName] = useState("");
 
-  const handleCreateFile = (name: string, content: string) => {
-    props.handleCreateFile(props.projectId, props.currentDirId, name, content);
+  const handleCreateFile = async (name: string, content: string) => {
+    await props.handleCreate(name, { type: "file", content });
     setShowCreateFileModal(false);
   };
 
-  const handleCreateDirectory = (name: string) => {
-    props.handleCreateDirectory(props.projectId, props.currentDirId, name);
+  const handleCreateDirectory = async (name: string) => {
+    await props.handleCreate(name, { type: "directory" });
     setShowCreateDirModal(false);
   };
 
   const handleStartRename = (file: File | Directory) => {
     setEditingFile(file);
-    setEditedName(file.name);
+    setEditedName(file.parentEdge?.name || "");
   };
 
-  const handleFinishRename = () => {
-    if (!editingFile || !editedName.trim() || editedName === editingFile.name) {
+  const handleFinishRename = async () => {
+    if (
+      !editingFile ||
+      !editedName.trim() ||
+      editedName === editingFile.parentEdge?.name
+    ) {
       setEditingFile(null);
       setEditedName("");
       return;
     }
-    props.handleRenameFile(props.projectId, editingFile.id, editedName);
+    const type = "content" in editingFile ? "file" : "directory";
+    await props.handleRename({ type, id: editingFile.id }, editedName);
     setEditingFile(null);
     setEditedName("");
   };
 
   const handleDeleteFile = (file: File | Directory) => {
-    props.handleDeleteFile(props.projectId, file.id);
+    const type = "content" in file ? "file" : "directory";
+    props.handleDelete({ type, id: file.id });
   };
 
   return (
@@ -131,10 +132,10 @@ export default function DirectoryView(props: {
             >
               {editingFile?.id === file.id ? (
                 <div className="flex items-center space-x-2 flex-1">
-                  {file.type === "directory" ? (
-                    <FolderIcon className="w-5 h-5 text-gray-400" />
-                  ) : (
+                  {"content" in file ? (
                     <DocumentIcon className="w-5 h-5 text-gray-400" />
+                  ) : (
+                    <FolderIcon className="w-5 h-5 text-gray-400" />
                   )}
                   <input
                     type="text"
@@ -156,16 +157,18 @@ export default function DirectoryView(props: {
                 <Link
                   href={`/projects/${props.projectId}/files/${[
                     ...props.pathSegments,
-                    file.name,
+                    file.parentEdge?.name,
                   ].join("/")}`}
                   className="flex items-center space-x-2 cursor-pointer flex-1"
                 >
-                  {file.type === "directory" ? (
-                    <FolderIcon className="w-5 h-5 text-gray-400" />
-                  ) : (
+                  {"content" in file ? (
                     <DocumentIcon className="w-5 h-5 text-gray-400" />
+                  ) : (
+                    <FolderIcon className="w-5 h-5 text-gray-400" />
                   )}
-                  <span className="text-sm text-gray-300">{file.name}</span>
+                  <span className="text-sm text-gray-300">
+                    {file.parentEdge?.name}
+                  </span>
                 </Link>
               )}
               <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity">

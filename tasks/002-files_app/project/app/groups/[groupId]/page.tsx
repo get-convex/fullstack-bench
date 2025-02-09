@@ -1,14 +1,20 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { Member, useGroup, useGroupMembers, useUser } from "../../../testData";
 import { UserIcon } from "@heroicons/react/24/outline";
+import { useGroup } from "@/lib/state/groups";
+import { useMembers } from "@/lib/state/membership";
+import { Member } from "@/lib/types";
+import { useUser, useUserByEmail } from "@/lib/state/users";
+import { useUserEmail } from "@/components/WithUserEmail";
 
 export default function GroupPage() {
   const params = useParams();
+  const email = useUserEmail();
+  const user = useUserByEmail(email)!;
   const groupId = params.groupId as string;
-  const group = useGroup(groupId);
-  const members = useGroupMembers(groupId);
+  const group = useGroup(user.id, groupId);
+  const members = useMembers({ type: "group", groupId });
 
   if (!group) {
     return (
@@ -65,7 +71,9 @@ function UserRow({ userId }: { userId: string }) {
 }
 
 function GroupRow({ groupId }: { groupId: string }) {
-  const group = useGroup(groupId);
+  const email = useUserEmail();
+  const user = useUserByEmail(email)!;
+  const group = useGroup(user.id, groupId);
   return (
     <div className="px-6 py-4 flex items-center justify-between">
       <div className="flex items-center space-x-3">

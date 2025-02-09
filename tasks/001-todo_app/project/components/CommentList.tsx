@@ -2,23 +2,23 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Comment as CommentComponent } from "./Comment";
-import { Comment } from "../lib/types";
+import { Comment, User } from "../lib/types";
 import { useUserEmail } from "./WithUserEmail";
 
 interface CommentListProps {
-  taskId: string;
   comments: Comment[];
-  onAddComment: (comment: Omit<Comment, "commentId">) => void;
+  usersById: Record<string, User>;
+  onAddComment: (content: string) => Promise<string>;
 }
 
 export function CommentList({
-  taskId,
   comments,
+  usersById,
   onAddComment,
 }: CommentListProps) {
   const [newComment, setNewComment] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const email = useUserEmail();
+  console.log("comments", comments);
 
   // Auto-resize textarea
   useEffect(() => {
@@ -35,12 +35,7 @@ export function CommentList({
     e.preventDefault();
     if (!newComment.trim()) return;
 
-    onAddComment({
-      taskId,
-      authorEmail: email,
-      content: newComment.trim(),
-      createdAt: new Date().toISOString(),
-    });
+    onAddComment(newComment.trim());
     setNewComment("");
   };
 
@@ -52,9 +47,9 @@ export function CommentList({
       <div className="space-y-6 mb-6">
         {comments.map((comment) => (
           <CommentComponent
-            key={comment.commentId}
-            author={comment.authorEmail}
-            createdAt={comment.createdAt}
+            key={comment.id}
+            author={usersById[comment.authorId].email}
+            createdAt={new Date(comment.createdAt).toLocaleString()}
             content={comment.content}
           />
         ))}

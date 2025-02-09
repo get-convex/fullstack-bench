@@ -1,26 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { updateUserRole, useUsers, inviteUser, removeUser } from "@/testData";
 import { UserPlusIcon, TrashIcon } from "@heroicons/react/24/outline";
-import InviteUserModal from "@/components/InviteUserModal";
 import Link from "next/link";
+import { useUsers } from "@/lib/state/users";
+import { setIsAdmin, useAdminUsers } from "@/lib/state/userPermissions";
 
 export default function UsersPage() {
   const users = useUsers();
-  const [showInviteModal, setShowInviteModal] = useState(false);
-
-  const handleUserRoleChange = (userId: string, newRole: "member" | "admin") => {
-    updateUserRole(userId, newRole === "admin");
-  };
-
-  const handleInviteUser = (email: string) => {
-    inviteUser(email);
-    setShowInviteModal(false);
-  };
-
-  const handleRemoveUser = (userId: string) => {
-    removeUser(userId);
+  const adminUsers = useAdminUsers();
+  const handleUserRoleChange = async (
+    userId: string,
+    newRole: "member" | "admin"
+  ) => {
+    await setIsAdmin(userId, newRole === "admin");
   };
 
   return (
@@ -36,17 +29,8 @@ export default function UsersPage() {
               >
                 ← Back to Workspace Admin
               </Link>
-              <h1 className="text-2xl font-bold text-white">
-                Users
-              </h1>
+              <h1 className="text-2xl font-bold text-white">Users</h1>
             </div>
-            <button
-              onClick={() => setShowInviteModal(true)}
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#8D2676] hover:bg-[#7A2065] rounded-md transition-colors"
-            >
-              <UserPlusIcon className="w-4 h-4 mr-1.5" />
-              Invite User
-            </button>
           </div>
         </div>
 
@@ -55,14 +39,17 @@ export default function UsersPage() {
           <table className="min-w-full divide-y divide-gray-800">
             <thead className="bg-[#1C2128]">
               <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
+                >
                   Email
                 </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
+                >
                   Role
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                  Actions
                 </th>
               </tr>
             </thead>
@@ -74,22 +61,18 @@ export default function UsersPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <select
-                      value={user.isAdmin ? "admin" : "member"}
-                      onChange={(e) => handleUserRoleChange(user.id, e.target.value as "member" | "admin")}
+                      value={adminUsers.includes(user.id) ? "admin" : "member"}
+                      onChange={(e) =>
+                        handleUserRoleChange(
+                          user.id,
+                          e.target.value as "member" | "admin"
+                        )
+                      }
                       className="bg-[#1C2128] text-gray-300 text-sm rounded-md border border-gray-700 focus:border-[#8D2676] focus:ring-[#8D2676]"
                     >
                       <option value="member">Member</option>
                       <option value="admin">Admin</option>
                     </select>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                    <button
-                      onClick={() => handleRemoveUser(user.id)}
-                      className="text-gray-400 hover:text-red-400"
-                      title="Remove User"
-                    >
-                      <TrashIcon className="w-4 h-4" />
-                    </button>
                   </td>
                 </tr>
               ))}
@@ -97,12 +80,6 @@ export default function UsersPage() {
           </table>
         </div>
       </div>
-
-      <InviteUserModal
-        isOpen={showInviteModal}
-        onClose={() => setShowInviteModal(false)}
-        onInviteUser={handleInviteUser}
-      />
     </div>
   );
 }

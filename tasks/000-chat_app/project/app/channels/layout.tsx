@@ -1,14 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Sidebar } from "@/components/Sidebar";
 import { useUserEmail } from "@/components/WithUserEmail";
-
-interface Channel {
-  id: string;
-  name: string;
-}
+import { createChannel, useChannels } from "@/lib/state";
 
 export default function ChannelsLayout({
   children,
@@ -17,24 +12,15 @@ export default function ChannelsLayout({
 }) {
   const pathname = usePathname();
   const email = useUserEmail();
-  const [channels, setChannels] = useState<Channel[]>([
-    { id: "general", name: "general" },
-    { id: "random", name: "random" },
-  ]);
-
   const currentChannel = pathname?.split("/").pop() || "general";
-
-  const handleCreateChannel = (id: string, channelName: string) => {
-    setChannels([...channels, { id, name: channelName }]);
-  };
-
+  const channels = useChannels();
   return (
     <div className="h-screen flex bg-[#151517]">
       <Sidebar
         email={email}
         currentChannel={currentChannel}
         channels={channels}
-        onCreateChannel={handleCreateChannel}
+        onCreateChannel={createChannel}
       />
       <div className="flex-1 bg-[#151517]">{children}</div>
     </div>

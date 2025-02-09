@@ -1,10 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { Sidebar } from "../../../components/Sidebar";
 import { CreateTask } from "../../../components/CreateTask";
-import { addProject, addTask, projects, tasks } from "../../../lib/testData";
+import {
+  addProject,
+  addTask,
+  useProject,
+  useTasks,
+  useProjects,
+  useUserByEmail,
+} from "@/lib/state";
+import { useUserEmail } from "@/components/WithUserEmail";
 
 const statusColors = {
   Todo: "bg-gray-400",
@@ -19,8 +27,19 @@ export default function ProjectPage() {
   const projectId = params.id as string;
   const [isCreatingTask, setIsCreatingTask] = useState(false);
 
-  const currentProject = projects.find((p) => p.projectId === projectId);
-  const projectTasks = tasks.filter((t) => t.projectId === projectId);
+  const email = useUserEmail();
+  const user = useUserByEmail(email);
+  if (!user) {
+    notFound();
+  }
+
+  const projects = useProjects();
+  const currentProject = useProject(projectId);
+  if (!currentProject) {
+    notFound();
+  }
+
+  const projectTasks = useTasks(projectId);
 
   const tasksByStatus = {
     Todo: projectTasks.filter((t) => t.status === "Todo"),
@@ -31,13 +50,13 @@ export default function ProjectPage() {
   };
 
   if (!currentProject) {
-    return <div>Project not found</div>;
+    notFound();
   }
 
   return (
     <div className="flex h-screen bg-[#0C0C0D]">
       <Sidebar
-        email="user@example.com"
+        user={user}
         currentProjectId={projectId}
         projects={projects}
         onCreateProject={addProject}
@@ -64,7 +83,7 @@ export default function ProjectPage() {
 
           {isCreatingTask && (
             <CreateTask
-              projectId={projectId}
+              project={currentProject}
               createTask={addTask}
               setIsCreatingTask={setIsCreatingTask}
             />
@@ -88,8 +107,8 @@ export default function ProjectPage() {
                     <div className="space-y-px">
                       {tasks.map((task) => (
                         <a
-                          key={task.taskId}
-                          href={`/projects/${projectId}/tasks/${task.taskId}`}
+                          key={task.id}
+                          href={`/projects/${projectId}/tasks/${task.id}`}
                           className="block px-3 py-2 -mx-3 hover:bg-[#1A1A1A] transition-colors group rounded"
                         >
                           <div className="flex items-start justify-between gap-4">

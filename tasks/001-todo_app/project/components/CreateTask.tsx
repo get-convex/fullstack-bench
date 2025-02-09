@@ -5,21 +5,18 @@ import { Calendar } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import { Modal } from "./Modal";
-import { projects } from "@/lib/testData";
-
-interface Task {
-  id: string;
-  projectId: string;
-  title: string;
-  description: string;
-  status: "Todo" | "In Progress" | "In Review" | "Done" | "Canceled";
-  dueDate: string;
-  assigneeId: string | null;
-}
+import { Task, Project } from "@/lib/types";
 
 interface CreateTaskProps {
-  projectId: string;
-  createTask: (task: Omit<Task, "id">) => void;
+  project: Project;
+  createTask: (
+    projectId: string,
+    title: string,
+    description: string,
+    status: Task["status"],
+    dueDate: number | null,
+    assigneeId: string | null
+  ) => Promise<string>;
   setIsCreatingTask: (isCreating: boolean) => void;
 }
 
@@ -137,7 +134,7 @@ const css = `
 `;
 
 export function CreateTask({
-  projectId,
+  project,
   createTask,
   setIsCreatingTask,
 }: CreateTaskProps) {
@@ -146,20 +143,18 @@ export function CreateTask({
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const currentProject = projects.find((p) => p.projectId === projectId);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
 
-    createTask({
-      projectId,
-      title: title.trim(),
-      description: description.trim(),
-      status: "Todo",
-      dueDate: selectedDate ? format(selectedDate, "yyyy-MM-dd") : "",
-      assigneeId: null,
-    });
+    createTask(
+      project.id,
+      title.trim(),
+      description.trim(),
+      "Todo",
+      selectedDate ? new Date(selectedDate).getTime() : null,
+      null
+    );
     setIsCreatingTask(false);
   };
 
@@ -171,8 +166,8 @@ export function CreateTask({
         onOpenChange={(open) => !open && setIsCreatingTask(false)}
         title={
           <div className="flex items-center gap-2">
-            <span>{currentProject?.emoji}</span>
-            <span>New task in {currentProject?.name}</span>
+            <span>{project.emoji}</span>
+            <span>New task in {project.name}</span>
           </div>
         }
       >

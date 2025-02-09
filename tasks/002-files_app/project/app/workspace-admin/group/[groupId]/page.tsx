@@ -3,19 +3,6 @@
 import { useState } from "react";
 import { notFound, useParams, useRouter } from "next/navigation";
 import {
-  Group,
-  useGroup,
-  updateGroupName,
-  removeGroup,
-  removeMemberFromGroup,
-  useGroupMembers,
-  Member,
-  useUser,
-  addMemberToGroup,
-  useUsers,
-  useGroups,
-} from "@/testData";
-import {
   UserIcon,
   UserGroupIcon,
   PencilIcon,
@@ -24,32 +11,49 @@ import {
 } from "@heroicons/react/24/outline";
 import GroupMembershipModal from "@/components/GroupMembershipModal";
 import Link from "next/link";
+import { removeGroup } from "@/lib/state/groups";
+import { updateGroupName, useGroups } from "@/lib/state/groups";
+import { useGroup } from "@/lib/state/groups";
+import { useUser, useUserByEmail, useUsers } from "@/lib/state/users";
+import { Group, Member } from "@/lib/types";
+import { addMember, removeMember, useMembers } from "@/lib/state/membership";
+import { useUserEmail } from "@/components/WithUserEmail";
 
 export default function GroupPage() {
   const params = useParams();
   const router = useRouter();
+  const email = useUserEmail();
+  const user = useUserByEmail(email)!;
   const groupId = params.groupId as string;
-  const group = useGroup(groupId);
+  const group = useGroup(user.id, groupId);
   if (!group) {
     notFound();
   }
-  const groupMembers = useGroupMembers(groupId);
+  const members = useMembers({ type: "group", groupId });
   const users = useUsers();
-  const groups = useGroups();
+  const groups = useGroups(user.id);
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState(group.name);
   const [showMembershipModal, setShowMembershipModal] = useState(false);
 
-  const handleUpdateName = () => {
+  const handleUpdateName = async () => {
     if (!editedName.trim()) return;
-    updateGroupName(groupId, editedName.trim());
+    await updateGroupName(user.id, groupId, editedName.trim());
     setIsEditingName(false);
   };
 
-  const handleDeleteGroup = () => {
-    removeGroup(groupId);
+  const handleDeleteGroup = async () => {
+    await removeGroup(user.id, groupId);
     router.push("/workspace-admin/groups");
+  };
+
+  const addMemberToGroup = async (
+    groupId: string,
+    subject: Member["subject"]
+  ) => {
+    await addMember(user.id, subject, { type: "group", groupId });
+    setShowMembershipModal(false);
   };
 
   return (
@@ -129,10 +133,10 @@ export default function GroupPage() {
             <h2 className="text-lg font-medium text-white">Members</h2>
           </div>
           <div className="divide-y divide-gray-800">
-            {groupMembers.map((member) => (
-              <MemberRow key={member.id} group={group} member={member} />
+            {members.map((member) => (
+              <MemberRow key={member.id} member={member} />
             ))}
-            {groupMembers.length === 0 && (
+            {members.length === 0 && (
               <div className="px-6 py-4 text-gray-500 text-center">
                 No members yet
               </div>
@@ -153,23 +157,11 @@ export default function GroupPage() {
   );
 }
 
-function MemberRow({ group, member }: { group: Group; member: Member }) {
+function MemberRow({ member }: { member: Member }) {
   if (member.subject.type === "user") {
-    return (
-      <UserRow
-        member={member}
-        group={group}
-        memberUserId={member.subject.userId}
-      />
-    );
+    return <UserRow member={member} memberUserId={member.subject.userId} />;
   } else if (member.subject.type === "group") {
-    return (
-      <GroupRow
-        group={group}
-        member={member}
-        memberGroupId={member.subject.groupId}
-      />
-    );
+    return <GroupRow member={member} memberGroupId={member.subject.groupId} />;
   } else {
     throw new Error("Invalid member type");
   }
@@ -177,11 +169,9 @@ function MemberRow({ group, member }: { group: Group; member: Member }) {
 
 function UserRow({
   member,
-  group,
   memberUserId,
 }: {
   member: Member;
-  group: Group;
   memberUserId: string;
 }) {
   const user = useUser(memberUserId);
@@ -199,7 +189,9 @@ function UserRow({
       </div>
       <div className="flex items-center space-x-2">
         <button
-          onClick={() => removeMemberFromGroup(group.id, member.id)}
+          onClick={() => {
+            void removeMember(user.id, member.id);
+          }}
           className="text-gray-400 hover:text-red-400 ml-4"
           title="Remove Member"
         >
@@ -211,15 +203,15 @@ function UserRow({
 }
 
 function GroupRow({
-  group,
   member,
   memberGroupId,
 }: {
-  group: Group;
   member: Member;
   memberGroupId: string;
 }) {
-  const subgroup = useGroup(memberGroupId);
+  const email = useUserEmail();
+  const user = useUserByEmail(email)!;
+  const subgroup = useGroup(user.id, memberGroupId);
   if (!subgroup) {
     throw new Error("Subgroup not found");
   }
@@ -234,7 +226,9 @@ function GroupRow({
       </div>
       <div className="flex items-center space-x-2">
         <button
-          onClick={() => removeMemberFromGroup(group.id, member.id)}
+          onClick={() => {
+            void removeMember(user.id, member.id);
+          }}
           className="text-gray-400 hover:text-red-400 ml-4"
           title="Remove Member"
         >

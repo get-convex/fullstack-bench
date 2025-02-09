@@ -1,5 +1,8 @@
+"use client";
+
 import { useUserEmail } from "@/components/WithUserEmail";
-import { useUserByEmail } from "@/testData";
+import { useIsAdmin } from "@/lib/state/userPermissions";
+import { useUserByEmail } from "@/lib/state/users";
 import { redirect } from "next/navigation";
 
 export default function WorkspaceAdminLayout({
@@ -13,7 +16,8 @@ export default function WorkspaceAdminLayout({
     console.error("User not found");
     redirect("/");
   }
-  if (!user.isAdmin) {
+  const isAdmin = useIsAdmin(user.id);
+  if (!isAdmin) {
     console.error("User is not an admin");
     redirect("/");
   }

@@ -9,8 +9,10 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import type { Project, Member, Group, User } from "../testData";
 import EmojiPicker from "./EmojiPicker";
+import { Group, User } from "@/lib/types";
+import { Member } from "@/lib/types";
+import { Project } from "@/lib/types";
 
 interface ProjectSettingsModalProps {
   isOpen: boolean;
@@ -20,14 +22,13 @@ interface ProjectSettingsModalProps {
   users: User[];
   groups: Group[];
 
-  addMemberToProject: (projectId: string, member: Member) => void;
-  removeMemberFromProject: (projectId: string, memberId: string) => void;
+  addMember: (subject: Member["subject"]) => Promise<void>;
+  removeMember: (memberId: string) => Promise<void>;
   updateProjectMetadata: (
-    projectId: string,
     name?: string,
     description?: string,
     emoji?: string
-  ) => void;
+  ) => Promise<void>;
 
   initialTab?: "details" | "members" | "invite";
 }
@@ -39,8 +40,8 @@ export default function ProjectSettingsModal({
   projectMembers,
   users,
   groups,
-  addMemberToProject,
-  removeMemberFromProject,
+  addMember,
+  removeMember,
   updateProjectMetadata,
   initialTab = "details",
 }: ProjectSettingsModalProps) {
@@ -49,9 +50,10 @@ export default function ProjectSettingsModal({
   const [inviteType, setInviteType] = useState<"user" | "group">("user");
   const [selectedInviteId, setSelectedInviteId] = useState("");
 
+  console.log("projectMembers", projectMembers);
+
   const handleSave = () => {
     updateProjectMetadata(
-      project.id,
       editedProject.name,
       editedProject.description,
       editedProject.emoji
@@ -62,30 +64,11 @@ export default function ProjectSettingsModal({
   const handleInvite = () => {
     const subject =
       inviteType === "user"
-        ? users.find((u) => u.id === selectedInviteId)
-        : groups.find((g) => g.id === selectedInviteId);
-
-    if (!subject) return;
-
-    const newMember: Member = {
-      id: crypto.randomUUID(),
-      subject:
-        inviteType === "user"
-          ? {
-              type: "user",
-              userId: subject.id,
-            }
-          : {
-              type: "group",
-              groupId: subject.id,
-            },
-    };
-    addMemberToProject(project.id, newMember);
+        ? { type: "user" as const, userId: selectedInviteId }
+        : { type: "group" as const, groupId: selectedInviteId };
+    addMember(subject);
     setSelectedInviteId("");
-  };
-
-  const handleRemoveMember = (memberId: string) => {
-    removeMemberFromProject(project.id, memberId);
+    setSelectedTab("members");
   };
 
   return (
@@ -220,7 +203,9 @@ export default function ProjectSettingsModal({
                             Description
                           </label>
                           <textarea
-                            value={editedProject.description}
+                            value={
+                              editedProject.description ?? project.description
+                            }
                             onChange={(e) =>
                               setEditedProject((prev) => ({
                                 ...prev,
@@ -251,7 +236,7 @@ export default function ProjectSettingsModal({
                             member={member}
                             users={users}
                             groups={groups}
-                            handleRemoveMember={handleRemoveMember}
+                            handleRemoveMember={removeMember}
                           />
                         ))}
                       </div>

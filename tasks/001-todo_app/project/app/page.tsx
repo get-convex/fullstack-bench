@@ -1,16 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { CreateProject } from "../components/CreateProject";
-import { addProject, projects } from "../lib/testData";
+import { addProject, useProjects, useUserByEmail } from "../lib/state";
+import { useUserEmail } from "@/components/WithUserEmail";
 
 export default function Home() {
   const [isCreatingProject, setIsCreatingProject] = useState(false);
+  const projects = useProjects();
+
+  const email = useUserEmail();
+  const user = useUserByEmail(email);
+  if (!user) {
+    notFound();
+  }
 
   // Redirect to the most recently created project, or show a message if no projects exist
   if (projects.length > 0) {
-    redirect(`/projects/${projects[projects.length - 1].projectId}`);
+    redirect(`/projects/${projects[projects.length - 1].id}`);
   }
 
   return (
@@ -18,6 +26,7 @@ export default function Home() {
       <div className="w-full max-w-md">
         {isCreatingProject ? (
           <CreateProject
+            userId={user.id}
             createProject={addProject}
             setIsCreatingProject={setIsCreatingProject}
           />

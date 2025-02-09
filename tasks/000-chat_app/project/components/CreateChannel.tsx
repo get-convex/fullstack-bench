@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 interface Channel {
   id: string;
   name: string;
@@ -10,33 +10,32 @@ interface Channel {
 
 interface CreateChannelProps {
   channels: Channel[];
-  createChannel: (id: string, channelName: string) => void;
+  createChannel: (
+    channelName: string
+  ) => Promise<
+    { type: "success"; channelId: string } | { type: "error"; message: string }
+  >;
   setIsCreatingChannel: (isCreatingChannel: boolean) => void;
 }
 
 export function CreateChannel(props: CreateChannelProps) {
   const router = useRouter();
-  const [newChannelName, setNewChannelName] = useState('');
+  const [newChannelName, setNewChannelName] = useState("");
 
-  const handleCreateChannel = (e: React.FormEvent) => {
+  const handleCreateChannel = async (e: React.FormEvent) => {
     e.preventDefault();
     if (newChannelName.trim()) {
-      // Create channel ID from name (lowercase, replace spaces with hyphens)
-      const channelId = newChannelName.trim().toLowerCase().replace(/\s+/g, '-');
-
-      // Check if channel already exists
-      if (props.channels.some(channel => channel.id === channelId)) {
-        alert('A channel with this name already exists');
+      // Add new channel
+      const result = await props.createChannel(newChannelName.trim());
+      if (result.type === "error") {
+        toast.error(result.message);
         return;
       }
-
-      // Add new channel
-      props.createChannel(channelId, newChannelName.trim());
-      setNewChannelName('');
+      setNewChannelName("");
       props.setIsCreatingChannel(false);
 
       // Navigate to the new channel
-      router.push(`/channels/${channelId}`);
+      router.push(`/channels/${result.channelId}`);
     }
   };
 
@@ -61,7 +60,7 @@ export function CreateChannel(props: CreateChannelProps) {
           type="button"
           onClick={() => {
             props.setIsCreatingChannel(false);
-            setNewChannelName('');
+            setNewChannelName("");
           }}
           className="flex-1 bg-[#26262b] hover:bg-[#363639] px-3 py-1.5 rounded text-sm font-medium text-[#E1E1E3] transition-colors"
         >

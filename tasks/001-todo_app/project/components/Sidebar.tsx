@@ -3,17 +3,22 @@
 import { useState } from "react";
 import Link from "next/link";
 import { CreateProject } from "./CreateProject";
-import { Project } from "../lib/types";
+import { Project, User } from "../lib/types";
 
 interface SidebarProps {
-  email: string;
+  user: User;
   currentProjectId: string;
   projects: Project[];
-  onCreateProject: (project: Omit<Project, "projectId">) => void;
+  onCreateProject: (
+    name: string,
+    emoji: string,
+    description: string,
+    creatorId: string
+  ) => void;
 }
 
 export function Sidebar({
-  email,
+  user,
   currentProjectId,
   projects,
   onCreateProject,
@@ -25,7 +30,7 @@ export function Sidebar({
     <div className="w-[240px] bg-[#0C0C0D] text-[#E1E1E3] border-r border-[#1A1A1A] flex flex-col">
       <div className="p-4 border-b border-[#1A1A1A]">
         <h2 className="text-xs font-medium text-[#8A8A8A]">Welcome,</h2>
-        <h1 className="text-sm font-medium text-white mt-0.5">{email}</h1>
+        <h1 className="text-sm font-medium text-white mt-0.5">{user.email}</h1>
       </div>
 
       <div className="flex-1 overflow-y-auto">
@@ -61,6 +66,7 @@ export function Sidebar({
                 {isCreatingProject && (
                   <div className="px-2">
                     <CreateProject
+                      userId={user.id}
                       createProject={onCreateProject}
                       setIsCreatingProject={setIsCreatingProject}
                     />
@@ -69,10 +75,10 @@ export function Sidebar({
 
                 {projects.map((project) => (
                   <Link
-                    key={project.projectId}
-                    href={`/projects/${project.projectId}`}
+                    key={project.id}
+                    href={`/projects/${project.id}`}
                     className={`flex items-center px-2 py-1 rounded text-sm transition-colors ${
-                      currentProjectId === project.projectId
+                      currentProjectId === project.id
                         ? "bg-[#1A1A1A] text-white"
                         : "text-[#8A8A8A] hover:text-white"
                     }`}
