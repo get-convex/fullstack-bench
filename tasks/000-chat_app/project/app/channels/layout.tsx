@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { Sidebar } from "@/components/Sidebar";
-import { useUserEmail } from "@/components/WithUserEmail";
+import { useLoggedInUser } from "@/lib/BackendContext";
 import { createChannel, useChannels } from "@/lib/state";
 
 export default function ChannelsLayout({
@@ -11,13 +11,13 @@ export default function ChannelsLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const email = useUserEmail();
+  const user = useLoggedInUser();
   const currentChannel = pathname?.split("/").pop() || "general";
   const channels = useChannels();
   return (
     <div className="h-screen flex bg-[#151517]">
       <Sidebar
-        email={email}
+        email={user.email}
         currentChannel={currentChannel}
         channels={channels}
         onCreateChannel={createChannel}

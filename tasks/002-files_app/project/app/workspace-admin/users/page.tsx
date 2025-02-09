@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { UserPlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useUsers } from "@/lib/state/users";
 import { setIsAdmin, useAdminUsers } from "@/lib/state/userPermissions";

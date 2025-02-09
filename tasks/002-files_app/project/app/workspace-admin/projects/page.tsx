@@ -6,8 +6,7 @@ import Link from "next/link";
 import EmojiPicker from "@/components/EmojiPicker";
 import { useProjects } from "@/lib/state/projects";
 import { addProject, deleteProject } from "@/lib/state/projects";
-import { useUserEmail } from "@/components/WithUserEmail";
-import { useUserByEmail } from "@/lib/state/users";
+import { useLoggedInUser } from "@/lib/BackendContext";
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -99,8 +98,7 @@ function CreateProjectModal({
 export default function ProjectsPage() {
   const projects = useProjects();
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const email = useUserEmail();
-  const user = useUserByEmail(email)!;
+  const user = useLoggedInUser();
 
   const handleCreateProject = async (
     name: string,

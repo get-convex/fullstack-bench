@@ -18,19 +18,15 @@ import {
   useUsersById,
   useUsers,
 } from "@/lib/state";
-import { useUserEmail } from "@/components/WithUserEmail";
 import { notFound } from "next/navigation";
+import { useLoggedInUser } from "@/lib/BackendContext";
 
 export default function TaskPage() {
   const params = useParams();
   const projectId = params.id as string;
   const taskId = params.taskId as string;
 
-  const email = useUserEmail();
-  const user = useUserByEmail(email);
-  if (!user) {
-    notFound();
-  }
+  const user = useLoggedInUser();
 
   const currentProject = useProject(projectId);
   const currentTask = useTask(taskId);

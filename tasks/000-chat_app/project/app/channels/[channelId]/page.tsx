@@ -3,10 +3,9 @@
 import { use } from "react";
 import { MessageList } from "@/components/MessageList";
 import { MessageInput } from "@/components/MessageInput";
-import { useUserByEmail } from "@/lib/state";
-import { sendMessage, useMessages, useChannel } from "@/lib/state";
+import { useChannel, sendMessage, useMessages } from "@/lib/state";
 import { notFound } from "next/navigation";
-import { useUserEmail } from "@/components/WithUserEmail";
+import { useLoggedInUser } from "@/lib/BackendContext";
 
 export default function ChannelPage({
   params,
@@ -15,8 +14,7 @@ export default function ChannelPage({
 }) {
   const resolvedParams = use(params);
   const messages = useMessages(resolvedParams.channelId);
-  const email = useUserEmail();
-  const user = useUserByEmail(email);
+  const user = useLoggedInUser();
   const channel = useChannel(resolvedParams.channelId);
   if (!channel || !user) {
     notFound();

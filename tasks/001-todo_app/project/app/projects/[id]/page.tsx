@@ -12,7 +12,7 @@ import {
   useProjects,
   useUserByEmail,
 } from "@/lib/state";
-import { useUserEmail } from "@/components/WithUserEmail";
+import { useLoggedInUser } from "@/lib/BackendContext";
 
 const statusColors = {
   Todo: "bg-gray-400",
@@ -27,11 +27,7 @@ export default function ProjectPage() {
   const projectId = params.id as string;
   const [isCreatingTask, setIsCreatingTask] = useState(false);
 
-  const email = useUserEmail();
-  const user = useUserByEmail(email);
-  if (!user) {
-    notFound();
-  }
+  const user = useLoggedInUser();
 
   const projects = useProjects();
   const currentProject = useProject(projectId);
