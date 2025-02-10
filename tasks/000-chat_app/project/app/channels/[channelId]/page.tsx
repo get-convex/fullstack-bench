@@ -27,9 +27,9 @@ export default function ChannelPage({
   return (
     <div className="flex flex-col h-screen">
       <div className="px-6 py-4 border-b border-slate-800">
-        <div className="flex items-center">
-          <span className="text-slate-400 mr-2">#</span>
-          <h2 className="text-lg font-medium text-white">{channel?.name}</h2>
+        <div className="flex items-center text-2xl">
+          <span className="text-slate-400 mr-1">#</span>
+          <h2 className="text-white font-bold">{channel?.name}</h2>
         </div>
       </div>
       <MessageList messages={messages} />

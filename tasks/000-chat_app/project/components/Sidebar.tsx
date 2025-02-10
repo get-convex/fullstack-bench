@@ -54,7 +54,7 @@ export function Sidebar({
               <h2 className="text-lg font-medium text-white">Create Channel</h2>
               <button
                 onClick={() => setIsCreatingChannel(false)}
-                className="text-slate-400 hover:text-white"
+                className="text-slate-400 hover:text-white font-lg"
               >
                 ✕
               </button>
@@ -79,7 +79,7 @@ export function Sidebar({
                   : "text-slate-400 hover:text-white hover:bg-slate-900"
               }`}
             >
-              <span className="text-slate-400 mr-2">#</span>
+              <span className="text-slate-400 mr-1">#</span>
               {channel.name}
             </Link>
           </li>

@@ -35,7 +35,7 @@ export function MessageInput({ channelId, onSendMessage }: MessageInputProps) {
           />
           <button
             type="submit"
-            className="bg-plum hover:bg-opacity-90 text-white px-6 py-2 rounded-r text-sm font-medium transition-colors"
+            className="bg-plum hover:bg-opacity-80 text-white px-6 py-2 rounded-r text-sm font-bold transition-colors"
           >
             Send
           </button>

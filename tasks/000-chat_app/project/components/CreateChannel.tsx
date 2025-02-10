@@ -31,6 +31,7 @@ export function CreateChannel(props: CreateChannelProps) {
         toast.error(result.message);
         return;
       }
+      toast.success("Channel created successfully");
       setNewChannelName("");
       props.setIsCreatingChannel(false);
 
@@ -40,7 +41,7 @@ export function CreateChannel(props: CreateChannelProps) {
   };
 
   return (
-    <form onSubmit={handleCreateChannel} className="mb-4">
+    <form onSubmit={handleCreateChannel}>
       <input
         type="text"
         value={newChannelName}
@@ -52,7 +53,7 @@ export function CreateChannel(props: CreateChannelProps) {
       <div className="flex gap-2">
         <button
           type="submit"
-          className="flex-1 bg-plum hover:bg-opacity-90 px-3 py-1.5 rounded text-sm font-medium text-white transition-colors"
+          className="flex-1 bg-plum hover:bg-opacity-80 px-3 py-1.5 rounded text-sm font-medium text-white transition-colors"
         >
           Create
         </button>
