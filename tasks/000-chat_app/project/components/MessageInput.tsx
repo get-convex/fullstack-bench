@@ -30,7 +30,7 @@ export function MessageInput({ channelId, onSendMessage }: MessageInputProps) {
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            className="flex-1 bg-slate-800 text-white placeholder-slate-400 px-4 py-2 rounded-l text-sm border border-slate-700 focus:border-plum focus:outline-none"
+            className="flex-1 bg-slate-800 text-white placeholder-slate-400 px-4 py-2 rounded-l text-sm border border-plum focus:outline-none border-r-0"
             placeholder={`Message #${channel.name}`}
           />
           <button
