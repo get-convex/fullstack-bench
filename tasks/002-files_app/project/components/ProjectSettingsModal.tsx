@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import { Dialog, Transition, Tab } from "@headlessui/react";
+import { Dialog, DialogPanel, Transition, TransitionChild, Tab, TabList } from "@headlessui/react";
 import {
   XMarkIcon,
   UserIcon,
@@ -72,9 +72,9 @@ export default function ProjectSettingsModal({
   };
 
   return (
-    <Transition.Root show={isOpen} as={Fragment}>
+    <Transition show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
-        <Transition.Child
+        <TransitionChild
           as={Fragment}
           enter="ease-out duration-100"
           enterFrom="opacity-0"
@@ -84,11 +84,11 @@ export default function ProjectSettingsModal({
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 bg-black/75 transition-opacity" />
-        </Transition.Child>
+        </TransitionChild>
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <Transition.Child
+            <TransitionChild
               as={Fragment}
               enter="ease-out duration-100"
               enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
@@ -97,7 +97,7 @@ export default function ProjectSettingsModal({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-visible rounded-lg bg-slate-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
+              <DialogPanel className="relative transform overflow-visible rounded-lg bg-slate-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                   <button
                     type="button"
@@ -128,7 +128,7 @@ export default function ProjectSettingsModal({
                   }
                 >
                   <div className="border-b border-slate-700">
-                    <Tab.List className="flex px-6">
+                    <TabList className="flex px-6">
                       <Tab
                         className={({ selected }) =>
                           clsx(
@@ -165,7 +165,7 @@ export default function ProjectSettingsModal({
                       >
                         Invite
                       </Tab>
-                    </Tab.List>
+                    </TabList>
                   </div>
 
                   <Tab.Panels className="px-6 py-4">
@@ -301,12 +301,12 @@ export default function ProjectSettingsModal({
                     </Tab.Panel>
                   </Tab.Panels>
                 </Tab.Group>
-              </Dialog.Panel>
-            </Transition.Child>
+              </DialogPanel>
+            </TransitionChild>
           </div>
         </div>
       </Dialog>
-    </Transition.Root>
+    </Transition>
   );
 }
 
