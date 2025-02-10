@@ -60,7 +60,7 @@ export function CommentList({
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Write a comment..."
-            className="w-full min-h-[72px] px-3 pb-12 pt-3 bg-slate-800 text-slate-200 text-sm rounded placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-600 transition-colors resize-none"
+            className="w-full min-h-[72px] px-3 pb-12 pt-3 bg-slate-900 border border-slate-700 text-slate-200 text-sm rounded placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-600 transition-colors resize-none"
           />
           <div className="absolute right-3 bottom-5 flex items-center">
             <button
