@@ -1,15 +1,18 @@
 import json
 import os
 import shutil
+import subprocess
+from datetime import datetime
 from pathlib import Path
 
-ignore_list = [".git", "node_modules", "bun.lockb", "bun.lockb", ".next", "package.json"]
+ignore_list = [".git", "node_modules", "bun.lockb", "bun.lockb", ".next", "package.json", "BACKEND.md", "TASK.md"]
 template_override = {
-    "components/WithUserEmail.tsx",
-    "components/SetupContext.tsx",
+    "lib/BackendContext.tsx",
 }
 
-def tangle(template_dir: Path, task_project_dir: Path, output_dir: Path) -> None:
+def tangle(template_dir: Path, task_dir: Path, output_dir: Path) -> None:
+    task_project_dir = task_dir / "project"
+
     os.makedirs(output_dir, exist_ok=True)
     shutil.copytree(
         template_dir,
@@ -51,9 +54,30 @@ def tangle(template_dir: Path, task_project_dir: Path, output_dir: Path) -> None
     with open(output_dir / "package.json", "w") as f:
         json.dump(merged_package_json, f)
 
+    # Merge the task description.
+    task_description = open(task_dir / "TASK.md").read()
+    backend_description = open(template_dir / "BACKEND.md").read()
+    output_description = f"{task_description}\n\n{backend_description}"
+    with open(output_dir / "TASK.md", "w") as f:
+        f.write(output_description)
+
+    # Install dependencies.
+    subprocess.run(["bun", "install"], cwd=output_dir)
+
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) != 4:
-        print("Usage: tangle.py <template_dir> <task_project_dir> <output_dir>")
+    if len(sys.argv) != 3:
+        print("Usage: tangle.py <template_dir> <task_dir>")
         sys.exit(1)
-    tangle(Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3]))
+
+    template_name = sys.argv[1].split("/")[-1]
+    assert template_name in ["supabase", "convex"]
+    task_name = sys.argv[2].split("/")[-1].split('-')[-1]
+    assert task_name in ["chat_app", "todo_app", "files_app"]
+
+    date = datetime.now().strftime("%Y-%m-%d")
+    output_dir = Path(f"results/{date}/{task_name}/{template_name}")
+    output_dir.mkdir(parents=True, exist_ok=False)
+    print(f"Tangling {template_name} and {task_name} into {output_dir}")
+
+    tangle(Path(sys.argv[1]), Path(sys.argv[2]), output_dir)

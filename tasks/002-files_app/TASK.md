@@ -1,6 +1,6 @@
 # Files Workspace App
 
-We've sketched out the frontend for a files workspace app with the following data model:
+We've sketched out the frontend for a files workspace app using Next.js and Jotai and would like to fill out the backend. Here is the app's data model:
 
 - There is a single top-level workspace.
 - The workspace has some number of users.
@@ -22,18 +22,18 @@ We've sketched out the frontend for a files workspace app with the following dat
   a directory, or deleting a nonempty directory.
 - Files have textual content.
 
-# Access control
+## Access control
 
 This application supports a flexible access control model where users and groups can be
 members of projects and directories.
 
-## Workspace access
+### Workspace access
 
 - Workspace admins can add or remove users from the workspace and change their admin status.
 - Workspace admins can create, delete, and modify groups.
 - Workspace admins can create, delete, and modify projects.
 
-## Project access
+### Project access
 
 - If a user is a member of a project, they have access to the project.
 - If a group is a member of a project, all of the group's members have access to the
@@ -43,11 +43,11 @@ members of projects and directories.
 - Anyone with access to a project can add or remove members from the project.
 - Anyone with access to a project can create, read, rename, modify, and delete files and directories.
 
-# Implementation
+## Implementation
 
 The app is implemented with Next.js and uses in-memory state management. The main components are:
 
-## Pages
+### Pages
 
 - `/` - Home page showing all accessible projects in the sidebar.
 - `/workspace-admin` - Workspace administration page, only accessible to admins
@@ -64,32 +64,6 @@ The app is implemented with Next.js and uses in-memory state management. The mai
   or child, or click into a child. If the path points to a file, this shows the file viewer, which shows
   the file's content and has an action to edit the file.
 - `/groups/[groupId]` - Group view listing the group's members.
-
-supabase-------------------------------------------------------------------------------
-
-# Task
-
-The app currently only uses in-memory state management, and we'd like to fill out the backend for this app using Supabase. Read the guidelines for using Supabase in the cursor rules.
-
-Please...
-
-1. Set up the tables for storing the app's data model. Pause and ask me to set up schema in the Supabase dashboard if needed, and I will do it for you.
-2. Query and modify these tables from the UI.
-3. Make sure that all changes are reflected immediately in the UI without a refresh, even if they've happened in another browser.
-
-convex-------------------------------------------------------------------------------
-
-# Task
-
-The app currently only uses in-memory state management, and we'd like to fill out the backend for this app using Convex. Read the guidelines for writing apps on Convex in the cursor rules.
-
-Please...
-
-1. Set up the tables for storing the app's data model. Do NOT modify the built in authentication tables.
-2. Write queries and mutations for reading and writing the appropriate data.
-3. Wire in these endpoints into the app's UI.
-
-final notes-------------------------------------------------------------------------
 
 You MUST implement all authorization rules, and it is UNACCEPTABLE for users to be able to
 read or write state that they don't have access to.

@@ -3,7 +3,12 @@
 import { use } from "react";
 import { MessageList } from "@/components/MessageList";
 import { MessageInput } from "@/components/MessageInput";
-import { useChannel, sendMessage, useMessages } from "@/lib/state";
+import {
+  useChannel,
+  sendMessage,
+  useMessages,
+  useUsersById,
+} from "@/lib/state";
 import { notFound } from "next/navigation";
 import { useLoggedInUser } from "@/lib/BackendContext";
 
@@ -14,6 +19,11 @@ export default function ChannelPage({
 }) {
   const resolvedParams = use(params);
   const messages = useMessages(resolvedParams.channelId);
+  const usersById = useUsersById(messages.map((message) => message.userId));
+  const messagesWithUserEmail = messages.map((message) => ({
+    ...message,
+    userEmail: usersById[message.userId].email,
+  }));
   const user = useLoggedInUser();
   const channel = useChannel(resolvedParams.channelId);
   if (!channel || !user) {
@@ -32,11 +42,8 @@ export default function ChannelPage({
           <h2 className="text-lg font-medium text-white">{channel?.name}</h2>
         </div>
       </div>
-      <MessageList messages={messages} />
-      <MessageInput
-        channelId={resolvedParams.channelId}
-        onSendMessage={handleSendMessage}
-      />
+      <MessageList messages={messagesWithUserEmail} />
+      <MessageInput channel={channel} onSendMessage={handleSendMessage} />
     </div>
   );
 }

@@ -3,21 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { CreateChannel } from "./CreateChannel";
-
-interface Channel {
-  id: string;
-  name: string;
-}
+import { Channel } from "@/lib/types";
 
 interface SidebarProps {
   email: string;
   currentChannel: string;
   channels: Channel[];
-  onCreateChannel: (
-    name: string
-  ) => Promise<
-    { type: "success"; channelId: string } | { type: "error"; message: string }
-  >;
+  onCreateChannel: (name: string) => Promise<string>;
 }
 
 export function Sidebar({

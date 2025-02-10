@@ -3,18 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-interface Channel {
-  id: string;
-  name: string;
-}
+import { Channel } from "@/lib/types";
 
 interface CreateChannelProps {
   channels: Channel[];
-  createChannel: (
-    channelName: string
-  ) => Promise<
-    { type: "success"; channelId: string } | { type: "error"; message: string }
-  >;
+  createChannel: (channelName: string) => Promise<string>;
   setIsCreatingChannel: (isCreatingChannel: boolean) => void;
 }
 
@@ -26,16 +19,16 @@ export function CreateChannel(props: CreateChannelProps) {
     e.preventDefault();
     if (newChannelName.trim()) {
       // Add new channel
-      const result = await props.createChannel(newChannelName.trim());
-      if (result.type === "error") {
-        toast.error(result.message);
-        return;
-      }
-      setNewChannelName("");
-      props.setIsCreatingChannel(false);
+      try {
+        const channelId = await props.createChannel(newChannelName.trim());
+        setNewChannelName("");
+        props.setIsCreatingChannel(false);
 
-      // Navigate to the new channel
-      router.push(`/channels/${result.channelId}`);
+        // Navigate to the new channel
+        router.push(`/channels/${channelId}`);
+      } catch (error) {
+        toast.error("Failed to create channel");
+      }
     }
   };
 
