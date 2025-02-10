@@ -5,7 +5,7 @@ import { UserCircleIcon } from "@heroicons/react/24/outline";
 import { Group, Project, User } from "@/lib/types";
 
 interface SidebarProps {
-  user: User;
+  user?: User;
   isAdmin: boolean;
   projects: Project[];
   groups: Group[];
@@ -71,9 +71,9 @@ export default function Sidebar(props: SidebarProps) {
           <div className="flex-1 min-w-0">
             <p
               className="text-sm text-gray-300 truncate"
-              title={props.user.email}
+              title={props.user?.email ?? ""}
             >
-              {props.user.email}
+              {props.user?.email ?? ""}
             </p>
           </div>
         </div>

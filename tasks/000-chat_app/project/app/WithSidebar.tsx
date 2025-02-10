@@ -13,7 +13,7 @@ export function WithSidebar(props: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen bg-[#151517]">
       <Sidebar
-        email={user.email}
+        email={user?.email}
         currentChannel={currentChannel}
         channels={channels}
         onCreateChannel={createChannel}
