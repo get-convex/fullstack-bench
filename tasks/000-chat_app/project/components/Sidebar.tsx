@@ -7,7 +7,7 @@ import { Channel } from "@/lib/types";
 
 interface SidebarProps {
   email: string;
-  currentChannel: string;
+  currentChannel?: string;
   channels: Channel[];
   onCreateChannel: (name: string) => Promise<string>;
 }
