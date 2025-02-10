@@ -21,7 +21,7 @@ export default function EmojiPicker({
       <button
         type="button"
         onClick={() => setShowPicker(!showPicker)}
-        className="inline-flex items-center justify-center w-10 h-10 text-2xl bg-[#26262B] border border-gray-700 rounded-md hover:bg-[#2C2C31] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#8D2676]"
+        className="inline-flex items-center justify-center w-10 h-10 text-2xl bg-slate-800 border border-slate-700 rounded-md hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-plum-600"
       >
         {emoji}
       </button>
@@ -36,7 +36,7 @@ export default function EmojiPicker({
             transform: "translate(-50%, -50%)",
           }}
         >
-          <div className="bg-[#1C1C1F] rounded-lg shadow-xl ring-1 ring-black ring-opacity-5">
+          <div className="bg-slate-900 rounded-lg shadow-xl ring-1 ring-black ring-opacity-5">
             <Picker
               data={data}
               onEmojiSelect={(emoji: { native: string }) => {

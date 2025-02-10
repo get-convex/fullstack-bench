@@ -56,7 +56,7 @@ export default function GroupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-slate-950">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -64,7 +64,7 @@ export default function GroupPage() {
             <div className="flex items-center space-x-4">
               <Link
                 href="/workspace-admin/groups"
-                className="text-sm text-gray-400 hover:text-gray-300"
+                className="text-sm text-slate-400 hover:text-slate-300"
               >
                 ← Back to Groups
               </Link>
@@ -74,7 +74,7 @@ export default function GroupPage() {
                     type="text"
                     value={editedName}
                     onChange={(e) => setEditedName(e.target.value)}
-                    className="bg-[#1C2128] border-gray-700 rounded-md text-gray-300 text-xl font-bold focus:border-[#8D2676] focus:ring-[#8D2676]"
+                    className="bg-slate-800 border-slate-700 rounded-md text-slate-300 text-xl font-bold focus:border-plum-600 focus:ring-plum-600"
                     onKeyDown={(e) => {
                       if (e.key === "Enter") handleUpdateName();
                       if (e.key === "Escape") {
@@ -89,7 +89,7 @@ export default function GroupPage() {
                       setIsEditingName(false);
                       setEditedName(group.name);
                     }}
-                    className="text-sm text-gray-400 hover:text-gray-300"
+                    className="text-sm text-slate-400 hover:text-slate-300"
                   >
                     Cancel
                   </button>
@@ -99,7 +99,7 @@ export default function GroupPage() {
                   <span>{group.name}</span>
                   <button
                     onClick={() => setIsEditingName(true)}
-                    className="text-gray-400 hover:text-gray-300"
+                    className="text-slate-400 hover:text-slate-300"
                     title="Rename Group"
                   >
                     <PencilIcon className="w-5 h-5" />
@@ -110,7 +110,7 @@ export default function GroupPage() {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setShowMembershipModal(true)}
-                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#8D2676] hover:bg-[#7A2065] rounded-md transition-colors"
+                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum-600 hover:bg-plum-700 rounded-md transition-colors"
               >
                 <UserPlusIcon className="w-4 h-4 mr-1.5" />
                 Add Members
@@ -127,16 +127,16 @@ export default function GroupPage() {
         </div>
 
         {/* Members List */}
-        <div className="bg-[#161B22] rounded-lg shadow overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-800">
+        <div className="bg-slate-900 rounded-lg shadow overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-700">
             <h2 className="text-lg font-medium text-white">Members</h2>
           </div>
-          <div className="divide-y divide-gray-800">
+          <div className="divide-y divide-slate-700">
             {members.map((member) => (
               <MemberRow key={member.id} member={member} />
             ))}
             {members.length === 0 && (
-              <div className="px-6 py-4 text-gray-500 text-center">
+              <div className="px-6 py-4 text-slate-500 text-center">
                 No members yet
               </div>
             )}
@@ -183,15 +183,15 @@ function UserRow({
       className="px-6 py-4 flex items-center justify-between"
     >
       <div className="flex items-center space-x-3">
-        <UserIcon className="w-5 h-5 text-gray-400" />
-        <span className="text-gray-300">{user.email}</span>
+        <UserIcon className="w-5 h-5 text-slate-400" />
+        <span className="text-slate-300">{user.email}</span>
       </div>
       <div className="flex items-center space-x-2">
         <button
           onClick={() => {
             void removeMember(user.id, member.id);
           }}
-          className="text-gray-400 hover:text-red-400 ml-4"
+          className="text-slate-400 hover:text-red-400 ml-4"
           title="Remove Member"
         >
           <TrashIcon className="w-4 h-4" />
@@ -219,15 +219,15 @@ function GroupRow({
       className="px-6 py-4 flex items-center justify-between"
     >
       <div className="flex items-center space-x-3">
-        <UserGroupIcon className="w-5 h-5 text-gray-400" />
-        <span className="text-gray-300">{subgroup.name}</span>
+        <UserGroupIcon className="w-5 h-5 text-slate-400" />
+        <span className="text-slate-300">{subgroup.name}</span>
       </div>
       <div className="flex items-center space-x-2">
         <button
           onClick={() => {
             void removeMember(user.id, member.id);
           }}
-          className="text-gray-400 hover:text-red-400 ml-4"
+          className="text-slate-400 hover:text-red-400 ml-4"
           title="Remove Member"
         >
           <TrashIcon className="w-4 h-4" />

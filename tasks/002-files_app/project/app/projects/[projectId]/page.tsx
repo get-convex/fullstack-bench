@@ -15,16 +15,12 @@ export default function ProjectPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Link
             href={`/projects/${projectId}/files`}
-            className="flex items-center p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
+            className="flex items-center p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors"
           >
-            <FolderIcon className="w-6 h-6 text-gray-400 mr-3" />
+            <FolderIcon className="w-6 h-6 text-slate-400 mr-3" />
             <div>
-              <h3 className="font-medium text-white">
-                Files
-              </h3>
-              <p className="text-sm text-gray-400">
-                Browse project files
-              </p>
+              <h3 className="font-medium text-white">Files</h3>
+              <p className="text-sm text-slate-400">Browse project files</p>
             </div>
           </Link>
           <button
@@ -35,16 +31,12 @@ export default function ProjectPage() {
                 })
               )
             }
-            className="flex items-center p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
+            className="flex items-center p-4 bg-slate-800 rounded-lg hover:bg-slate-700 transition-colors"
           >
-            <Cog6ToothIcon className="w-6 h-6 text-gray-400 mr-3" />
+            <Cog6ToothIcon className="w-6 h-6 text-slate-400 mr-3" />
             <div className="text-left">
-              <h3 className="font-medium text-white">
-                Settings
-              </h3>
-              <p className="text-sm text-gray-400">
-                Manage project settings
-              </p>
+              <h3 className="font-medium text-white">Settings</h3>
+              <p className="text-sm text-slate-400">Manage project settings</p>
             </div>
           </button>
         </div>

@@ -74,12 +74,12 @@ export default function DirectoryView(props: {
   };
 
   return (
-    <div className="w-full border-r border-gray-800 overflow-y-auto bg-[#0D1117]">
+    <div className="w-full border-r border-slate-700 overflow-y-auto bg-slate-950">
       <Breadcrumb pathSegments={props.pathSegments} projectId={props.projectId}>
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setShowCreateFileModal(true)}
-            className="inline-flex items-center px-2 py-1 text-sm text-gray-400 hover:text-white rounded transition-colors"
+            className="inline-flex items-center px-2 py-1 text-sm text-slate-400 hover:text-white rounded transition-colors"
             title="Create new file"
           >
             <DocumentIcon className="w-4 h-4 mr-1.5" />
@@ -87,7 +87,7 @@ export default function DirectoryView(props: {
           </button>
           <button
             onClick={() => setShowCreateDirModal(true)}
-            className="inline-flex items-center px-2 py-1 text-sm text-gray-400 hover:text-white rounded transition-colors"
+            className="inline-flex items-center px-2 py-1 text-sm text-slate-400 hover:text-white rounded transition-colors"
             title="Create new directory"
           >
             <FolderPlusIcon className="w-4 h-4 mr-1.5" />
@@ -100,24 +100,24 @@ export default function DirectoryView(props: {
       <div className="py-2">
         {props.dirChildren.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 px-4">
-            <FolderPlusIcon className="w-12 h-12 text-gray-600 mb-4" />
+            <FolderPlusIcon className="w-12 h-12 text-slate-600 mb-4" />
             <h3 className="text-sm font-medium text-white mb-1">
               Empty directory
             </h3>
-            <p className="text-sm text-gray-400 text-center mb-4">
+            <p className="text-sm text-slate-400 text-center mb-4">
               Get started by creating a new file or directory
             </p>
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => setShowCreateFileModal(true)}
-                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#8D2676] hover:bg-[#7A2065] rounded-md transition-colors"
+                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum-600 hover:bg-plum-700 rounded-md transition-colors"
               >
                 <DocumentIcon className="w-4 h-4 mr-1.5" />
                 Add file
               </button>
               <button
                 onClick={() => setShowCreateDirModal(true)}
-                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#8D2676] hover:bg-[#7A2065] rounded-md transition-colors"
+                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum-600 hover:bg-plum-700 rounded-md transition-colors"
               >
                 <FolderPlusIcon className="w-4 h-4 mr-1.5" />
                 Add directory
@@ -128,14 +128,14 @@ export default function DirectoryView(props: {
           props.dirChildren.map((file) => (
             <div
               key={file.id}
-              className="group flex items-center justify-between px-4 py-2 hover:bg-gray-800 transition-colors"
+              className="group flex items-center justify-between px-4 py-2 hover:bg-slate-800 transition-colors"
             >
               {editingFile?.id === file.id ? (
                 <div className="flex items-center space-x-2 flex-1">
                   {"content" in file ? (
-                    <DocumentIcon className="w-5 h-5 text-gray-400" />
+                    <DocumentIcon className="w-5 h-5 text-slate-400" />
                   ) : (
-                    <FolderIcon className="w-5 h-5 text-gray-400" />
+                    <FolderIcon className="w-5 h-5 text-slate-400" />
                   )}
                   <input
                     type="text"
@@ -149,7 +149,7 @@ export default function DirectoryView(props: {
                       }
                     }}
                     onBlur={handleFinishRename}
-                    className="flex-1 bg-[#1C2128] border-gray-700 rounded-md text-gray-300 text-sm focus:border-[#8D2676] focus:ring-[#8D2676]"
+                    className="flex-1 bg-slate-900 border-slate-700 rounded-md text-slate-300 text-sm focus:border-plum-600 focus:ring-plum-600"
                     autoFocus
                   />
                 </div>
@@ -162,11 +162,11 @@ export default function DirectoryView(props: {
                   className="flex items-center space-x-2 cursor-pointer flex-1"
                 >
                   {"content" in file ? (
-                    <DocumentIcon className="w-5 h-5 text-gray-400" />
+                    <DocumentIcon className="w-5 h-5 text-slate-400" />
                   ) : (
-                    <FolderIcon className="w-5 h-5 text-gray-400" />
+                    <FolderIcon className="w-5 h-5 text-slate-400" />
                   )}
-                  <span className="text-sm text-gray-300">
+                  <span className="text-sm text-slate-300">
                     {file.parentEdge?.name}
                   </span>
                 </Link>
@@ -177,7 +177,7 @@ export default function DirectoryView(props: {
                     e.stopPropagation();
                     handleStartRename(file);
                   }}
-                  className="p-1 text-gray-400 hover:text-white inline-flex items-center"
+                  className="p-1 text-slate-400 hover:text-white inline-flex items-center"
                   title="Rename"
                 >
                   <PencilIcon className="w-4 h-4" />
@@ -188,7 +188,7 @@ export default function DirectoryView(props: {
                     e.stopPropagation();
                     handleDeleteFile(file);
                   }}
-                  className="p-1 text-gray-400 hover:text-red-400 inline-flex items-center ml-2"
+                  className="p-1 text-slate-400 hover:text-red-400 inline-flex items-center ml-2"
                   title="Delete"
                 >
                   <TrashIcon className="w-4 h-4" />

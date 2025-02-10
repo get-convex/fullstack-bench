@@ -35,7 +35,7 @@ function CreateProjectModal({
 
   return (
     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="bg-[#0D1117] rounded-lg p-6 w-full max-w-md border border-[#30363D] shadow-xl">
+      <div className="bg-slate-950 rounded-lg p-6 w-full max-w-md border border-slate-700 shadow-xl">
         <h2 className="text-xl font-semibold text-white mb-6">
           Create New Project
         </h2>
@@ -43,32 +43,32 @@ function CreateProjectModal({
           <div className="space-y-5">
             <div className="flex items-start space-x">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">
+                <label className="block text-sm font-medium text-slate-400 mb-2">
                   Emoji
                 </label>
                 <EmojiPicker emoji={emoji} onEmojiSelect={setEmoji} />
               </div>
               <div className="flex-1 ml-4">
-                <label className="block text-sm font-medium text-gray-400 mb-2">
+                <label className="block text-sm font-medium text-slate-400 mb-2">
                   Project Name
                 </label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-[#161B22] text-gray-200 rounded-md border border-[#30363D] focus:border-[#8D2676] focus:ring-1 focus:ring-[#8D2676] px-3 py-2 shadow-sm"
+                  className="w-full bg-slate-900 text-slate-200 rounded-md border border-slate-700 focus:border-plum-600 focus:ring-1 focus:ring-plum-600 px-3 py-2 shadow-sm"
                   required
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
+              <label className="block text-sm font-medium text-slate-400 mb-2">
                 Description
               </label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full bg-[#161B22] text-gray-200 rounded-md border border-[#30363D] focus:border-[#8D2676] focus:ring-1 focus:ring-[#8D2676] px-3 py-2 shadow-sm"
+                className="w-full bg-slate-900 text-slate-200 rounded-md border border-slate-700 focus:border-plum-600 focus:ring-1 focus:ring-plum-600 px-3 py-2 shadow-sm"
                 rows={3}
                 required
               />
@@ -78,13 +78,13 @@ function CreateProjectModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white bg-[#21262D] hover:bg-[#30363D] rounded-md transition-colors"
+              className="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-md transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-sm font-medium text-white bg-[#8D2676] hover:bg-[#7A2065] rounded-md transition-colors shadow-sm"
+              className="px-4 py-2 text-sm font-medium text-white bg-plum-600 hover:bg-plum-700 rounded-md transition-colors shadow-sm"
             >
               Create Project
             </button>
@@ -120,7 +120,7 @@ export default function ProjectsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-slate-950">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -128,7 +128,7 @@ export default function ProjectsPage() {
             <div className="flex items-center space-x-4">
               <Link
                 href="/workspace-admin"
-                className="text-sm text-gray-400 hover:text-gray-300"
+                className="text-sm text-slate-400 hover:text-slate-300"
               >
                 ← Back to Workspace Admin
               </Link>
@@ -136,7 +136,7 @@ export default function ProjectsPage() {
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#8D2676] hover:bg-[#7A2065] rounded-md transition-colors"
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum-600 hover:bg-plum-700 rounded-md transition-colors"
             >
               <PlusIcon className="w-4 h-4 mr-1.5" />
               New Project
@@ -145,50 +145,50 @@ export default function ProjectsPage() {
         </div>
 
         {/* Projects List */}
-        <div className="bg-[#161B22] rounded-lg shadow overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-800">
-            <thead className="bg-[#1C2128]">
+        <div className="bg-slate-900 rounded-lg shadow overflow-hidden">
+          <table className="min-w-full divide-y divide-slate-700">
+            <thead className="bg-slate-800">
               <tr>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider"
                 >
                   Project
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider"
                 >
                   Description
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider"
                 >
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-slate-700">
               {projects.map((project) => (
                 <tr key={project.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <span className="text-xl mr-2">{project.emoji}</span>
-                      <span className="text-sm text-gray-300">
+                      <span className="text-sm text-slate-300">
                         {project.name}
                       </span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm text-gray-300">
+                    <div className="text-sm text-slate-300">
                       {project.description}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
                     <button
                       onClick={() => handleDeleteProject(project.id)}
-                      className="text-gray-400 hover:text-red-400"
+                      className="text-slate-400 hover:text-red-400"
                       title="Delete Project"
                     >
                       <TrashIcon className="w-4 h-4" />

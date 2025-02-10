@@ -47,11 +47,11 @@ export default function CreateGroupModal({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-visible rounded-lg bg-[#1C1C1F] text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+              <Dialog.Panel className="relative transform overflow-visible rounded-lg bg-slate-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                   <button
                     type="button"
-                    className="rounded-md text-gray-400 hover:text-gray-300"
+                    className="rounded-md text-slate-400 hover:text-slate-300"
                     onClick={onClose}
                   >
                     <span className="sr-only">Close</span>
@@ -66,7 +66,7 @@ export default function CreateGroupModal({
 
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-1">
+                      <label className="block text-sm font-medium text-slate-300 mb-1">
                         Group Name
                       </label>
                       <input
@@ -74,7 +74,7 @@ export default function CreateGroupModal({
                         value={groupName}
                         onChange={(e) => setGroupName(e.target.value)}
                         placeholder="Enter group name"
-                        className="block w-full bg-[#1C2128] border-gray-700 rounded-md text-gray-300 text-sm focus:border-[#8D2676] focus:ring-[#8D2676]"
+                        className="block w-full bg-slate-800 border-slate-700 rounded-md text-slate-300 text-sm focus:border-plum-600 focus:ring-plum-600"
                         onKeyDown={(e) => {
                           if (e.key === "Enter") handleCreate();
                           if (e.key === "Escape") onClose();
@@ -84,14 +84,14 @@ export default function CreateGroupModal({
                     <div className="mt-6 flex justify-end space-x-3">
                       <button
                         onClick={onClose}
-                        className="px-3 py-2 text-sm text-gray-400 hover:text-gray-300"
+                        className="px-3 py-2 text-sm text-slate-400 hover:text-slate-300"
                       >
                         Cancel
                       </button>
                       <button
                         onClick={handleCreate}
                         disabled={!groupName.trim()}
-                        className="px-3 py-2 text-sm bg-[#8D2676] text-white rounded-md hover:bg-[#7A2065] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 py-2 text-sm bg-plum-600 text-white rounded-md hover:bg-plum-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Create Group
                       </button>

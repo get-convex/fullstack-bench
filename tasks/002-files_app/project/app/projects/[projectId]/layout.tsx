@@ -75,7 +75,7 @@ export default function ProjectLayout({
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#0D1117]">
+    <div className="flex flex-col h-full bg-slate-950">
       <ProjectHeader project={project} />
       <div className="flex-1 overflow-auto">{children}</div>
 

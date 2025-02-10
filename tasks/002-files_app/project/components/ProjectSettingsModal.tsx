@@ -97,11 +97,11 @@ export default function ProjectSettingsModal({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-visible rounded-lg bg-[#1C1C1F] text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
+              <Dialog.Panel className="relative transform overflow-visible rounded-lg bg-slate-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                   <button
                     type="button"
-                    className="rounded-md text-gray-400 hover:text-gray-300"
+                    className="rounded-md text-slate-400 hover:text-slate-300"
                     onClick={onClose}
                   >
                     <span className="sr-only">Close</span>
@@ -127,15 +127,15 @@ export default function ProjectSettingsModal({
                     )
                   }
                 >
-                  <div className="border-b border-gray-800">
+                  <div className="border-b border-slate-700">
                     <Tab.List className="flex px-6">
                       <Tab
                         className={({ selected }) =>
                           clsx(
                             "px-4 py-3 text-sm font-medium border-b-2 focus:outline-none whitespace-nowrap",
                             selected
-                              ? "border-[#8D2676] text-[#E1E1E3]"
-                              : "border-transparent text-gray-400 hover:text-gray-200"
+                              ? "border-plum-600 text-slate-200"
+                              : "border-transparent text-slate-400 hover:text-slate-200"
                           )
                         }
                       >
@@ -146,8 +146,8 @@ export default function ProjectSettingsModal({
                           clsx(
                             "px-4 py-3 text-sm font-medium border-b-2 focus:outline-none whitespace-nowrap",
                             selected
-                              ? "border-[#8D2676] text-[#E1E1E3]"
-                              : "border-transparent text-gray-400 hover:text-gray-200"
+                              ? "border-plum-600 text-slate-200"
+                              : "border-transparent text-slate-400 hover:text-slate-200"
                           )
                         }
                       >
@@ -158,8 +158,8 @@ export default function ProjectSettingsModal({
                           clsx(
                             "px-4 py-3 text-sm font-medium border-b-2 focus:outline-none whitespace-nowrap",
                             selected
-                              ? "border-[#8D2676] text-[#E1E1E3]"
-                              : "border-transparent text-gray-400 hover:text-gray-200"
+                              ? "border-plum-600 text-slate-200"
+                              : "border-transparent text-slate-400 hover:text-slate-200"
                           )
                         }
                       >
@@ -182,7 +182,7 @@ export default function ProjectSettingsModal({
                             }
                           />
                           <div className="flex-1">
-                            <label className="block text-sm font-medium text-gray-300 mb-1">
+                            <label className="block text-sm font-medium text-slate-300 mb-1">
                               Name
                             </label>
                             <input
@@ -194,12 +194,12 @@ export default function ProjectSettingsModal({
                                   name: e.target.value,
                                 }))
                               }
-                              className="block w-full rounded-md border-gray-700 bg-[#26262B] text-white shadow-sm focus:border-[#8D2676] focus:ring-[#8D2676] sm:text-sm"
+                              className="w-full bg-slate-800 text-slate-200 rounded-md border border-slate-700 focus:border-plum-600 focus:ring-1 focus:ring-plum-600 px-3 py-2 shadow-sm"
                             />
                           </div>
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-1">
+                          <label className="block text-sm font-medium text-slate-300 mb-1">
                             Description
                           </label>
                           <textarea
@@ -213,7 +213,7 @@ export default function ProjectSettingsModal({
                               }))
                             }
                             rows={3}
-                            className="block w-full rounded-md border-gray-700 bg-[#26262B] text-white shadow-sm focus:border-[#8D2676] focus:ring-[#8D2676] sm:text-sm"
+                            className="w-full bg-slate-800 text-slate-200 rounded-md border border-slate-700 focus:border-plum-600 focus:ring-1 focus:ring-plum-600 px-3 py-2 shadow-sm"
                           />
                         </div>
                       </div>
@@ -221,7 +221,7 @@ export default function ProjectSettingsModal({
                         <button
                           type="button"
                           onClick={handleSave}
-                          className="rounded-md bg-[#8D2676] px-3 py-2 text-sm text-white hover:bg-[#7A2065] focus:outline-none focus:ring-2 focus:ring-[#8D2676] focus:ring-offset-2"
+                          className="px-4 py-2 text-sm font-medium text-white bg-plum-600 rounded-md hover:bg-plum-700 focus:outline-none focus:ring-2 focus:ring-plum-600 focus:ring-offset-2 focus:ring-offset-slate-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           Save Changes
                         </button>
@@ -245,7 +245,7 @@ export default function ProjectSettingsModal({
                     <Tab.Panel>
                       <div className="space-y-4">
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-1">
+                          <label className="block text-sm font-medium text-slate-300 mb-1">
                             Type
                           </label>
                           <select
@@ -254,14 +254,14 @@ export default function ProjectSettingsModal({
                               setInviteType(e.target.value as "user" | "group");
                               setSelectedInviteId("");
                             }}
-                            className="block w-full rounded-md border-gray-700 bg-[#26262B] text-white shadow-sm focus:border-[#8D2676] focus:ring-[#8D2676] sm:text-sm"
+                            className="block w-full rounded-md border-slate-700 bg-slate-800 text-white shadow-sm focus:border-plum-600 focus:ring-plum-600 sm:text-sm"
                           >
                             <option value="user">User</option>
                             <option value="group">Group</option>
                           </select>
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-300 mb-1">
+                          <label className="block text-sm font-medium text-slate-300 mb-1">
                             {inviteType === "user" ? "User" : "Group"}
                           </label>
                           <select
@@ -269,7 +269,7 @@ export default function ProjectSettingsModal({
                             onChange={(e) =>
                               setSelectedInviteId(e.target.value)
                             }
-                            className="block w-full rounded-md border-gray-700 bg-[#26262B] text-white shadow-sm focus:border-[#8D2676] focus:ring-[#8D2676] sm:text-sm"
+                            className="block w-full rounded-md border-slate-700 bg-slate-800 text-white shadow-sm focus:border-plum-600 focus:ring-plum-600 sm:text-sm"
                           >
                             <option value="">
                               Select{" "}
@@ -292,7 +292,7 @@ export default function ProjectSettingsModal({
                           <button
                             onClick={handleInvite}
                             disabled={!selectedInviteId}
-                            className="w-full rounded-md bg-[#8D2676] px-3 py-2 text-sm text-white hover:bg-[#7A2065] focus:outline-none focus:ring-2 focus:ring-[#8D2676] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full rounded-md bg-plum-600 px-3 py-2 text-sm text-white hover:bg-plum-700 focus:outline-none focus:ring-2 focus:ring-plum-600 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             Add {inviteType === "user" ? "User" : "Group"}
                           </button>
@@ -333,18 +333,18 @@ function ProjectMemberRow({
     <div key={member.id} className="flex items-center justify-between py-2">
       <div className="flex items-center min-w-0">
         {member.subject.type === "user" ? (
-          <UserIcon className="h-5 w-5 text-gray-400" />
+          <UserIcon className="h-5 w-5 text-slate-400" />
         ) : (
-          <UserGroupIcon className="h-5 w-5 text-gray-400" />
+          <UserGroupIcon className="h-5 w-5 text-slate-400" />
         )}
         <div className="ml-3 min-w-0">
-          <p className="text-sm text-gray-500 truncate">{name}</p>
+          <p className="text-sm text-slate-500 truncate">{name}</p>
         </div>
       </div>
       <div className="ml-3 flex items-center space-x-3">
         <button
           onClick={() => handleRemoveMember(member.id)}
-          className="text-gray-400 hover:text-red-600"
+          className="text-slate-400 hover:text-red-600"
         >
           <TrashIcon className="h-5 w-5" />
         </button>

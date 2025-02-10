@@ -25,17 +25,15 @@ export default function Breadcrumb({
             .join("/")}`,
   }));
   return (
-    <div className="px-4 py-3 flex space-x-1 text-sm text-gray-400 border-b border-gray-800 justify-between">
+    <div className="px-4 py-3 flex space-x-1 text-sm text-slate-400 border-b border-slate-700 justify-between">
       <div className="flex items-center">
         {breadcrumbPath.map((segment, index) => (
           <div key={index} className="flex items-center">
             {index > 0 && (
-              <ChevronRightIcon className="w-4 h-4 mx-1 text-gray-400" />
+              <ChevronRightIcon className="w-4 h-4 mx-1 text-slate-400" />
             )}
             {segment.isLast ? (
-              <span className="text-white font-medium">
-                {segment.name}
-              </span>
+              <span className="text-white font-medium">{segment.name}</span>
             ) : (
               <Link
                 href={segment.href}
@@ -47,9 +45,7 @@ export default function Breadcrumb({
           </div>
         ))}
       </div>
-      <div>
-      {children}
-      </div>
+      <div>{children}</div>
     </div>
   );
 }

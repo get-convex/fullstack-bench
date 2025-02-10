@@ -21,7 +21,7 @@ export default function GroupsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D1117]">
+    <div className="min-h-screen bg-slate-950">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -29,7 +29,7 @@ export default function GroupsPage() {
             <div className="flex items-center space-x-4">
               <Link
                 href="/workspace-admin"
-                className="text-sm text-gray-400 hover:text-gray-300"
+                className="text-sm text-slate-400 hover:text-slate-300"
               >
                 ← Back to Workspace Admin
               </Link>
@@ -37,7 +37,7 @@ export default function GroupsPage() {
             </div>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#8D2676] hover:bg-[#7A2065] rounded-md transition-colors"
+              className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum-600 hover:bg-plum-700 rounded-md transition-colors"
             >
               <UserGroupIcon className="w-4 h-4 mr-1.5" />
               New Group
@@ -46,25 +46,25 @@ export default function GroupsPage() {
         </div>
 
         {/* Groups List */}
-        <div className="bg-[#161B22] rounded-lg shadow overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-800">
-            <thead className="bg-[#1C2128]">
+        <div className="bg-slate-900 rounded-lg shadow overflow-hidden">
+          <table className="min-w-full divide-y divide-slate-700">
+            <thead className="bg-slate-800">
               <tr>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider"
                 >
                   Name
                 </th>
                 <th
                   scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider"
                 >
                   Members
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-slate-700">
               {groups.map((group) => (
                 <GroupRow key={group.id} group={group} />
               ))}
@@ -87,17 +87,17 @@ function GroupRow({ group }: { group: Group }) {
   return (
     <tr
       key={group.id}
-      className="hover:bg-gray-800/50 cursor-pointer transition-colors"
+      className="hover:bg-slate-800/50 cursor-pointer transition-colors"
     >
       <td className="px-6 py-4 whitespace-nowrap text-sm">
         <Link
           href={`/workspace-admin/group/${group.id}`}
-          className="text-gray-300 hover:text-white"
+          className="text-slate-300 hover:text-white"
         >
           {group.name}
         </Link>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-300">
         {members.length} members
       </td>
     </tr>

@@ -69,12 +69,12 @@ export default function FileView({
   const highlighted = hljs.highlight(file.content || "", { language }).value;
 
   return (
-    <div className="w-full border-r border-gray-800 overflow-y-auto bg-[#0D1117]">
+    <div className="w-full border-r border-slate-700 overflow-y-auto bg-slate-950">
       <Breadcrumb pathSegments={pathSegments} projectId={projectId}>
         <div className="flex space-x-2">
           <button
             onClick={() => setIsEditing(!isEditing)}
-            className="p-1 text-gray-400 hover:text-white rounded transition-colors"
+            className="p-1 text-slate-400 hover:text-white rounded transition-colors"
             title={isEditing ? "Save" : "Edit"}
           >
             <PencilIcon className="w-4 h-4" />
@@ -87,14 +87,14 @@ export default function FileView({
           <textarea
             value={editedContent}
             onChange={(e) => setEditedContent(e.target.value)}
-            className="w-full h-[calc(100vh-12rem)] font-mono text-sm bg-[#1E1E1E] text-gray-100 p-4 rounded-lg border border-gray-700 focus:border-[#8D2676] focus:ring-[#8D2676] resize-none"
+            className="w-full h-[calc(100vh-12rem)] font-mono text-sm bg-slate-900 text-slate-100 p-4 rounded-lg border border-slate-700 focus:border-plum-600 focus:ring-plum-600 resize-none"
           />
         ) : (
           <div className="relative">
-            <pre className="!bg-[#1E1E1E] !p-4 rounded-lg border border-gray-700 overflow-x-auto">
+            <pre className="!bg-slate-900 !p-4 rounded-lg border border-slate-700 overflow-x-auto">
               <code dangerouslySetInnerHTML={{ __html: highlighted }} />
             </pre>
-            <div className="absolute top-3 right-3 text-xs text-gray-500 font-mono px-2 py-1 rounded bg-gray-800">
+            <div className="absolute top-3 right-3 text-xs text-slate-500 font-mono px-2 py-1 rounded bg-slate-800">
               {language}
             </div>
           </div>
@@ -103,13 +103,13 @@ export default function FileView({
 
       {/* Edit Actions */}
       {isEditing && (
-        <div className="px-4 py-3 border-t border-gray-800 flex justify-end space-x-3">
+        <div className="px-4 py-3 border-t border-slate-700 flex justify-end space-x-3">
           <button
             onClick={() => {
               setIsEditing(false);
               setEditedContent(file.content || "");
             }}
-            className="px-3 py-2 text-sm text-gray-400 hover:text-white"
+            className="px-3 py-2 text-sm text-slate-400 hover:text-white"
           >
             Cancel
           </button>
@@ -118,7 +118,7 @@ export default function FileView({
               await handleEditFile(editedContent);
               setIsEditing(false);
             }}
-            className="px-3 py-2 text-sm bg-[#8D2676] text-white rounded-md hover:bg-[#7A2065] transition-colors"
+            className="px-3 py-2 text-sm bg-plum-600 text-white rounded-md hover:bg-plum-700 transition-colors"
           >
             Save Changes
           </button>

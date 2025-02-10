@@ -49,11 +49,11 @@ export default function CreateFileModal({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-visible rounded-lg bg-[#1C1C1F] text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3xl">
+              <Dialog.Panel className="relative transform overflow-visible rounded-lg bg-slate-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3xl">
                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                   <button
                     type="button"
-                    className="rounded-md text-gray-400 hover:text-gray-300"
+                    className="rounded-md text-slate-400 hover:text-slate-300"
                     onClick={onClose}
                   >
                     <span className="sr-only">Close</span>
@@ -68,7 +68,7 @@ export default function CreateFileModal({
 
                   <div className="space-y-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
                         File Name
                       </label>
                       <input
@@ -76,11 +76,11 @@ export default function CreateFileModal({
                         value={fileName}
                         onChange={(e) => setFileName(e.target.value)}
                         placeholder="Enter file name"
-                        className="block w-full px-3 py-2 bg-[#2D2D30] border border-gray-700 rounded-md text-gray-300 text-sm placeholder-gray-500 focus:border-[#8D2676] focus:ring-[#8D2676] focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#1C1C1F] transition-colors"
+                        className="block w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-slate-300 text-sm placeholder-slate-500 focus:border-plum-600 focus:ring-plum-600 focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 transition-colors"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-slate-300 mb-2">
                         Initial Content
                       </label>
                       <textarea
@@ -88,20 +88,20 @@ export default function CreateFileModal({
                         onChange={(e) => setFileContent(e.target.value)}
                         placeholder="Enter file content"
                         rows={12}
-                        className="block w-full px-3 py-2 font-mono text-sm bg-[#2D2D30] border border-gray-700 rounded-md text-gray-300 placeholder-gray-500 focus:border-[#8D2676] focus:ring-[#8D2676] focus:ring-2 focus:ring-offset-2 focus:ring-offset-[#1C1C1F] transition-colors"
+                        className="block w-full px-3 py-2 font-mono text-sm bg-slate-800 border border-slate-700 rounded-md text-slate-300 placeholder-slate-500 focus:border-plum-600 focus:ring-plum-600 focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 transition-colors"
                       />
                     </div>
                     <div className="flex justify-end space-x-3 pt-2">
                       <button
                         onClick={onClose}
-                        className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                        className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors"
                       >
                         Cancel
                       </button>
                       <button
                         onClick={handleCreate}
                         disabled={!fileName.trim()}
-                        className="px-4 py-2 text-sm font-medium bg-[#8D2676] text-white rounded-md hover:bg-[#7A2065] focus:outline-none focus:ring-2 focus:ring-[#8D2676] focus:ring-offset-2 focus:ring-offset-[#1C1C1F] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-4 py-2 text-sm font-medium bg-plum-600 text-white rounded-md hover:bg-plum-700 focus:outline-none focus:ring-2 focus:ring-plum-600 focus:ring-offset-2 focus:ring-offset-slate-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Create File
                       </button>
