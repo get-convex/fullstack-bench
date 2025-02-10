@@ -31,26 +31,34 @@ import { defineTable } from "convex/server";
 import { v } from "convex/values";
 
 const users = defineTable({
-  name: v.optional(v.string()),
-  image: v.optional(v.string()),
   email: v.optional(v.string()),
-  emailVerificationTime: v.optional(v.number()),
-  phone: v.optional(v.string()),
-  phoneVerificationTime: v.optional(v.number()),
-  isAnonymous: v.optional(v.boolean()),
+  // Other auth fields that are irrelevant for this task. Only use the `email` field.
+  ...
 })
   .index("email", ["email"])
   .index("phone", ["phone"]);
 
 const authTables = {
   users,
-  // Other auth tables that are irrelevant for this task.
+  // Other auth tables that are irrelevant for this task. Only use the `users` table.
   ...
 };
 ```
 
-Only use the `_id` and `email` fields within the app. Do NOT modify the auth setup or schema, and ALWAYS use the existing
-`users` table.
+Within the server, ALWAYS use the `getAuthUserId` function from `@convex-dev/auth/server` to get the current user.
+
+```ts
+import { getAuthUserId } from "@convex-dev/auth/server";
+
+const userId = await getAuthUserId(ctx);
+if (!userId) {
+  throw new Error("Not authenticated");
+}
+const user = await ctx.db.get(userId);
+if (!user) {
+  throw new Error(`User ${userId} not found`);
+}
+```
 
 Within the app, use the `lib/BackendContext:useLoggedInUser` hook to get the current user. Do NOT modify this code.
 

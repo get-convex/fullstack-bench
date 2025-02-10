@@ -5,7 +5,7 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-ignore_list = [".git", "node_modules", "bun.lockb", "bun.lockb", ".next", "package.json", "BACKEND.md", "TASK.md"]
+ignore_list = [".git", "node_modules", "bun.lockb", "bun.lockb", ".next", "package.json", "BACKEND.md", "TASK.md", ".env.local"]
 template_override = {
     "lib/BackendContext.tsx",
 }
@@ -63,6 +63,9 @@ def tangle(template_dir: Path, task_dir: Path, output_dir: Path) -> None:
 
     # Install dependencies.
     subprocess.run(["bun", "install"], cwd=output_dir)
+
+    # Run setup script.
+    subprocess.run(["python", "setup.py"], cwd=output_dir)
 
 if __name__ == "__main__":
     import sys
