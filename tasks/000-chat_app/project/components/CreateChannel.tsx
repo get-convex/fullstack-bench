@@ -46,13 +46,13 @@ export function CreateChannel(props: CreateChannelProps) {
         value={newChannelName}
         onChange={(e) => setNewChannelName(e.target.value)}
         placeholder="New channel name"
-        className="w-full px-3 py-2 rounded bg-[#26262b] text-white placeholder-[#A1A1A3] border border-[#363639] focus:border-[#8D2676] focus:outline-none mb-2 text-sm"
+        className="w-full px-3 py-2 rounded bg-slate-800 text-white placeholder-slate-400 border border-slate-700 focus:border-[#8D2676] focus:outline-none mb-2 text-sm"
         autoFocus
       />
       <div className="flex gap-2">
         <button
           type="submit"
-          className="flex-1 bg-[#8D2676] hover:bg-[#7A2065] px-3 py-1.5 rounded text-sm font-medium text-white transition-colors"
+          className="flex-1 bg-plum hover:bg-opacity-90 px-3 py-1.5 rounded text-sm font-medium text-white transition-colors"
         >
           Create
         </button>
@@ -62,7 +62,7 @@ export function CreateChannel(props: CreateChannelProps) {
             props.setIsCreatingChannel(false);
             setNewChannelName("");
           }}
-          className="flex-1 bg-[#26262b] hover:bg-[#363639] px-3 py-1.5 rounded text-sm font-medium text-[#E1E1E3] transition-colors"
+          className="flex-1 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded text-sm font-medium text-slate-200 transition-colors"
         >
           Cancel
         </button>

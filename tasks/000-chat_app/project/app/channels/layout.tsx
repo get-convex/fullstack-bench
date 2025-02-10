@@ -15,14 +15,14 @@ export default function ChannelsLayout({
   const currentChannel = pathname?.split("/").pop() || "general";
   const channels = useChannels();
   return (
-    <div className="h-screen flex bg-[#151517]">
+    <div className="h-screen flex bg-slate-950">
       <Sidebar
         email={user.email}
         currentChannel={currentChannel}
         channels={channels}
         onCreateChannel={createChannel}
       />
-      <div className="flex-1 bg-[#151517]">{children}</div>
+      <div className="flex-1 bg-slate-950">{children}</div>
     </div>
   );
 }

@@ -16,11 +16,11 @@ export function MessageList({ messages }: MessageListProps) {
             <span className="font-medium text-white">
               {users[message.userId].email}
             </span>
-            <span className="text-xs text-[#A1A1A3] ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <span className="text-xs text-slate-400 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
               {new Date(message.createdAt).toLocaleTimeString()}
             </span>
           </div>
-          <p className="text-[#E1E1E3] text-sm leading-relaxed">
+          <p className="text-slate-200 text-sm leading-relaxed">
             {message.content}
           </p>
         </div>

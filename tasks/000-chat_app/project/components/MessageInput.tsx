@@ -23,19 +23,19 @@ export function MessageInput({ channelId, onSendMessage }: MessageInputProps) {
   };
 
   return (
-    <div className="px-6 py-4 border-t border-[#26262b]">
+    <div className="px-6 py-4 border-t border-slate-800">
       <form onSubmit={handleSubmit}>
         <div className="flex">
           <input
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            className="flex-1 bg-[#26262b] text-white placeholder-[#A1A1A3] px-4 py-2 rounded-l text-sm border border-[#363639] focus:border-[#8D2676] focus:outline-none"
+            className="flex-1 bg-slate-800 text-white placeholder-slate-400 px-4 py-2 rounded-l text-sm border border-slate-700 focus:border-plum focus:outline-none"
             placeholder={`Message #${channel.name}`}
           />
           <button
             type="submit"
-            className="bg-[#8D2676] hover:bg-[#7A2065] text-white px-6 py-2 rounded-r text-sm font-medium transition-colors"
+            className="bg-plum hover:bg-opacity-90 text-white px-6 py-2 rounded-r text-sm font-medium transition-colors"
           >
             Send
           </button>
