@@ -26,14 +26,14 @@ export function useChannel(channelId: string) {
   return currentChannels.find((channel) => channel.id === channelId);
 }
 
-export async function createChannel(name: string): Promise<{ type: "success", channelId: string } | { type: "error", message: string }> {
+export async function createChannel(name: string): Promise<string> {
   const currentChannels = store.get(channels);
   const id = crypto.randomUUID();
   if (currentChannels.find((channel) => channel.name === name)) {
-    return { type: "error", message: `Channel with name ${name} already exists` };
+    throw new Error(`Channel with name ${name} already exists`);
   }
   store.set(channels, [...currentChannels, { id, name, createdAt: Date.now() }]);
-  return { type: "success", channelId: id };
+  return id;
 }
 
 export function useMessages(channelId: string) {
@@ -43,11 +43,11 @@ export function useMessages(channelId: string) {
   return results;
 }
 
-export async function sendMessage(userId: string, content: string, channelId: string): Promise<{ type: "success" } | { type: "error", message: string }> {
+export async function sendMessage(userId: string, content: string, channelId: string): Promise<void> {
   const currentChannels = store.get(channels);
   const channel = currentChannels.find((channel) => channel.id === channelId);
   if (!channel) {
-    return { type: "error", message: `Channel with id ${channelId} not found` };
+    throw new Error(`Channel with id ${channelId} not found`);
   }
   const currentMessages = store.get(messages);
   const message: Message = {
@@ -58,7 +58,6 @@ export async function sendMessage(userId: string, content: string, channelId: st
     createdAt: Date.now(),
   };
   store.set(messages, [...currentMessages, message]);
-  return { type: "success" };
 }
 
 const users = atom<User[]>(initialUsers);

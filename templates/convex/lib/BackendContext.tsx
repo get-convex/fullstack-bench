@@ -12,6 +12,7 @@ import {
 import { createContext, useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { User } from "./types";
+import { Spinner } from "@/components/Spinner";
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
@@ -21,9 +22,7 @@ export function BackendContext(props: { children: React.ReactNode }) {
   return (
     <ConvexAuthProvider client={convex}>
       <AuthLoading>
-        <div className="min-h-screen flex items-center justify-center bg-[#151517]">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#8D2676] border-t-transparent" />
-        </div>
+        <Spinner />
       </AuthLoading>
       <Unauthenticated>
         <LoginForm />
@@ -46,11 +45,7 @@ export function useLoggedInUser(): User {
 function SetUserEmail(props: { children: React.ReactNode }) {
   const currentUser = useQuery(api.auth.getLoggedInUser);
   if (currentUser === undefined) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#151517]">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-[#8D2676] border-t-transparent" />
-      </div>
-    );
+    return <Spinner />;
   }
   const email = currentUser?.email;
   if (!email) {

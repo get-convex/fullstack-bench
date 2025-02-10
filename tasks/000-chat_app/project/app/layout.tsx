@@ -2,6 +2,7 @@ import { BackendContext } from "@/lib/BackendContext";
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import { WithSidebar } from "./WithSidebar";
 
 export const metadata: Metadata = {
   title: "Chat App",
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased bg-slate-950">
-        <BackendContext>{children}</BackendContext>
+        <BackendContext>
+          <WithSidebar>{children}</WithSidebar>
+        </BackendContext>
         <Toaster
           position="top-center"
           toastOptions={{
