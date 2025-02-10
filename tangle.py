@@ -67,6 +67,9 @@ def tangle(template_dir: Path, task_dir: Path, output_dir: Path) -> None:
     # Run setup script.
     subprocess.run(["python", "setup.py"], cwd=output_dir)
 
+    # Open up cursor.
+    subprocess.run(["cursor", output_dir])
+
 if __name__ == "__main__":
     import sys
     if len(sys.argv) != 3:
