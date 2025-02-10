@@ -47,7 +47,7 @@ export function CreateChannel(props: CreateChannelProps) {
         value={newChannelName}
         onChange={(e) => setNewChannelName(e.target.value)}
         placeholder="New channel name"
-        className="w-full px-3 py-2 rounded bg-slate-800 text-white placeholder-slate-400 border border-slate-700 focus:border-[#8D2676] focus:outline-none mb-2 text-sm"
+        className="w-full px-3 py-2 rounded bg-slate-800 text-white placeholder-slate-400 border border-slate-700 focus:border-[#8D2676] focus:outline-none mb-4 text-sm"
         autoFocus
       />
       <div className="flex gap-2">

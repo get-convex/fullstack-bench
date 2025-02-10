@@ -50,7 +50,7 @@ export function Sidebar({
       {isCreatingChannel && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
           <div className="bg-slate-900 p-6 rounded-lg w-[400px]">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-medium text-white">Create Channel</h2>
               <button
                 onClick={() => setIsCreatingChannel(false)}
