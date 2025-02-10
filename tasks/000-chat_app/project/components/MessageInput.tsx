@@ -1,19 +1,15 @@
 "use client";
 
-import { useChannel } from "@/lib/state";
+import { Channel } from "@/lib/types";
 import React, { useState } from "react";
 
 interface MessageInputProps {
-  channelId: string;
+  channel: Channel;
   onSendMessage: (content: string) => void;
 }
 
-export function MessageInput({ channelId, onSendMessage }: MessageInputProps) {
+export function MessageInput({ channel, onSendMessage }: MessageInputProps) {
   const [newMessage, setNewMessage] = useState("");
-  const channel = useChannel(channelId);
-  if (!channel) {
-    throw new Error("Channel not found");
-  }
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newMessage.trim()) {
