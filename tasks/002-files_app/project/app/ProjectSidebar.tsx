@@ -9,8 +9,8 @@ import { useIsAdmin } from "@/lib/state/userPermissions";
 export function ProjectSidebar() {
   const projects = useProjects();
   const user = useLoggedInUser();
-  const isAdmin = useIsAdmin(user.id);
-  const groups = useGroups(user.id);
+  const isAdmin = user ? useIsAdmin(user.id) : false;
+  const groups = user ? useGroups(user.id) : [];
   return (
     <Sidebar
       projects={projects}

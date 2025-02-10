@@ -6,7 +6,7 @@ import { CreateChannel } from "./CreateChannel";
 import { Channel } from "@/lib/types";
 
 interface SidebarProps {
-  email: string;
+  email?: string;
   currentChannel?: string;
   channels: Channel[];
   onCreateChannel: (name: string) => Promise<string>;
@@ -24,7 +24,7 @@ export function Sidebar({
     <div className="w-[280px] border-r border-slate-800 bg-slate-950 text-slate-200 p-4">
       <div className="mb-8">
         <h2 className="text-sm font-medium text-slate-400">Welcome,</h2>
-        <h1 className="text-lg font-medium text-white">{email}</h1>
+        <h1 className="text-lg font-medium text-white">{email ?? ""}</h1>
       </div>
 
       <div className="flex justify-between items-center mb-3 group">
