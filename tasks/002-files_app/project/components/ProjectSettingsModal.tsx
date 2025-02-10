@@ -1,7 +1,17 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import { Dialog, DialogPanel, Transition, TransitionChild, Tab, TabList } from "@headlessui/react";
+import {
+  Dialog,
+  DialogPanel,
+  Transition,
+  TransitionChild,
+  Tab,
+  TabGroup,
+  TabPanel,
+  TabPanels,
+  TabList,
+} from "@headlessui/react";
 import {
   XMarkIcon,
   UserIcon,
@@ -109,7 +119,7 @@ export default function ProjectSettingsModal({
                   </button>
                 </div>
 
-                <Tab.Group
+                <TabGroup
                   selectedIndex={
                     selectedTab === "details"
                       ? 0
@@ -168,8 +178,8 @@ export default function ProjectSettingsModal({
                     </TabList>
                   </div>
 
-                  <Tab.Panels className="px-6 py-4">
-                    <Tab.Panel>
+                  <TabPanels className="px-6 py-4">
+                    <TabPanel>
                       <div className="space-y-4">
                         <div className="flex items-start space-x-3">
                           <EmojiPicker
@@ -226,9 +236,9 @@ export default function ProjectSettingsModal({
                           Save Changes
                         </button>
                       </div>
-                    </Tab.Panel>
+                    </TabPanel>
 
-                    <Tab.Panel>
+                    <TabPanel>
                       <div className="space-y-3">
                         {projectMembers.map((member) => (
                           <ProjectMemberRow
@@ -240,9 +250,9 @@ export default function ProjectSettingsModal({
                           />
                         ))}
                       </div>
-                    </Tab.Panel>
+                    </TabPanel>
 
-                    <Tab.Panel>
+                    <TabPanel>
                       <div className="space-y-4">
                         <div>
                           <label className="block text-sm font-medium text-slate-300 mb-1">
@@ -298,9 +308,9 @@ export default function ProjectSettingsModal({
                           </button>
                         </div>
                       </div>
-                    </Tab.Panel>
-                  </Tab.Panels>
-                </Tab.Group>
+                    </TabPanel>
+                  </TabPanels>
+                </TabGroup>
               </DialogPanel>
             </TransitionChild>
           </div>
