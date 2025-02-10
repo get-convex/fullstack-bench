@@ -40,7 +40,7 @@ export function CommentList({
 
   return (
     <div>
-      <h2 className="text-xs font-medium text-[#8A8A8A] uppercase mb-4">
+      <h2 className="text-xs font-medium text-slate-400 uppercase mb-4">
         Comments
       </h2>
       <div className="space-y-6 mb-6">
@@ -60,13 +60,13 @@ export function CommentList({
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="Write a comment..."
-            className="w-full min-h-[72px] px-3 pb-12 pt-3 bg-[#1A1A1A] text-[#E1E1E1] text-sm rounded placeholder-[#8A8A8A] focus:outline-none focus:ring-1 focus:ring-[#4A4A4A] transition-colors resize-none"
+            className="w-full min-h-[72px] px-3 pb-12 pt-3 bg-slate-800 text-slate-200 text-sm rounded placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-600 transition-colors resize-none"
           />
           <div className="absolute right-3 bottom-5 flex items-center">
             <button
               type="submit"
               disabled={!newComment.trim()}
-              className="px-3 py-1.5 bg-[#4A4A4A] text-white text-xs rounded hover:bg-[#5A5A5A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-3 py-1.5 bg-slate-700 text-slate-50 text-xs rounded hover:bg-slate-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Comment
             </button>
