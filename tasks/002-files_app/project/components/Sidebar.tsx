@@ -15,7 +15,7 @@ export default function Sidebar(props: SidebarProps) {
   return (
     <div className="w-64 bg-slate-950 border-r border-slate-800 p-4 flex flex-col h-screen">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold text-white">Projects</h2>
+        <h2 className="text-lg font-semibold text-white">Files</h2>
         <div className="flex space-x-2">
           <Link href="/" className="text-sm text-blue-400 hover:text-blue-300">
             Home
@@ -32,7 +32,8 @@ export default function Sidebar(props: SidebarProps) {
       </div>
 
       {/* Projects List */}
-      <div className="space-y-2 flex-1 overflow-y-auto">
+      <div className="pt-4 border-t border-slate-800 space-y-2 overflow-y-auto">
+        <h3 className="text-sm font-medium text-slate-300 mb-3">Projects</h3>
         {props.projects.map((project) => (
           <Link
             key={project.id}
@@ -49,7 +50,7 @@ export default function Sidebar(props: SidebarProps) {
       </div>
 
       {/* Groups Section */}
-      <div className="mt-6 pt-4 border-t border-slate-800">
+      <div className="mt-6 pt-4 border-t flex-1 border-slate-800">
         <h3 className="text-sm font-medium text-slate-300 mb-3">Groups</h3>
         <div className="space-y-1">
           {props.groups.map((group) => (
@@ -58,7 +59,7 @@ export default function Sidebar(props: SidebarProps) {
               href={`/groups/${group.id}`}
               className="block px-2 py-1.5 text-sm text-slate-400 hover:bg-slate-800/50 hover:text-slate-300 rounded"
             >
-              {group.name}
+              <span>👥 {group.name}</span>
             </Link>
           ))}
         </div>

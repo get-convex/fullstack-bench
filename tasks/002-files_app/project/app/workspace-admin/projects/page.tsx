@@ -84,7 +84,7 @@ function CreateProjectModal({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-sm font-medium text-white bg-plum-600 hover:bg-plum-700 rounded-md transition-colors shadow-sm"
+              className="px-4 py-2 text-sm font-medium text-white bg-plum hover:bg-plum/80 rounded-md transition-colors shadow-sm"
             >
               Create Project
             </button>
@@ -124,23 +124,23 @@ export default function ProjectsPage() {
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/workspace-admin"
-                className="text-sm text-slate-400 hover:text-slate-300"
-              >
-                ← Back to Workspace Admin
-              </Link>
-              <h1 className="text-2xl font-bold text-white">Projects</h1>
-            </div>
-            <button
-              onClick={() => setShowCreateModal(true)}
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum-600 hover:bg-plum-700 rounded-md transition-colors"
+          <div className="flex flex-col space-y-4">
+            <Link
+              href="/workspace-admin"
+              className="text-sm text-slate-400 hover:text-slate-300"
             >
-              <PlusIcon className="w-4 h-4 mr-1.5" />
-              New Project
-            </button>
+              ← Back to Workspace Admin
+            </Link>
+            <div className="flex justify-between items-center">
+              <h1 className="text-2xl font-bold text-white">Projects</h1>
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum hover:bg-plum/80 rounded-md transition-colors"
+              >
+                <PlusIcon className="w-4 h-4 mr-1.5" />
+                New Project
+              </button>
+            </div>
           </div>
         </div>
 

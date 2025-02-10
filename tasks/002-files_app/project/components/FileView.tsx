@@ -118,7 +118,7 @@ export default function FileView({
               await handleEditFile(editedContent);
               setIsEditing(false);
             }}
-            className="px-3 py-2 text-sm bg-plum-600 text-white rounded-md hover:bg-plum-700 transition-colors"
+            className="px-3 py-2 text-sm bg-plum hover:bg-plum/80 text-white rounded-md transition-colors"
           >
             Save Changes
           </button>

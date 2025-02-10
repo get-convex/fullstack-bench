@@ -60,14 +60,14 @@ export default function GroupPage() {
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/workspace-admin/groups"
-                className="text-sm text-slate-400 hover:text-slate-300"
-              >
-                ← Back to Groups
-              </Link>
+          <div className="flex flex-col space-y-4">
+            <Link
+              href="/workspace-admin/groups"
+              className="text-sm text-slate-400 hover:text-slate-300"
+            >
+              ← Back to Groups
+            </Link>
+            <div className="flex justify-between items-center">
               {isEditingName ? (
                 <div className="flex items-center space-x-2">
                   <input
@@ -106,22 +106,22 @@ export default function GroupPage() {
                   </button>
                 </h1>
               )}
-            </div>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => setShowMembershipModal(true)}
-                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum-600 hover:bg-plum-700 rounded-md transition-colors"
-              >
-                <UserPlusIcon className="w-4 h-4 mr-1.5" />
-                Add Members
-              </button>
-              <button
-                onClick={handleDeleteGroup}
-                className="inline-flex items-center px-3 py-2 text-sm font-medium text-red-500 hover:text-red-400"
-              >
-                <TrashIcon className="w-4 h-4 mr-1.5" />
-                Delete Group
-              </button>
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => setShowMembershipModal(true)}
+                  className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum-600 hover:bg-plum-700 rounded-md transition-colors"
+                >
+                  <UserPlusIcon className="w-4 h-4 mr-1.5" />
+                  Add Members
+                </button>
+                <button
+                  onClick={handleDeleteGroup}
+                  className="inline-flex items-center px-3 py-2 text-sm font-medium text-red-500 hover:text-red-400"
+                >
+                  <TrashIcon className="w-4 h-4 mr-1.5" />
+                  Delete Group
+                </button>
+              </div>
             </div>
           </div>
         </div>

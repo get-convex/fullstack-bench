@@ -79,7 +79,7 @@ export default function DirectoryView(props: {
         <div className="flex items-center space-x-2">
           <button
             onClick={() => setShowCreateFileModal(true)}
-            className="inline-flex items-center px-2 py-1 text-sm text-slate-400 hover:text-white rounded transition-colors"
+            className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum hover:bg-plum/80 rounded-md transition-colors"
             title="Create new file"
           >
             <DocumentIcon className="w-4 h-4 mr-1.5" />
@@ -87,7 +87,7 @@ export default function DirectoryView(props: {
           </button>
           <button
             onClick={() => setShowCreateDirModal(true)}
-            className="inline-flex items-center px-2 py-1 text-sm text-slate-400 hover:text-white rounded transition-colors"
+            className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum hover:bg-plum/80 rounded-md transition-colors"
             title="Create new directory"
           >
             <FolderPlusIcon className="w-4 h-4 mr-1.5" />
@@ -110,14 +110,14 @@ export default function DirectoryView(props: {
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => setShowCreateFileModal(true)}
-                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum-600 hover:bg-plum-700 rounded-md transition-colors"
+                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum hover:bg-plum/80 rounded-md transition-colors"
               >
                 <DocumentIcon className="w-4 h-4 mr-1.5" />
                 Add file
               </button>
               <button
                 onClick={() => setShowCreateDirModal(true)}
-                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum-600 hover:bg-plum-700 rounded-md transition-colors"
+                className="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-plum hover:bg-plum/80 rounded-md transition-colors"
               >
                 <FolderPlusIcon className="w-4 h-4 mr-1.5" />
                 Add directory

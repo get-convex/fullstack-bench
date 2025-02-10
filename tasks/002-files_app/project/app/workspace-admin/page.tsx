@@ -22,9 +22,9 @@ export default function WorkspaceAdminPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             href="/workspace-admin/users"
-            className="flex items-center p-4 bg-slate-900 rounded-lg hover:bg-slate-800/50 transition-colors"
+            className="flex items-center p-4 bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors"
           >
-            <UserIcon className="w-6 h-6 text-slate-400 mr-3" />
+            <UserIcon className="w-8 h-8 text-slate-400 mr-5" />
             <div>
               <h3 className="font-medium text-white">Users</h3>
               <p className="text-sm text-slate-400">
@@ -34,9 +34,9 @@ export default function WorkspaceAdminPage() {
           </Link>
           <Link
             href="/workspace-admin/groups"
-            className="flex items-center p-4 bg-slate-900 rounded-lg hover:bg-slate-800/50 transition-colors"
+            className="flex items-center p-4 bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors"
           >
-            <UserGroupIcon className="w-6 h-6 text-slate-400 mr-3" />
+            <UserGroupIcon className="w-8 h-8 text-slate-400 mr-5" />
             <div>
               <h3 className="font-medium text-white">Groups</h3>
               <p className="text-sm text-slate-400">
@@ -46,9 +46,9 @@ export default function WorkspaceAdminPage() {
           </Link>
           <Link
             href="/workspace-admin/projects"
-            className="flex items-center p-4 bg-slate-900 rounded-lg hover:bg-slate-800/50 transition-colors"
+            className="flex items-center p-4 bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors"
           >
-            <FolderIcon className="w-6 h-6 text-slate-400 mr-3" />
+            <FolderIcon className="w-8 h-8 text-slate-400 mr-5" />
             <div>
               <h3 className="font-medium text-white">Projects</h3>
               <p className="text-sm text-slate-400">

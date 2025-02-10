@@ -74,7 +74,7 @@ export default function CreateGroupModal({
                         value={groupName}
                         onChange={(e) => setGroupName(e.target.value)}
                         placeholder="Enter group name"
-                        className="block w-full bg-slate-800 border-slate-700 rounded-md text-slate-300 text-sm focus:border-plum-600 focus:ring-plum-600"
+                        className="block w-full rounded-md border-0 p-2 bg-slate-800 py-1.5 text-slate-300 shadow-sm ring-1 ring-inset ring-slate-700 placeholder:text-slate-500 focus:ring-2 focus:ring-inset focus:ring-plum-500 sm:text-sm sm:leading-6"
                         onKeyDown={(e) => {
                           if (e.key === "Enter") handleCreate();
                           if (e.key === "Escape") onClose();
@@ -91,7 +91,7 @@ export default function CreateGroupModal({
                       <button
                         onClick={handleCreate}
                         disabled={!groupName.trim()}
-                        className="px-3 py-2 text-sm bg-plum-600 text-white rounded-md hover:bg-plum-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 py-2 text-sm bg-plum text-white rounded-md hover:bg-plum/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                       >
                         Create Group
                       </button>

@@ -1,6 +1,12 @@
-import { Fragment, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Transition,
+  TransitionChild,
+} from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { Fragment, useState } from "react";
 
 interface CreateFileModalProps {
   isOpen: boolean;
@@ -24,9 +30,9 @@ export default function CreateFileModal({
   };
 
   return (
-    <Transition.Root show={isOpen} as={Fragment}>
+    <Transition show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
-        <Transition.Child
+        <TransitionChild
           as={Fragment}
           enter="ease-out duration-100"
           enterFrom="opacity-0"
@@ -36,11 +42,11 @@ export default function CreateFileModal({
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 bg-black/75 transition-opacity" />
-        </Transition.Child>
+        </TransitionChild>
 
         <div className="fixed inset-0 z-10 overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <Transition.Child
+            <TransitionChild
               as={Fragment}
               enter="ease-out duration-100"
               enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
@@ -49,7 +55,7 @@ export default function CreateFileModal({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-visible rounded-lg bg-slate-900 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3xl">
+              <DialogPanel className="relative transform overflow-visible rounded-lg bg-slate-950 border border-slate-800 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-3xl">
                 <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                   <button
                     type="button"
@@ -62,9 +68,9 @@ export default function CreateFileModal({
                 </div>
 
                 <div className="p-6">
-                  <Dialog.Title className="text-xl font-semibold text-white mb-6">
+                  <DialogTitle className="text-xl font-semibold text-white mb-6">
                     Create New File
-                  </Dialog.Title>
+                  </DialogTitle>
 
                   <div className="space-y-6">
                     <div>
@@ -76,7 +82,7 @@ export default function CreateFileModal({
                         value={fileName}
                         onChange={(e) => setFileName(e.target.value)}
                         placeholder="Enter file name"
-                        className="block w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-slate-300 text-sm placeholder-slate-500 focus:border-plum-600 focus:ring-plum-600 focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 transition-colors"
+                        className="block w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-md text-slate-300 text-sm placeholder-slate-500 focus:border-plum-500 focus:ring-plum-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 transition-colors"
                       />
                     </div>
                     <div>
@@ -88,7 +94,7 @@ export default function CreateFileModal({
                         onChange={(e) => setFileContent(e.target.value)}
                         placeholder="Enter file content"
                         rows={12}
-                        className="block w-full px-3 py-2 font-mono text-sm bg-slate-800 border border-slate-700 rounded-md text-slate-300 placeholder-slate-500 focus:border-plum-600 focus:ring-plum-600 focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 transition-colors"
+                        className="block w-full px-3 py-2 font-mono text-sm bg-slate-900 border border-slate-800 rounded-md text-slate-300 placeholder-slate-500 focus:border-plum-500 focus:ring-plum-500 focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 transition-colors"
                       />
                     </div>
                     <div className="flex justify-end space-x-3 pt-2">
@@ -101,18 +107,18 @@ export default function CreateFileModal({
                       <button
                         onClick={handleCreate}
                         disabled={!fileName.trim()}
-                        className="px-4 py-2 text-sm font-medium bg-plum-600 text-white rounded-md hover:bg-plum-700 focus:outline-none focus:ring-2 focus:ring-plum-600 focus:ring-offset-2 focus:ring-offset-slate-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-4 py-2 text-sm font-medium bg-plum hover:bg-plum/80 text-white rounded-md hover:bg-plum-700 focus:outline-none focus:ring-2 focus:ring-plum-600 focus:ring-offset-2 focus:ring-offset-slate-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Create File
                       </button>
                     </div>
                   </div>
                 </div>
-              </Dialog.Panel>
-            </Transition.Child>
+              </DialogPanel>
+            </TransitionChild>
           </div>
         </div>
       </Dialog>
-    </Transition.Root>
+    </Transition>
   );
 }
