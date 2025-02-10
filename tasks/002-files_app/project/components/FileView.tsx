@@ -1,16 +1,8 @@
 "use client";
 
 import type { File } from "@/lib/types";
-import {
-  DocumentIcon,
-  FolderIcon,
-  FolderPlusIcon,
-  TrashIcon,
-  PencilIcon,
-} from "@heroicons/react/24/outline";
-import Link from "next/link";
+import { PencilIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import "highlight.js/styles/default.css";
 import hljs from "highlight.js";
 import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
@@ -19,6 +11,7 @@ import json from "highlight.js/lib/languages/json";
 import css from "highlight.js/lib/languages/css";
 import html from "highlight.js/lib/languages/xml";
 import Breadcrumb from "./Breadcrumb";
+import "highlight.js/styles/tokyo-night-dark.css";
 
 hljs.registerLanguage("javascript", javascript);
 hljs.registerLanguage("typescript", typescript);
@@ -91,8 +84,11 @@ export default function FileView({
           />
         ) : (
           <div className="relative">
-            <pre className="!bg-slate-900 !p-4 rounded-lg border border-slate-700 overflow-x-auto">
-              <code dangerouslySetInnerHTML={{ __html: highlighted }} />
+            <pre className="!bg-[#1a1b26] !p-4 rounded-lg border border-[#292e42] overflow-x-auto">
+              <code
+                className="hljs"
+                dangerouslySetInnerHTML={{ __html: highlighted }}
+              />
             </pre>
             <div className="absolute top-3 right-3 text-xs text-slate-500 font-mono px-2 py-1 rounded bg-slate-800">
               {language}

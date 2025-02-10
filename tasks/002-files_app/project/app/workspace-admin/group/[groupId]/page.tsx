@@ -18,6 +18,7 @@ import { useUser, useUsers } from "@/lib/state/users";
 import { Member } from "@/lib/types";
 import { addMember, removeMember, useMembers } from "@/lib/state/membership";
 import { useLoggedInUser } from "@/lib/BackendContext";
+import toast from "react-hot-toast";
 
 export default function GroupPage() {
   const params = useParams();
@@ -38,21 +39,33 @@ export default function GroupPage() {
 
   const handleUpdateName = async () => {
     if (!editedName.trim()) return;
-    await updateGroupName(user.id, groupId, editedName.trim());
-    setIsEditingName(false);
+    try {
+      await updateGroupName(user.id, groupId, editedName.trim());
+      setIsEditingName(false);
+    } catch (error) {
+      toast.error(`Failed to update group name: ${error}`);
+    }
   };
 
   const handleDeleteGroup = async () => {
-    await removeGroup(user.id, groupId);
-    router.push("/workspace-admin/groups");
+    try {
+      await removeGroup(user.id, groupId);
+      router.push("/workspace-admin/groups");
+    } catch (error) {
+      toast.error(`Failed to delete group: ${error}`);
+    }
   };
 
   const addMemberToGroup = async (
     groupId: string,
     subject: Member["subject"]
   ) => {
-    await addMember(user.id, subject, { type: "group", groupId });
-    setShowMembershipModal(false);
+    try {
+      await addMember(user.id, subject, { type: "group", groupId });
+      setShowMembershipModal(false);
+    } catch (error) {
+      toast.error(`Failed to add member: ${error}`);
+    }
   };
 
   return (

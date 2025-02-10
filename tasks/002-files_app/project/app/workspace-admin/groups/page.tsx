@@ -9,15 +9,20 @@ import { useGroups } from "@/lib/state/groups";
 import { Group } from "@/lib/types";
 import { useMembers } from "@/lib/state/membership";
 import { useLoggedInUser } from "@/lib/BackendContext";
+import toast from "react-hot-toast";
 
 export default function GroupsPage() {
   const user = useLoggedInUser();
   const groups = useGroups(user.id);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const handleCreateGroup = (name: string) => {
-    createGroup(user.id, name);
-    setShowCreateModal(false);
+  const handleCreateGroup = async (name: string) => {
+    try {
+      await createGroup(user.id, name);
+      setShowCreateModal(false);
+    } catch (error) {
+      toast.error(`Failed to create group: ${error}`);
+    }
   };
 
   return (

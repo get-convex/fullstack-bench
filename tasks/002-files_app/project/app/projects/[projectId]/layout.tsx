@@ -10,6 +10,7 @@ import { useGroups } from "@/lib/state/groups";
 import { useUsers } from "@/lib/state/users";
 import { Member } from "@/lib/types";
 import { useLoggedInUser } from "@/lib/BackendContext";
+import toast from "react-hot-toast";
 
 export default function ProjectLayout({
   children,
@@ -56,14 +57,22 @@ export default function ProjectLayout({
   }
 
   const addMemberToProject = async (subject: Member["subject"]) => {
-    await addMember(user.id, subject, {
-      type: "project",
-      projectId: project.id,
-    });
+    try {
+      await addMember(user.id, subject, {
+        type: "project",
+        projectId: project.id,
+      });
+    } catch (error) {
+      toast.error(`Failed to add member: ${error}`);
+    }
   };
 
   const removeMemberFromProject = async (memberId: string) => {
-    await removeMember(user.id, memberId);
+    try {
+      await removeMember(user.id, memberId);
+    } catch (error) {
+      toast.error(`Failed to remove member: ${error}`);
+    }
   };
 
   const updateProject = async (
@@ -71,7 +80,17 @@ export default function ProjectLayout({
     description?: string,
     emoji?: string
   ) => {
-    await updateProjectMetadata(user.id, project.id, name, description, emoji);
+    try {
+      await updateProjectMetadata(
+        user.id,
+        project.id,
+        name,
+        description,
+        emoji
+      );
+    } catch (error) {
+      toast.error(`Failed to update project: ${error}`);
+    }
   };
 
   return (

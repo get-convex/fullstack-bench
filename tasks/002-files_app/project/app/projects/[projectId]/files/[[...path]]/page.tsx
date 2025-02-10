@@ -11,6 +11,7 @@ import {
   deleteNode,
 } from "@/lib/state/filesystem";
 import { useLoggedInUser } from "@/lib/BackendContext";
+import toast from "react-hot-toast";
 
 export default function ProjectFilesPage() {
   const params = useParams();
@@ -31,7 +32,11 @@ export default function ProjectFilesPage() {
         pathSegments={pathSegments}
         projectId={projectId}
         handleEditFile={async (content) => {
-          await editFile(user.id, node.id, content);
+          try {
+            await editFile(user.id, node.id, content);
+          } catch (error) {
+            toast.error(`Failed to edit file: ${error}`);
+          }
         }}
       />
     );
@@ -43,13 +48,25 @@ export default function ProjectFilesPage() {
         currentDirId={node.id}
         dirChildren={node.children}
         handleCreate={async (name, newNode) => {
-          await create(user.id, node.id, name, newNode);
+          try {
+            await create(user.id, node.id, name, newNode);
+          } catch (error) {
+            toast.error(`Failed to create file: ${error}`);
+          }
         }}
         handleRename={async (node, newName) => {
-          await rename(user.id, node, newName);
+          try {
+            await rename(user.id, node, newName);
+          } catch (error) {
+            toast.error(`Failed to rename file: ${error}`);
+          }
         }}
         handleDelete={async (node) => {
-          await deleteNode(user.id, node);
+          try {
+            await deleteNode(user.id, node);
+          } catch (error) {
+            toast.error(`Failed to delete file: ${error}`);
+          }
         }}
       />
     );

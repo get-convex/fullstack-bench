@@ -7,6 +7,7 @@ import EmojiPicker from "@/components/EmojiPicker";
 import { useProjects } from "@/lib/state/projects";
 import { addProject, deleteProject } from "@/lib/state/projects";
 import { useLoggedInUser } from "@/lib/BackendContext";
+import toast from "react-hot-toast";
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -25,12 +26,16 @@ function CreateProjectModal({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onCreateProject(name, description, emoji);
-    setName("");
-    setDescription("");
-    setEmoji("📁");
+    try {
+      await onCreateProject(name, description, emoji);
+      setName("");
+      setDescription("");
+      setEmoji("📁");
+    } catch (error) {
+      toast.error(`Failed to create project: ${error}`);
+    }
   };
 
   return (
@@ -105,17 +110,19 @@ export default function ProjectsPage() {
     description: string,
     emoji: string
   ) => {
-    await addProject(user.id, name, description, emoji);
-    setShowCreateModal(false);
+    try {
+      await addProject(user.id, name, description, emoji);
+      setShowCreateModal(false);
+    } catch (error) {
+      toast.error(`Failed to create project: ${error}`);
+    }
   };
 
-  const handleDeleteProject = (projectId: string) => {
-    if (
-      confirm(
-        "Are you sure you want to delete this project? This action cannot be undone."
-      )
-    ) {
-      deleteProject(user.id, projectId);
+  const handleDeleteProject = async (projectId: string) => {
+    try {
+      await deleteProject(user.id, projectId);
+    } catch (error) {
+      toast.error(`Failed to delete project: ${error}`);
     }
   };
 
