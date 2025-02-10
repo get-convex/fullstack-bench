@@ -71,7 +71,7 @@ export default function ProjectPage() {
             </div>
             <button
               onClick={() => setIsCreatingTask(true)}
-              className="px-3 py-1.5 bg-slate-700 text-slate-50 text-sm rounded hover:bg-slate-600 transition-colors"
+              className="px-3 py-1.5 bg-plum text-slate-50 text-sm rounded hover:bg-plum/80 transition-colors"
             >
               New Task
             </button>
