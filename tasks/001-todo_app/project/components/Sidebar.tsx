@@ -27,9 +27,9 @@ export function Sidebar({
   const [isProjectsExpanded, setIsProjectsExpanded] = useState(true);
 
   return (
-    <div className="w-[240px] bg-[#0C0C0D] text-[#E1E1E3] border-r border-[#1A1A1A] flex flex-col">
-      <div className="p-4 border-b border-[#1A1A1A]">
-        <h2 className="text-xs font-medium text-[#8A8A8A]">Welcome,</h2>
+    <div className="w-[240px] bg-slate-950 text-slate-200 border-r border-slate-900 flex flex-col">
+      <div className="p-4 border-b border-slate-900">
+        <h2 className="text-xs font-medium text-slate-400">Welcome,</h2>
         <h1 className="text-sm font-medium text-white mt-0.5">{user.email}</h1>
       </div>
 
@@ -38,7 +38,7 @@ export function Sidebar({
           <div className="mb-4">
             <div
               onClick={() => setIsProjectsExpanded(!isProjectsExpanded)}
-              className="flex items-center justify-between w-full px-2 py-1 text-xs font-medium text-[#8A8A8A] hover:text-white transition-colors group cursor-pointer"
+              className="flex items-center justify-between w-full px-2 py-1 text-xs font-medium text-slate-400 hover:text-white transition-colors group cursor-pointer"
             >
               <div className="flex items-center gap-1">
                 <span
@@ -55,7 +55,7 @@ export function Sidebar({
                   e.stopPropagation();
                   setIsCreatingProject(true);
                 }}
-                className="opacity-0 group-hover:opacity-100 text-[#8A8A8A] hover:text-white transition-opacity"
+                className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-white transition-opacity"
               >
                 +
               </button>
@@ -79,8 +79,8 @@ export function Sidebar({
                     href={`/projects/${project.id}`}
                     className={`flex items-center px-2 py-1 rounded text-sm transition-colors ${
                       currentProjectId === project.id
-                        ? "bg-[#1A1A1A] text-white"
-                        : "text-[#8A8A8A] hover:text-white"
+                        ? "bg-slate-900 text-white"
+                        : "text-slate-400 hover:text-white"
                     }`}
                   >
                     <span className="w-4 text-center">{project.emoji}</span>

@@ -23,10 +23,10 @@ interface CreateTaskProps {
 const css = `
   .rdp {
     --rdp-cell-size: 32px;
-    --rdp-accent-color: #4A4A4A;
-    --rdp-background-color: #242424;
-    --rdp-accent-color-dark: #E1E1E1;
-    --rdp-background-color-dark: #1A1A1A;
+    --rdp-accent-color: #475569; /* slate-600 */
+    --rdp-background-color: #1e293b; /* slate-800 */
+    --rdp-accent-color-dark: #f1f5f9; /* slate-100 */
+    --rdp-background-color-dark: #0f172a; /* slate-900 */
     --rdp-outline: 2px solid var(--rdp-accent-color);
     --rdp-outline-selected: 2px solid var(--rdp-accent-color);
     margin: 0;
@@ -41,12 +41,12 @@ const css = `
   .rdp-month_caption {
     padding: 0 0 0.75rem;
     margin-bottom: 0.5rem;
-    border-bottom: 1px solid #242424;
+    border-bottom: 1px solid #1e293b; /* slate-800 */
   }
 
   .rdp-caption_label {
     font-size: 0.875rem;
-    color: #E1E1E1;
+    color: #f1f5f9; /* slate-100 */
     font-weight: 500;
   }
 
@@ -55,17 +55,17 @@ const css = `
     width: 24px;
     height: 24px;
     border-radius: 4px;
-    color: #8A8A8A;
+    color: #64748b; /* slate-500 */
   }
 
   .rdp-button_previous:hover,
   .rdp-button_next:hover {
-    color: #E1E1E1;
-    background-color: #242424;
+    color: #f1f5f9; /* slate-100 */
+    background-color: #1e293b; /* slate-800 */
   }
 
   .rdp-nav {
-    color: #8A8A8A;
+    color: #64748b; /* slate-500 */
     position: absolute;
     right: 22px;
   }
@@ -78,7 +78,7 @@ const css = `
   .rdp-head_cell {
     font-size: 0.75rem;
     font-weight: 500;
-    color: #E1E1E1;
+    color: #f1f5f9; /* slate-100 */
     text-transform: uppercase;
     padding-bottom: 0.75rem;
   }
@@ -88,11 +88,11 @@ const css = `
   }
 
   .rdp-cell {
-    color: #8A8A8A;
+    color: #64748b; /* slate-500 */
   }
 
   .rdp-day {
-    color: #8A8A8A;
+    color: #64748b; /* slate-500 */
     width: 32px;
     height: 32px;
     border-radius: 4px;
@@ -101,35 +101,35 @@ const css = `
   }
 
   .rdp-weekday {
-    color: #8A8A8A;
+    color: #64748b; /* slate-500 */
     font-size: 0.75rem;
     font-weight: 500;
     text-transform: uppercase;
   }
 
   .rdp-day_today {
-    color: #E1E1E1;
+    color: #f1f5f9; /* slate-100 */
     font-weight: 600;
-    background-color: #242424;
+    background-color: #1e293b; /* slate-800 */
   }
 
   .rdp-day:not(.rdp-outside) {
-    color: #E1E1E1;
+    color: #f1f5f9; /* slate-100 */
   }
 
   .rdp-day_selected {
-    background-color: #4A4A4A !important;
-    color: #E1E1E1 !important;
+    background-color: #475569 !important; /* slate-600 */
+    color: #f1f5f9 !important; /* slate-100 */
     font-weight: 600;
   }
 
   .rdp-day_selected:hover {
-    background-color: #4A4A4A !important;
+    background-color: #475569 !important; /* slate-600 */
   }
 
   .rdp-day:hover:not(.rdp-day_outside) {
-    background-color: #242424;
-    color: #E1E1E1;
+    background-color: #1e293b; /* slate-800 */
+    color: #f1f5f9; /* slate-100 */
   }
 `;
 
@@ -178,7 +178,7 @@ export function CreateTask({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Task title"
-              className="w-full px-2 py-1.5 bg-[#1A1A1A] text-[#E1E1E1] text-sm rounded placeholder-[#8A8A8A] focus:outline-none focus:ring-1 focus:ring-[#4A4A4A] transition-colors"
+              className="w-full px-2 py-1.5 bg-slate-900 text-slate-100 text-sm rounded placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-600 transition-colors"
               autoFocus
             />
           </div>
@@ -187,7 +187,7 @@ export function CreateTask({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Description"
-              className="w-full px-2 py-1.5 bg-[#1A1A1A] text-[#E1E1E1] text-sm rounded placeholder-[#8A8A8A] focus:outline-none focus:ring-1 focus:ring-[#4A4A4A] transition-colors resize-none"
+              className="w-full px-2 py-1.5 bg-slate-900 text-slate-200 text-sm rounded placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-700 transition-colors resize-none"
               rows={4}
             />
           </div>
@@ -196,9 +196,9 @@ export function CreateTask({
               <button
                 type="button"
                 onClick={() => setShowDatePicker(!showDatePicker)}
-                className="w-full px-2 py-1.5 bg-[#1A1A1A] text-[#E1E1E1] text-sm rounded hover:bg-[#242424] focus:outline-none focus:ring-1 focus:ring-[#4A4A4A] transition-colors flex items-center gap-2"
+                className="w-full px-2 py-1.5 bg-slate-900 text-slate-100 text-sm rounded hover:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-600 transition-colors flex items-center gap-2"
               >
-                <Calendar size={14} className="text-[#8A8A8A]" />
+                <Calendar size={14} className="text-slate-500" />
                 {selectedDate
                   ? format(selectedDate, "MMM d, yyyy")
                   : "No due date"}
@@ -213,7 +213,7 @@ export function CreateTask({
                       setShowDatePicker(false);
                     }}
                     showOutsideDays
-                    className="bg-[#1A1A1A]"
+                    className="bg-slate-900"
                   />
                 </div>
               )}
@@ -223,13 +223,13 @@ export function CreateTask({
             <button
               type="button"
               onClick={() => setIsCreatingTask(false)}
-              className="px-3 py-1.5 text-xs text-[#8A8A8A] hover:text-white transition-colors"
+              className="px-3 py-1.5 text-xs text-slate-500 hover:text-white transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-3 py-1.5 bg-[#4A4A4A] text-white text-xs rounded hover:bg-[#5A5A5A] transition-colors"
+              className="px-3 py-1.5 bg-slate-600 text-white text-xs rounded hover:bg-slate-500 transition-colors"
             >
               Create Task
             </button>

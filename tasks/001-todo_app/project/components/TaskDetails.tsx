@@ -150,14 +150,14 @@ export function TaskDetails({
   return (
     <>
       <style>{css}</style>
-      <div className="w-[240px] border-l border-[#1A1A1A] p-4 space-y-4">
+      <div className="w-[240px] border-l border-slate-900 p-4 space-y-4">
         <div>
-          <h2 className="text-xs font-medium text-[#8A8A8A] uppercase mb-2">
+          <h2 className="text-xs font-medium text-slate-400 uppercase mb-2">
             Status
           </h2>
           <Popover.Root open={statusOpen} onOpenChange={setStatusOpen}>
             <Popover.Trigger asChild>
-              <button className="w-full px-2 py-1.5 bg-[#1A1A1A] text-[#E1E1E1] text-sm rounded hover:bg-[#242424] focus:outline-none focus:ring-1 focus:ring-[#4A4A4A] transition-colors flex items-center gap-2">
+              <button className="w-full px-2 py-1.5 bg-slate-900 text-slate-200 text-sm rounded hover:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-700 transition-colors flex items-center gap-2">
                 <div
                   className={`w-1.5 h-1.5 rounded-full ${
                     statusColors[task.status]
@@ -168,14 +168,14 @@ export function TaskDetails({
             </Popover.Trigger>
             <Popover.Portal>
               <Popover.Content
-                className="w-[200px] bg-[#1A1A1A] rounded-md shadow-lg p-1 z-50"
+                className="w-[200px] bg-slate-900 rounded-md shadow-lg p-1 z-50"
                 sideOffset={5}
               >
                 {Object.keys(statusColors).map((status) => (
                   <Popover.Close key={status} asChild>
                     <button
-                      className={`w-full px-2 py-1.5 text-sm rounded flex items-center gap-2 hover:bg-[#242424] transition-colors ${
-                        task.status === status ? "text-white" : "text-[#8A8A8A]"
+                      className={`w-full px-2 py-1.5 text-sm rounded flex items-center gap-2 hover:bg-slate-800 transition-colors ${
+                        task.status === status ? "text-white" : "text-slate-400"
                       }`}
                       onClick={() => {
                         updateTaskStatus(status as Task["status"]);
@@ -196,26 +196,26 @@ export function TaskDetails({
         </div>
 
         <div>
-          <h2 className="text-xs font-medium text-[#8A8A8A] uppercase mb-2">
+          <h2 className="text-xs font-medium text-slate-400 uppercase mb-2">
             Assignee
           </h2>
           <Popover.Root open={assigneeOpen} onOpenChange={setAssigneeOpen}>
             <Popover.Trigger asChild>
-              <button className="w-full px-2 py-1.5 bg-[#1A1A1A] text-[#E1E1E1] text-sm rounded hover:bg-[#242424] focus:outline-none focus:ring-1 focus:ring-[#4A4A4A] transition-colors flex items-center gap-2">
-                <LucideUser size={14} className="text-[#8A8A8A]" />
+              <button className="w-full px-2 py-1.5 bg-slate-900 text-slate-200 text-sm rounded hover:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-700 transition-colors flex items-center gap-2">
+                <LucideUser size={14} className="text-slate-400" />
                 {users.find((user) => user.id === task.assigneeId)?.email ||
                   "Unassigned"}
               </button>
             </Popover.Trigger>
             <Popover.Portal>
               <Popover.Content
-                className="w-[200px] bg-[#1A1A1A] rounded-md shadow-lg p-1 z-50"
+                className="w-[200px] bg-slate-900 rounded-md shadow-lg p-1 z-50"
                 sideOffset={5}
               >
                 <Popover.Close asChild>
                   <button
-                    className={`w-full px-2 py-1.5 text-sm rounded flex items-center gap-2 hover:bg-[#242424] transition-colors ${
-                      !task.assigneeId ? "text-white" : "text-[#8A8A8A]"
+                    className={`w-full px-2 py-1.5 text-sm rounded flex items-center gap-2 hover:bg-slate-800 transition-colors ${
+                      !task.assigneeId ? "text-white" : "text-slate-400"
                     }`}
                     onClick={() => updateTaskAssignee(null)}
                   >
@@ -228,10 +228,10 @@ export function TaskDetails({
                     {users.map((user) => (
                       <button
                         key={user.id}
-                        className={`w-full px-2 py-1.5 text-sm rounded flex items-center gap-2 hover:bg-[#242424] transition-colors ${
+                        className={`w-full px-2 py-1.5 text-sm rounded flex items-center gap-2 hover:bg-slate-800 transition-colors ${
                           task.assigneeId === user.id
                             ? "text-white"
-                            : "text-[#8A8A8A]"
+                            : "text-slate-400"
                         }`}
                         onClick={() => updateTaskAssignee(user.id)}
                       >
@@ -247,7 +247,7 @@ export function TaskDetails({
         </div>
 
         <div>
-          <h2 className="text-xs font-medium text-[#8A8A8A] uppercase mb-2">
+          <h2 className="text-xs font-medium text-slate-400 uppercase mb-2">
             <div className="flex items-center gap-2">
               <Clock size={12} />
               Due Date
@@ -255,8 +255,8 @@ export function TaskDetails({
           </h2>
           <Popover.Root open={dueDateOpen} onOpenChange={setDueDateOpen}>
             <Popover.Trigger asChild>
-              <button className="w-full px-2 py-1.5 bg-[#1A1A1A] text-[#E1E1E1] text-sm rounded hover:bg-[#242424] focus:outline-none focus:ring-1 focus:ring-[#4A4A4A] transition-colors flex items-center gap-2">
-                <Calendar size={14} className="text-[#8A8A8A]" />
+              <button className="w-full px-2 py-1.5 bg-slate-900 text-slate-200 text-sm rounded hover:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-700 transition-colors flex items-center gap-2">
+                <Calendar size={14} className="text-slate-400" />
                 {task.dueDate
                   ? format(selectedDate!, "MMM d, yyyy")
                   : "No due date"}
@@ -264,7 +264,7 @@ export function TaskDetails({
             </Popover.Trigger>
             <Popover.Portal>
               <Popover.Content
-                className="bg-[#1A1A1A] rounded-md shadow-lg p-3 z-50"
+                className="bg-slate-900 rounded-md shadow-lg p-3 z-50"
                 sideOffset={5}
               >
                 <div className="space-y-2">
@@ -278,7 +278,7 @@ export function TaskDetails({
                       }
                     }}
                     showOutsideDays
-                    className="bg-[#1A1A1A]"
+                    className="bg-slate-900"
                   />
                 </div>
               </Popover.Content>

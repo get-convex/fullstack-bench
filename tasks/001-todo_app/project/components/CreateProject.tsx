@@ -46,16 +46,16 @@ export function CreateProject({
             <button
               type="button"
               onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-              className="shrink-0 w-10 h-10 bg-[#1A1A1A] text-[#E1E1E1] text-lg rounded hover:bg-[#242424] focus:outline-none focus:ring-1 focus:ring-[#4A4A4A] transition-colors flex items-center justify-center"
+              className="shrink-0 w-10 h-10 bg-slate-900 text-slate-200 text-lg rounded hover:bg-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-700 transition-colors flex items-center justify-center"
             >
-              {emoji || <Smile className="text-[#8A8A8A]" size={20} />}
+              {emoji || <Smile className="text-slate-400" size={20} />}
             </button>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Project name"
-              className="flex-1 px-2 py-1.5 bg-[#1A1A1A] text-[#E1E1E1] text-sm rounded placeholder-[#8A8A8A] focus:outline-none focus:ring-1 focus:ring-[#4A4A4A] transition-colors"
+              className="flex-1 px-2 py-1.5 bg-slate-900 text-slate-200 text-sm rounded placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-700 transition-colors"
               autoFocus
             />
           </div>
@@ -77,7 +77,7 @@ export function CreateProject({
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Description"
-            className="w-full px-2 py-1.5 bg-[#1A1A1A] text-[#E1E1E1] text-sm rounded placeholder-[#8A8A8A] focus:outline-none focus:ring-1 focus:ring-[#4A4A4A] transition-colors resize-none"
+            className="w-full px-2 py-1.5 bg-slate-900 text-slate-200 text-sm rounded placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-700 transition-colors resize-none"
             rows={3}
           />
         </div>
@@ -85,13 +85,13 @@ export function CreateProject({
           <button
             type="button"
             onClick={() => setIsCreatingProject(false)}
-            className="px-3 py-1.5 text-xs text-[#8A8A8A] hover:text-white transition-colors"
+            className="px-3 py-1.5 text-xs text-slate-400 hover:text-white transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-3 py-1.5 bg-[#4A4A4A] text-white text-xs rounded hover:bg-[#5A5A5A] transition-colors"
+            className="px-3 py-1.5 bg-slate-700 text-white text-xs rounded hover:bg-slate-600 transition-colors"
           >
             Create Project
           </button>
