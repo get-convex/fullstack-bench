@@ -4,26 +4,24 @@ import { initialChannels, initialMessages, initialUsers } from "./init";
 
 const store = getDefaultStore();
 
-export function useUsersById(ids: string[]) {
-  const [currentUsers, _] = useAtom(users);
-  return Object.fromEntries(currentUsers.filter((user) => ids.includes(user.id))
-    .map((user) => [user.id, user]));
-}
-
 export function useUserByEmail(email: string) {
   const [currentUsers, _] = useAtom(users);
   return currentUsers.find((user) => user.email === email);
 }
 
-export function useChannels() {
+export function useChannels(): Channel[] | undefined {
   const [currentChannels, _] = useAtom(channels);
   currentChannels.sort((a, b) => a.createdAt - b.createdAt);
   return currentChannels;
 }
 
-export function useChannel(channelId: string) {
+export function useChannel(channelId: string): Channel | null | undefined {
   const [currentChannels, _] = useAtom(channels);
-  return currentChannels.find((channel) => channel.id === channelId);
+  const channel = currentChannels.find((channel) => channel.id === channelId);
+  if (!channel) {
+    return null;
+  }
+  return channel;
 }
 
 export async function createChannel(name: string): Promise<string> {
@@ -36,9 +34,21 @@ export async function createChannel(name: string): Promise<string> {
   return id;
 }
 
-export function useMessages(channelId: string) {
+export function useMessages(channelId: string): (Message & { userEmail: string })[] | undefined {
   const [currentMessages] = useAtom(messages);
-  const results = currentMessages.filter((message) => message.channelId === channelId);
+  const [currentUsers] = useAtom(users);
+  const results = currentMessages
+    .filter((message) => message.channelId === channelId)
+    .map((message) => {
+      const user = currentUsers.find((user) => user.id === message.userId);
+      if (!user) {
+        throw new Error(`User with id ${message.userId} not found`);
+      }
+      return {
+        ...message,
+        userEmail: user.email,
+      };
+    });
   results.sort((a, b) => a.createdAt - b.createdAt);
   return results;
 }

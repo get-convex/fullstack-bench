@@ -19,19 +19,25 @@ import { Member } from "@/lib/types";
 import { addMember, removeMember, useMembers } from "@/lib/state/membership";
 import { useLoggedInUser } from "@/lib/BackendContext";
 import toast from "react-hot-toast";
+import { Spinner } from "@/components/Spinner";
 
 export default function GroupPage() {
   const params = useParams();
   const router = useRouter();
   const user = useLoggedInUser();
   const groupId = params.groupId as string;
-  const group = useGroup(user.id, groupId);
-  if (!group) {
-    notFound();
-  }
   const members = useMembers({ type: "group", groupId });
   const users = useUsers();
   const groups = useGroups(user.id);
+
+  if (members === undefined || users === undefined || groups === undefined) {
+    return <Spinner />;
+  }
+
+  const group = groups.find((group) => group.id === groupId);
+  if (!group) {
+    notFound();
+  }
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [editedName, setEditedName] = useState(group.name);

@@ -1,12 +1,13 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { UserIcon } from "@heroicons/react/24/outline";
 import { useGroup } from "@/lib/state/groups";
 import { useMembers } from "@/lib/state/membership";
 import { Member } from "@/lib/types";
 import { useUser } from "@/lib/state/users";
 import { useLoggedInUser } from "@/lib/BackendContext";
+import { Spinner } from "@/components/Spinner";
 
 export default function GroupPage() {
   const params = useParams();
@@ -15,12 +16,12 @@ export default function GroupPage() {
   const group = useGroup(user.id, groupId);
   const members = useMembers({ type: "group", groupId });
 
+  if (group === undefined || members === undefined) {
+    return <Spinner />;
+  }
+
   if (!group) {
-    return (
-      <div className="p-8">
-        <h1 className="text-2xl font-bold text-red-600">Group not found</h1>
-      </div>
-    );
+    notFound();
   }
 
   return (
@@ -59,11 +60,14 @@ function GroupMemberRow({ member }: { member: Member }) {
 
 function UserRow({ userId }: { userId: string }) {
   const user = useUser(userId);
+  if (user === undefined) {
+    return <Spinner />;
+  }
   return (
     <div className="px-6 py-4 flex items-center justify-between">
       <div className="flex items-center space-x-3">
         <UserIcon className="w-5 h-5 text-slate-400" />
-        <span className="text-slate-300">{user?.email || ""}</span>
+        <span className="text-slate-300">{user.email}</span>
       </div>
     </div>
   );
@@ -72,11 +76,14 @@ function UserRow({ userId }: { userId: string }) {
 function GroupRow({ groupId }: { groupId: string }) {
   const user = useLoggedInUser();
   const group = useGroup(user.id, groupId);
+  if (group === undefined) {
+    return <Spinner />;
+  }
   return (
     <div className="px-6 py-4 flex items-center justify-between">
       <div className="flex items-center space-x-3">
         <UserIcon className="w-5 h-5 text-slate-400" />
-        <span className="text-slate-300">{group?.name || ""}</span>
+        <span className="text-slate-300">{group.name}</span>
       </div>
     </div>
   );

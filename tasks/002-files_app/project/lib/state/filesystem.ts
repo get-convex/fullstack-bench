@@ -1,11 +1,13 @@
 import { atom, useAtom } from "jotai";
 import { store } from ".";
-import { Directory, File, Project } from "../types";
+import { Directory, File, Node, Project } from "../types";
 import { projects, useProject } from "./projects";
 import { initialDirectories, initialFiles } from "./init";
-import { hasAccessToProject } from "./userPermissions";
+import { hasAccessToProject, userPermissions } from "./userPermissions";
+import { users } from "./users";
+import { members } from "./membership";
 
-function directoryChildren(dirId: string, allFiles: File[], allDirectories: Directory[]) {
+function directoryChildren(dirId: string, allFiles: File[], allDirectories: Directory[]): Array<Node> {
   const children = [
     ...allFiles
       .filter((f) => f.parentEdge.directoryId === dirId)
@@ -18,8 +20,14 @@ function directoryChildren(dirId: string, allFiles: File[], allDirectories: Dire
   return children;
 }
 
-export function useFilePath(actingUserId: string, projectId: string, pathSegments: string[]) {
-  if (!hasAccessToProject(actingUserId, projectId)) {
+type FilePathResult = ({ type: "file" } & File) | { type: "directory", id: string, children: Array<Node> } | null;
+
+export function useFilePath(actingUserId: string, projectId: string, pathSegments: string[]): FilePathResult | undefined {
+  const [currentUsers] = useAtom(users);
+  const [currentProjects] = useAtom(projects);
+  const [currentMembers] = useAtom(members);
+  const [currentUserPermissions] = useAtom(userPermissions);
+  if (!hasAccessToProject(currentUsers, currentUserPermissions, currentProjects, currentMembers, actingUserId, projectId)) {
     throw new Error(`User ${actingUserId} does not have access to project ${projectId}`);
   }
   const project = useProject(actingUserId, projectId);
@@ -58,10 +66,10 @@ export function useFilePath(actingUserId: string, projectId: string, pathSegment
     if (!file) {
       return null;
     }
-    return { type: "file" as const, ...file };
+    return { type: "file", ...file };
   } else {
     const children = directoryChildren(current.id, allFiles, allDirectories);
-    return { type: "directory" as const, id: current.id, children };
+    return { type: "directory", id: current.id, children };
   }
 }
 
@@ -84,15 +92,19 @@ function projectDirectory(allProjects: Project[], allDirectories: Directory[], d
 
 export async function create(actingUserId: string, dirId: string, name: string, node: { type: "file", content: string } | { type: "directory" }) {
   const currentProjects = store.get(projects);
+  const currentUsers = store.get(users);
+  const currentMembers = store.get(members);
+  const currentUserPermissions = store.get(userPermissions);
   const currentFiles = store.get(files);
   const currentDirectories = store.get(directories);
+
   const parentDirectory = currentDirectories.find((d) => d.id === dirId);
   if (!parentDirectory) {
     throw new Error(`Parent directory ${dirId} not found`);
   }
 
   const project = projectDirectory(currentProjects, currentDirectories, dirId);
-  if (!hasAccessToProject(actingUserId, project.id)) {
+  if (!hasAccessToProject(currentUsers, currentUserPermissions, currentProjects, currentMembers, actingUserId, project.id)) {
     throw new Error(`User ${actingUserId} does not have access to project ${project.id}`);
   }
 
@@ -121,6 +133,9 @@ export async function rename(actingUserId: string, node: { type: "file" | "direc
   const currentFiles = store.get(files);
   const currentDirectories = store.get(directories);
   const currentProjects = store.get(projects);
+  const currentUsers = store.get(users);
+  const currentMembers = store.get(members);
+  const currentUserPermissions = store.get(userPermissions);
 
   const checkParentDirectory = (dirId: string) => {
     const parentDirectory = currentDirectories.find((d) => d.id === dirId);
@@ -128,7 +143,7 @@ export async function rename(actingUserId: string, node: { type: "file" | "direc
       throw new Error(`Parent directory ${dirId} not found`);
     }
     const project = projectDirectory(currentProjects, currentDirectories, dirId);
-    if (!hasAccessToProject(actingUserId, project.id)) {
+    if (!hasAccessToProject(currentUsers, currentUserPermissions, currentProjects, currentMembers, actingUserId, project.id)) {
       throw new Error(`User ${actingUserId} does not have access to project ${project.id}`);
     }
     if (!nameFreeInDirectory(dirId, newName, currentFiles, currentDirectories)) {
@@ -159,12 +174,16 @@ export async function editFile(actingUserId: string, fileId: string, content: st
   const currentFiles = store.get(files);
   const currentDirectories = store.get(directories);
   const currentProjects = store.get(projects);
+  const currentUsers = store.get(users);
+  const currentMembers = store.get(members);
+  const currentUserPermissions = store.get(userPermissions);
+
   const file = currentFiles.find((f) => f.id === fileId);
   if (!file) {
     throw new Error(`File ${fileId} not found`);
   }
   const project = projectDirectory(currentProjects, currentDirectories, file.parentEdge.directoryId);
-  if (!hasAccessToProject(actingUserId, project.id)) {
+  if (!hasAccessToProject(currentUsers, currentUserPermissions, currentProjects, currentMembers, actingUserId, project.id)) {
     throw new Error(`User ${actingUserId} does not have access to project ${project.id}`);
   }
   store.set(files, currentFiles.map((f) => f.id === fileId ? { ...f, content } : f));
@@ -174,13 +193,17 @@ export async function deleteNode(actingUserId: string, node: { type: "file" | "d
   const currentFiles = store.get(files);
   const currentDirectories = store.get(directories);
   const currentProjects = store.get(projects);
+  const currentUsers = store.get(users);
+  const currentMembers = store.get(members);
+  const currentUserPermissions = store.get(userPermissions);
+
   if (node.type === "file") {
     const file = currentFiles.find((f) => f.id === node.id);
     if (!file) {
       throw new Error(`File ${node.id} not found`);
     }
     const project = projectDirectory(currentProjects, currentDirectories, file.parentEdge.directoryId);
-    if (!hasAccessToProject(actingUserId, project.id)) {
+    if (!hasAccessToProject(currentUsers, currentUserPermissions, currentProjects, currentMembers, actingUserId, project.id)) {
       throw new Error(`User ${actingUserId} does not have access to project ${project.id}`);
     }
     store.set(files, currentFiles.filter((f) => f.id !== node.id));
@@ -193,7 +216,7 @@ export async function deleteNode(actingUserId: string, node: { type: "file" | "d
       throw new Error(`Directory ${node.id} is the root directory`);
     }
     const project = projectDirectory(currentProjects, currentDirectories, directory.parentEdge.directoryId);
-    if (!hasAccessToProject(actingUserId, project.id)) {
+    if (!hasAccessToProject(currentUsers, currentUserPermissions, currentProjects, currentMembers, actingUserId, project.id)) {
       throw new Error(`User ${actingUserId} does not have access to project ${project.id}`);
     }
     const children = directoryChildren(node.id, currentFiles, currentDirectories);

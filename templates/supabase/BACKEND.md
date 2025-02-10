@@ -36,3 +36,6 @@ Within the app, use the `lib/BackendContext:useLoggedInUser` hook to get the cur
 The Supabase client is already set up in `lib/browserClient.ts`. Do NOT modify this code.
 
 Use Next client components for the UI: do not bother with server rendering.
+
+Run `bunx tsc -noEmit` to check for type errors across all files. Be sure to run
+this command and fix all errors before considering yourself done.

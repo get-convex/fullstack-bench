@@ -8,6 +8,7 @@ import { useProjects } from "@/lib/state/projects";
 import { addProject, deleteProject } from "@/lib/state/projects";
 import { useLoggedInUser } from "@/lib/BackendContext";
 import toast from "react-hot-toast";
+import { Spinner } from "@/components/Spinner";
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -101,9 +102,13 @@ function CreateProjectModal({
 }
 
 export default function ProjectsPage() {
-  const projects = useProjects();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const user = useLoggedInUser();
+  const projects = useProjects(user.id);
+
+  if (projects === undefined) {
+    return <Spinner />;
+  }
 
   const handleCreateProject = async (
     name: string,

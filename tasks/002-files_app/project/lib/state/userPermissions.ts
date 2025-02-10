@@ -1,19 +1,17 @@
 import { atom, useAtom } from "jotai";
-import { Member, UserPermissions } from "../types";
-import { users } from "./users";
+import { Group, Member, Project, User, UserPermissions } from "../types";
 import { initialUserPermissions } from "./init";
 import { store } from ".";
-import { projects } from "./projects";
-import { members, subjectEquals } from "./membership";
+import { subjectEquals } from "./membership";
 
-export function useAdminUsers() {
+export function useAdminUsers(): string[] | undefined {
   const [currentUserPermissions, _] = useAtom(userPermissions);
   return currentUserPermissions
     .filter((permission) => permission.isAdmin)
     .map((permission) => permission.userId);
 }
 
-export function useIsAdmin(userId: string) {
+export function useIsAdmin(userId: string): boolean | undefined {
   const [currentUserPermissions, _] = useAtom(userPermissions);
   return currentUserPermissions.find((permission) => permission.userId === userId)?.isAdmin ?? false;
 }
@@ -28,22 +26,27 @@ export function setIsAdmin(userId: string, isAdmin: boolean) {
   }
 }
 
-export function hasAccessToProject(actingUserId: string, projectId: string) {
-  const user = store.get(users).find((user) => user.id === actingUserId);
+export function hasAccessToProject(
+  currentUsers: User[],
+  currentUserPermissions: UserPermissions[],
+  currentProjects: Project[],
+  currentMembers: Member[],
+  actingUserId: string,
+  projectId: string,
+) {
+  const user = currentUsers.find((user) => user.id === actingUserId);
   if (!user) {
     throw new Error(`User ${actingUserId} not found`);
   }
-  const project = store.get(projects).find((project) => project.id === projectId);
+  const project = currentProjects.find((project) => project.id === projectId);
   if (!project) {
     throw new Error(`Project ${projectId} not found`);
   }
-  const currentUserPermissions = store.get(userPermissions);
   const actingUserPermission = currentUserPermissions.find((permission) => permission.userId === actingUserId);
   const isAdmin = actingUserPermission?.isAdmin ?? false;
   if (isAdmin) {
     return true;
   }
-  const currentMembers = store.get(members);
 
   const projectMembers = currentMembers.filter((member) => member.object.type === 'project' && member.object.projectId === projectId);
 
@@ -67,12 +70,27 @@ export function hasAccessToProject(actingUserId: string, projectId: string) {
   return false;
 }
 
-export function hasAccessToGroup(actingUserId: string, groupId: string) {
-  const user = store.get(users).find((user) => user.id === actingUserId);
+export function hasAccessToGroup(
+  currentUsers: User[],
+  currentUserPermissions: UserPermissions[],
+  currentMembers: Member[],
+  currentGroups: Group[],
+  actingUserId: string,
+  groupId: string,
+) {
+  const user = currentUsers.find((user) => user.id === actingUserId);
   if (!user) {
     throw new Error(`User ${actingUserId} not found`);
   }
-  const currentMembers = store.get(members);
+  const group = currentGroups.find((group) => group.id === groupId);
+  if (!group) {
+    throw new Error(`Group ${groupId} not found`);
+  }
+  const actingUserPermission = currentUserPermissions.find((permission) => permission.userId === actingUserId);
+  const isAdmin = actingUserPermission?.isAdmin ?? false;
+  if (isAdmin) {
+    return true;
+  }
 
   const stack: Array<Member["subject"]> = [
     { type: "user", userId: actingUserId },

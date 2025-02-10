@@ -50,3 +50,5 @@ export interface Member {
   | { type: "project"; projectId: string }
   | { type: "group"; groupId: string }
 }
+
+export type Node = ({ type: "file"; } & File) | ({ type: "directory"; } & Directory);

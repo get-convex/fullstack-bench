@@ -4,19 +4,27 @@ import { Group, Member } from "../types";
 import { members } from "./membership";
 import { initialGroups } from "./init";
 import { hasAccessToGroup, userPermissions } from "./userPermissions";
+import { users } from "./users";
 
-export function useGroups(actingUserId: string) {
-  const [currentGroups, _] = useAtom(groups);
-  return currentGroups.filter((group) => hasAccessToGroup(actingUserId, group.id));
+export function useGroups(actingUserId: string): Group[] | undefined {
+  const [currentUsers] = useAtom(users);
+  const [currentMembers] = useAtom(members);
+  const [currentUserPermissions] = useAtom(userPermissions);
+  const [currentGroups] = useAtom(groups);
+  return currentGroups.filter((group) => hasAccessToGroup(currentUsers, currentUserPermissions, currentMembers, currentGroups, actingUserId, group.id));
 }
 
-export function useGroup(actingUserId: string, groupId: string) {
-  const [currentGroups, _] = useAtom(groups);
+export function useGroup(actingUserId: string, groupId: string): Group | undefined {
+  const [currentUsers] = useAtom(users);
+  const [currentMembers] = useAtom(members);
+  const [currentUserPermissions] = useAtom(userPermissions);
+  const [currentGroups] = useAtom(groups);
+
   const group = currentGroups.find((group) => group.id === groupId);
   if (!group) {
     throw new Error(`Group ${groupId} not found`);
   }
-  if (!hasAccessToGroup(actingUserId, group.id)) {
+  if (!hasAccessToGroup(currentUsers, currentUserPermissions, currentMembers, currentGroups, actingUserId, group.id)) {
     throw new Error(`User ${actingUserId} does not have access to group ${groupId}`);
   }
   return group;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import ProjectHeader from "@/components/ProjectHeader";
 import ProjectSettingsModal from "@/components/ProjectSettingsModal";
 import { updateProjectMetadata, useProject } from "@/lib/state/projects";
@@ -11,6 +11,7 @@ import { useUsers } from "@/lib/state/users";
 import { Member } from "@/lib/types";
 import { useLoggedInUser } from "@/lib/BackendContext";
 import toast from "react-hot-toast";
+import { Spinner } from "@/components/Spinner";
 
 export default function ProjectLayout({
   children,
@@ -48,12 +49,17 @@ export default function ProjectLayout({
       );
   }, []);
 
+  if (
+    project === undefined ||
+    projectMembers === undefined ||
+    users === undefined ||
+    groups === undefined
+  ) {
+    return <Spinner />;
+  }
+
   if (!project) {
-    return (
-      <div className="p-8">
-        <h1 className="text-2xl font-bold text-red-600">Project not found</h1>
-      </div>
-    );
+    notFound();
   }
 
   const addMemberToProject = async (subject: Member["subject"]) => {

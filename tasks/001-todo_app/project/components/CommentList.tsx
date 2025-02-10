@@ -5,19 +5,13 @@ import { Comment as CommentComponent } from "./Comment";
 import { Comment, User } from "../lib/types";
 
 interface CommentListProps {
-  comments: Comment[];
-  usersById: Record<string, User>;
+  comments: (Comment & { authorEmail: string })[];
   onAddComment: (content: string) => Promise<string>;
 }
 
-export function CommentList({
-  comments,
-  usersById,
-  onAddComment,
-}: CommentListProps) {
+export function CommentList({ comments, onAddComment }: CommentListProps) {
   const [newComment, setNewComment] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  console.log("comments", comments);
 
   // Auto-resize textarea
   useEffect(() => {
@@ -47,7 +41,7 @@ export function CommentList({
         {comments.map((comment) => (
           <CommentComponent
             key={comment.id}
-            author={usersById[comment.authorId].email}
+            author={comment.authorEmail}
             createdAt={new Date(comment.createdAt).toLocaleString()}
             content={comment.content}
           />

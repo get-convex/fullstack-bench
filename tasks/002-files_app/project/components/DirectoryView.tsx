@@ -13,12 +13,13 @@ import { useState } from "react";
 import Breadcrumb from "./Breadcrumb";
 import CreateFileModal from "./CreateFileModal";
 import CreateDirectoryModal from "./CreateDirectoryModal";
+import { Node } from "@/lib/types";
 
 export default function DirectoryView(props: {
   projectId: string;
   pathSegments: string[];
   currentDirId: string | undefined;
-  dirChildren: (File | Directory)[];
+  dirChildren: Node[];
   handleCreate: (
     name: string,
     node: { type: "file"; content: string } | { type: "directory" }

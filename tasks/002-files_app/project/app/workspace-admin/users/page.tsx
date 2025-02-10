@@ -3,10 +3,16 @@
 import Link from "next/link";
 import { useUsers } from "@/lib/state/users";
 import { setIsAdmin, useAdminUsers } from "@/lib/state/userPermissions";
+import { Spinner } from "@/components/Spinner";
 
 export default function UsersPage() {
   const users = useUsers();
   const adminUsers = useAdminUsers();
+
+  if (users === undefined || adminUsers === undefined) {
+    return <Spinner />;
+  }
+
   const handleUserRoleChange = async (
     userId: string,
     newRole: "member" | "admin"

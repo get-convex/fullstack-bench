@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { Sidebar } from "@/components/Sidebar";
 import { TaskDetails } from "@/components/TaskDetails";
 import { CommentList } from "@/components/CommentList";
@@ -10,16 +10,14 @@ import {
   updateTaskStatus,
   updateTaskAssignee,
   updateTaskDueDate,
-  useProject,
   useTask,
   useComments,
   useUserByEmail,
   useProjects,
-  useUsersById,
   useUsers,
 } from "@/lib/state";
-import { notFound } from "next/navigation";
 import { useLoggedInUser } from "@/lib/BackendContext";
+import { Spinner } from "@/components/Spinner";
 
 export default function TaskPage() {
   const params = useParams();
@@ -28,16 +26,21 @@ export default function TaskPage() {
 
   const user = useLoggedInUser();
 
-  const currentProject = useProject(projectId);
   const currentTask = useTask(taskId);
   const taskComments = useComments(taskId);
-  const usersById = useUsersById(
-    taskComments.map((comment) => comment.authorId)
-  );
   const projects = useProjects();
-
   const users = useUsers();
 
+  if (
+    currentTask === undefined ||
+    taskComments === undefined ||
+    projects === undefined ||
+    users === undefined
+  ) {
+    return <Spinner />;
+  }
+
+  const currentProject = projects.find((p) => p.id === projectId);
   if (!currentProject || !currentTask) {
     notFound();
   }
@@ -75,11 +78,7 @@ export default function TaskPage() {
               </p>
             </div>
 
-            <CommentList
-              comments={taskComments}
-              usersById={usersById}
-              onAddComment={postComment}
-            />
+            <CommentList comments={taskComments} onAddComment={postComment} />
           </div>
         </div>
         <TaskDetails

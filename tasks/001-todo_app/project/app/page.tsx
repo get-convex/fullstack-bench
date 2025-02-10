@@ -5,12 +5,16 @@ import { redirect, notFound } from "next/navigation";
 import { CreateProject } from "../components/CreateProject";
 import { addProject, useProjects, useUserByEmail } from "../lib/state";
 import { useLoggedInUser } from "@/lib/BackendContext";
+import { Spinner } from "@/components/Spinner";
 
 export default function Home() {
   const [isCreatingProject, setIsCreatingProject] = useState(false);
   const projects = useProjects();
-
   const user = useLoggedInUser();
+
+  if (projects === undefined) {
+    return <Spinner />;
+  }
 
   // Redirect to the most recently created project, or show a message if no projects exist
   if (projects.length > 0) {

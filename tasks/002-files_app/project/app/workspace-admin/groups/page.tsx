@@ -10,11 +10,16 @@ import { Group } from "@/lib/types";
 import { useMembers } from "@/lib/state/membership";
 import { useLoggedInUser } from "@/lib/BackendContext";
 import toast from "react-hot-toast";
+import { Spinner } from "@/components/Spinner";
 
 export default function GroupsPage() {
   const user = useLoggedInUser();
   const groups = useGroups(user.id);
   const [showCreateModal, setShowCreateModal] = useState(false);
+
+  if (groups === undefined) {
+    return <Spinner />;
+  }
 
   const handleCreateGroup = async (name: string) => {
     try {
@@ -89,6 +94,9 @@ export default function GroupsPage() {
 
 function GroupRow({ group }: { group: Group }) {
   const members = useMembers({ type: "group", groupId: group.id });
+  if (members === undefined) {
+    return <Spinner />;
+  }
   return (
     <tr
       key={group.id}

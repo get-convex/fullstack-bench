@@ -4,8 +4,11 @@ import { Member } from "../types";
 import { initialMembers } from "./init";
 import { hasAccessToGroup } from "./userPermissions";
 import { hasAccessToProject } from "./userPermissions";
+import { users } from "./users";
+import { projects } from "./projects";
+import { userPermissions } from "./userPermissions";
 
-export function useMembers(object: Member["object"]) {
+export function useMembers(object: Member["object"]): Member[] | undefined {
   const [currentMembers, _] = useAtom(members);
   return currentMembers.filter((member) => objectEquals(member.object, object));
 }
@@ -31,16 +34,19 @@ export function objectEquals(a: Member["object"], b: Member["object"]) {
 }
 
 export async function addMember(actingUserId: string, subject: Member["subject"], object: Member["object"]) {
+  const currentUsers = store.get(users);
+  const currentProjects = store.get(projects);
+  const currentMembers = store.get(members);
+  const currentUserPermissions = store.get(userPermissions);
   if (object.type === "project") {
-    if (!hasAccessToProject(actingUserId, object.projectId)) {
+    if (!hasAccessToProject(currentUsers, currentUserPermissions, currentProjects, currentMembers, actingUserId, object.projectId)) {
       throw new Error(`User ${actingUserId} does not have access to project ${object.projectId}`);
     }
   } else {
-    if (!hasAccessToGroup(actingUserId, object.groupId)) {
+    if (!hasAccessToGroup(currentUsers, currentUserPermissions, currentMembers, currentProjects, actingUserId, object.groupId)) {
       throw new Error(`User ${actingUserId} does not have access to group ${object.groupId}`);
     }
   }
-  const currentMembers = store.get(members);
 
   // Check that the membership doesn't already exist.
   if (currentMembers.some((member) => subjectEquals(member.subject, subject) && objectEquals(member.object, object))) {
@@ -74,17 +80,20 @@ export async function addMember(actingUserId: string, subject: Member["subject"]
 }
 
 export async function removeMember(actingUserId: string, memberId: string) {
+  const currentUsers = store.get(users);
+  const currentProjects = store.get(projects);
   const currentMembers = store.get(members);
+  const currentUserPermissions = store.get(userPermissions);
   const member = currentMembers.find((member) => member.id === memberId);
   if (!member) {
     throw new Error(`Member ${memberId} not found`);
   }
   if (member.object.type === "project") {
-    if (!hasAccessToProject(actingUserId, member.object.projectId)) {
+    if (!hasAccessToProject(currentUsers, currentUserPermissions, currentProjects, currentMembers, actingUserId, member.object.projectId)) {
       throw new Error(`User ${actingUserId} does not have access to project ${member.object.projectId}`);
     }
   } else {
-    if (!hasAccessToGroup(actingUserId, member.object.groupId)) {
+    if (!hasAccessToGroup(currentUsers, currentUserPermissions, currentMembers, currentProjects, actingUserId, member.object.groupId)) {
       throw new Error(`User ${actingUserId} does not have access to group ${member.object.groupId}`);
     }
   }

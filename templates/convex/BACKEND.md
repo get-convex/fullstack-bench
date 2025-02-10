@@ -57,3 +57,10 @@ Within the app, use the `lib/BackendContext:useLoggedInUser` hook to get the cur
 The Convex client is already set up in `lib/BackendContext.tsx` and wired into `app/layout.tsx`. You can use `useQuery` and `useMutation` directly from `convex/react` along with the generated `api` object from `@/convex/_generated/api`. Do NOT modify this code.
 
 Use Next client components for the UI: do not bother with server rendering.
+
+# Typechecking and deployment
+
+Run `bunx tsc -noEmit` to check for type errors across all files. Be sure to run
+this command and fix all errors before considering yourself done.
+
+Run `bunx convex dev --once` to deploy the `convex/` folder to the backend.

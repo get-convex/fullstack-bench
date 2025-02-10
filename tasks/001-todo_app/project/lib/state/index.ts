@@ -4,31 +4,20 @@ import { initialUsers, initialProjects, initialTasks, initialComments, getTimest
 
 const store = getDefaultStore();
 
-export function useUsers() {
+export function useUsers(): User[] | undefined {
   const [currentUsers, _] = useAtom(users);
   return currentUsers;
 }
 
-export function useUserByEmail(email: string) {
+export function useUserByEmail(email: string): User | null | undefined {
   const [currentUsers, _] = useAtom(users);
-  return currentUsers.find((user) => user.email === email);
+  return currentUsers.find((user) => user.email === email) ?? null;
 }
 
-export function useUsersById(ids: string[]) {
-  const [currentUsers, _] = useAtom(users);
-  return Object.fromEntries(
-    currentUsers.filter((user) => ids.includes(user.id)).map((user) => [user.id, user])
-  ) as Record<string, User>;
-}
-
-export function useProjects() {
+export function useProjects(): Project[] | undefined {
   const [currentProjects, _] = useAtom(projects);
+  currentProjects.sort((a, b) => b.createdAt - a.createdAt);
   return currentProjects;
-}
-
-export function useProject(id: string) {
-  const [currentProjects, _] = useAtom(projects);
-  return currentProjects.find((project) => project.id === id);
 }
 
 export async function addProject(name: string, emoji: string, description: string, creatorId: string) {
@@ -39,14 +28,18 @@ export async function addProject(name: string, emoji: string, description: strin
   return id;
 }
 
-export function useTasks(projectId: string) {
+export function useTasks(projectId: string): Task[] | undefined {
   const [currentTasks, _] = useAtom(tasks);
   return currentTasks.filter((task) => task.projectId === projectId);
 }
 
-export function useTask(taskId: string) {
+export function useTask(taskId: string): Task | null | undefined {
   const [currentTasks, _] = useAtom(tasks);
-  return currentTasks.find((task) => task.id === taskId);
+  const task = currentTasks.find((task) => task.id === taskId);
+  if (!task) {
+    return null;
+  }
+  return task;
 }
 
 export async function addTask(projectId: string, title: string, description: string, status: Task["status"], dueDate: number | null, assigneeId: string | null) {
@@ -81,16 +74,29 @@ export async function updateTaskDueDate(taskId: string, dueDate: number | null) 
   store.set(tasks, updatedTasks);
 }
 
-export function useComments(taskId: string) {
-  const [currentComments, _] = useAtom(comments);
-  return currentComments.filter((comment) => comment.taskId === taskId);
+export function useComments(taskId: string): (Comment & { authorEmail: string })[] | undefined {
+  const [currentComments] = useAtom(comments);
+  const [currentUsers] = useAtom(users);
+  const results = currentComments
+    .filter((comment) => comment.taskId === taskId)
+    .map((comment) => {
+      const user = currentUsers.find((user) => user.id === comment.authorId);
+      if (!user) {
+        throw new Error(`User with id ${comment.authorId} not found`);
+      }
+      return {
+        ...comment,
+        authorEmail: user.email,
+      };
+    });
+  results.sort((a, b) => a.createdAt - b.createdAt);
+  return results;
 }
 
 export async function addComment(taskId: string, content: string, authorId: string) {
   const currentComments = store.get(comments);
   const id = crypto.randomUUID();
   const newComment: Comment = { id, createdAt: getTimestamp(), taskId, authorId, content };
-  console.log("newComment", newComment);
   store.set(comments, [...currentComments, newComment]);
   return id;
 }

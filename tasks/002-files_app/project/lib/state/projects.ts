@@ -5,18 +5,26 @@ import { initialProjects } from "./init";
 import { hasAccessToProject, userPermissions } from "./userPermissions";
 import { directories } from "./filesystem";
 import { members } from "./membership";
+import { users } from "./users";
 
-export function useProjects() {
-  const [currentProjects, _] = useAtom(projects);
-  return currentProjects;
-}
-
-export function useProject(actingUserId: string, projectId: string) {
-  const [currentProjects, _] = useAtom(projects);
-  if (!hasAccessToProject(actingUserId, projectId)) {
+export function useProject(actingUserId: string, projectId: string): Project | undefined {
+  const [currentUsers] = useAtom(users);
+  const [currentProjects] = useAtom(projects);
+  const [currentMembers] = useAtom(members);
+  const [currentUserPermissions] = useAtom(userPermissions);
+  if (!hasAccessToProject(currentUsers, currentUserPermissions, currentProjects, currentMembers, actingUserId, projectId)) {
     throw new Error(`User ${actingUserId} does not have access to project ${projectId}`);
   }
   return currentProjects.find((project) => project.id === projectId);
+}
+
+export function useProjects(actingUserId: string): Project[] | undefined {
+  const [currentProjects] = useAtom(projects);
+  const [currentMembers] = useAtom(members);
+  const [currentUserPermissions] = useAtom(userPermissions);
+  const [currentUsers] = useAtom(users);
+  return currentProjects.filter((project) => hasAccessToProject(currentUsers, currentUserPermissions, currentProjects, currentMembers, actingUserId, project.id));
+
 }
 
 export async function addProject(actingUserId: string, name: string, description: string, emoji: string) {

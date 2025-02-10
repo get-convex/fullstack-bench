@@ -4,15 +4,9 @@ import { useState } from "react";
 import { notFound, useParams } from "next/navigation";
 import { Sidebar } from "../../../components/Sidebar";
 import { CreateTask } from "../../../components/CreateTask";
-import {
-  addProject,
-  addTask,
-  useProject,
-  useTasks,
-  useProjects,
-  useUserByEmail,
-} from "@/lib/state";
+import { addProject, addTask, useTasks, useProjects } from "@/lib/state";
 import { useLoggedInUser } from "@/lib/BackendContext";
+import { Spinner } from "@/components/Spinner";
 
 const statusColors = {
   Todo: "bg-gray-400",
@@ -30,12 +24,16 @@ export default function ProjectPage() {
   const user = useLoggedInUser();
 
   const projects = useProjects();
-  const currentProject = useProject(projectId);
+  const projectTasks = useTasks(projectId);
+
+  if (projects === undefined || projectTasks === undefined) {
+    return <Spinner />;
+  }
+
+  const currentProject = projects.find((p) => p.id === projectId);
   if (!currentProject) {
     notFound();
   }
-
-  const projectTasks = useTasks(projectId);
 
   const tasksByStatus = {
     Todo: projectTasks.filter((t) => t.status === "Todo"),
@@ -44,10 +42,6 @@ export default function ProjectPage() {
     Done: projectTasks.filter((t) => t.status === "Done"),
     Canceled: projectTasks.filter((t) => t.status === "Canceled"),
   };
-
-  if (!currentProject) {
-    notFound();
-  }
 
   return (
     <div className="flex h-screen bg-slate-950">

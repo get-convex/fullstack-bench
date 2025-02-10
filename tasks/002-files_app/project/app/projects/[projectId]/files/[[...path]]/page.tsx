@@ -12,6 +12,7 @@ import {
 } from "@/lib/state/filesystem";
 import { useLoggedInUser } from "@/lib/BackendContext";
 import toast from "react-hot-toast";
+import { Spinner } from "@/components/Spinner";
 
 export default function ProjectFilesPage() {
   const params = useParams();
@@ -20,12 +21,15 @@ export default function ProjectFilesPage() {
   const user = useLoggedInUser();
   // Start with the root.
   const node = useFilePath(user.id, projectId, pathSegments);
-  if (!node) {
+
+  if (node === undefined) {
+    return <Spinner />;
+  }
+  if (node === null) {
     notFound();
   }
 
   if (node.type === "file") {
-    // This is a file
     return (
       <FileView
         file={node}
