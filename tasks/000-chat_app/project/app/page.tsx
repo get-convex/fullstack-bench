@@ -10,7 +10,11 @@ export default function Home() {
     return <Spinner />;
   }
   if (channels.length === 0) {
-    return <div>No channels found</div>;
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <div className="p-8 text-center text-slate-400">Create a channel!</div>
+      </div>
+    );
   } else {
     const channelId = channels[0].id;
     redirect(`/channels/${channelId}`);
