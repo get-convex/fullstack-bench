@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { redirect, notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import { CreateProject } from "../components/CreateProject";
-import { addProject, useProjects, useUserByEmail } from "../lib/state";
 import { useLoggedInUser } from "@/lib/BackendContext";
 import { Spinner } from "@/components/Spinner";
+import { initialProjects } from "@/lib/exampleData";
 
 export default function Home() {
   const [isCreatingProject, setIsCreatingProject] = useState(false);
-  const projects = useProjects();
+  const projects = initialProjects;
   const user = useLoggedInUser();
 
   if (projects === undefined) {
@@ -27,7 +27,9 @@ export default function Home() {
         {isCreatingProject ? (
           <CreateProject
             userId={user.id}
-            createProject={addProject}
+            createProject={() => {
+              throw new Error("Not implemented");
+            }}
             setIsCreatingProject={setIsCreatingProject}
           />
         ) : (
