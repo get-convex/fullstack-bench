@@ -1,4 +1,4 @@
-import { Task } from "../types";
+import { Task } from "./types";
 
 let base = (new Date("2025-02-04 12:00:00")).getTime();
 

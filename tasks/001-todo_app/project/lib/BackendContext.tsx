@@ -1,4 +1,4 @@
-import { initialUsers } from "@/lib/state/init";
+import { initialUsers } from "@/lib/exampleData";
 import { useUserByEmail } from "./state";
 import { User } from "./types";
 

@@ -1,5 +1,5 @@
 ---
-description: Guidelines and best practices for building Convex projects, including database schema design, queries, mutations, and real-world examples.
+description: Guidelines and best practices for building Convex projects, including database schema design, queries, mutations, and real-world examples.˘
 globs: **/*.{ts,tsx,js,jsx}
 ---
 
@@ -170,6 +170,92 @@ const messages = await ctx.db
                     });
                     ```
   </file_storage_guidelines>
+  <react_client_guidelines>
+    - Here are some guidelines for using Convex within a React app. 
+    - Convex provides the "convex/react" library for calling Convex functions on the server.  
+    <queries>      
+        - Use the `useQuery` hook to execute a Convex query. Pass in a `FunctionReference` from the `api` object and the query's arguments.
+          ```tsx
+          import { useQuery } from "convex/react";
+          import { api } from "@/convex/_generated/api";
+          import { Spinner } from "@/components/Spinner";
+
+          export default function ExampleComponent() {
+            const data = useQuery(api.example.f, { name: "Alice" });
+            // `data` is `undefined` while the query is loading and the function's return type after.
+            // `data` automatically reruns and live updates whenever the query changes.
+            if (data === undefined) {
+              return <Spinner />;
+            }
+          }
+          ```         
+       - Be sure to obey React's hook rules when calling queries:
+         - Only call hooks at the top-level of a React component, before any early returns.
+         - Hooks must be called in the same order each time a component redners.
+         - Do NOT call hooks inside loops, conditions, or nested functions.       
+         - Do NOT call hooks from async functions.
+       - If you'd like to conditionally execute a query, you can use the `"skip"` parameter.
+         ```tsx
+         import { useQuery } from "convex/react";
+         import { api } from "@/convex/_generated/api";
+         import { Spinner } from "@/components/Spinner";
+
+         export default function ExampleComponent() {
+           const fData = useQuery(api.example.f, { name: "Alice" });
+           const gData = useQuery(api.example.g, fData === undefined ? "skip" : { age: fData });
+           // `api.example.g` is not executed if `fData` is `undefined`. In that case, `gData` is undefined.
+           // Once `fData` is defined, `gData` is `undefined` while the call to `api.example.g` is still loading.
+           if (fData === undefined || gData === undefined) {
+             return <Spinner />; 
+           }
+         }           
+         ```
+       - PREFER to call a single query per React component instead of using "skip". In this case, define
+         a new Convex query `api.example.fAndG` that implements both `api.exmaple.f` and `api.example.g`'s 
+         functionality and returns the final result.
+         ```tsx
+         import { useQuery } from "convex/react";
+         import { api } from "@/convex/_generated/api";
+         import { Spinner } from "@/components/Spinner";
+
+         export default function ExampleComponent() {
+           const gData = useQuery(api.example.fAndG, { name: "Alice" });           
+           if (gData === undefined) {
+             return <Spinner />;
+           }
+         }           
+         ```
+  </queries>         
+  <mutations>
+      - Use the `useMutation` hook to get an async callback to invoke a mutation on the server. This async
+        function takes in the mutation's argument object and either returns the mutation's value or throw an error.
+        ```tsx
+        import { useMutation } from "convex/react";
+        import { api } from "@/convex/_generated/api";
+        
+
+        export default function ExampleComponent() {          
+          const [counterId, setCounterId] = useState<Id<"counters"> | null>(null);
+          const addOne = useMutation(api.example.addOne)
+          const onClick = async () => {
+            if (!counterId) {
+              return;
+            }
+            try {
+              const result = await addOne({ counter: counterId });
+              console.log("Added one", result);
+            } catch (error) {
+              console.error("Adding one failed", error);
+            }
+          };          
+        }
+        ```
+      - Just like queries, `useMutation` is subject to React's hook rules.
+        ALWAYS call it directly from a React component. Do NOT call it from
+        a helper function or an async callback that may be called outside 
+        a React component.
+  </mutations>             
+  </react_client_guidelines>
 </convex_guidelines>
 
 

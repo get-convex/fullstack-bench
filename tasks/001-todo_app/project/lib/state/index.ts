@@ -1,6 +1,6 @@
 import { atom, getDefaultStore, useAtom } from "jotai";
 import { Project, Task, Comment, User } from "../types";
-import { initialUsers, initialProjects, initialTasks, initialComments, getTimestamp } from "./init";
+import { initialUsers, initialProjects, initialTasks, initialComments, getTimestamp } from "../exampleData";
 
 const store = getDefaultStore();
 

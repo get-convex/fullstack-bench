@@ -14,7 +14,9 @@ import toast from "react-hot-toast";
 import { User } from "./types";
 import { Spinner } from "@/components/Spinner";
 
-const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+export const convex = new ConvexReactClient(
+  process.env.NEXT_PUBLIC_CONVEX_URL!
+);
 
 const UserEmailContext = createContext<User | null>(null);
 

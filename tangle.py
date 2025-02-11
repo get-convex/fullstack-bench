@@ -5,7 +5,7 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-ignore_list = [".git", "node_modules", "bun.lockb", "bun.lockb", ".next", "package.json", "BACKEND.md", "TASK.md", ".env.local"]
+ignore_list = [".git", "node_modules", "bun.lockb", "bun.lockb", ".next", "package.json", "BACKEND.md", "TASK.md"]
 template_override = {
     "lib/BackendContext.tsx",
 }
@@ -13,11 +13,15 @@ template_override = {
 def tangle(template_dir: Path, task_dir: Path, output_dir: Path) -> None:
     task_project_dir = task_dir / "project"
 
+    tangle_ignore = ignore_list
+    if template_dir == Path("templates/convex"):
+        tangle_ignore.append(".env.local")
+
     os.makedirs(output_dir, exist_ok=True)
     shutil.copytree(
         template_dir,
         output_dir,
-        ignore=lambda dir, contents: ignore_list,
+        ignore=lambda dir, contents: tangle_ignore,
         dirs_exist_ok=True,
     )
 
@@ -36,7 +40,7 @@ def tangle(template_dir: Path, task_dir: Path, output_dir: Path) -> None:
     shutil.copytree(
         task_project_dir,
         output_dir,
-        ignore=lambda dir, contents: ignore_list,
+        ignore=lambda dir, contents: tangle_ignore,
         copy_function=copy_function,
         dirs_exist_ok=True,
     )
