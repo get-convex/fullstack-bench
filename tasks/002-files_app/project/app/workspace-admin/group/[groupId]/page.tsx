@@ -11,24 +11,24 @@ import {
 } from "@heroicons/react/24/outline";
 import GroupMembershipModal from "@/components/GroupMembershipModal";
 import Link from "next/link";
-import { removeGroup } from "@/lib/state/groups";
-import { updateGroupName, useGroups } from "@/lib/state/groups";
-import { useGroup } from "@/lib/state/groups";
-import { useUser, useUsers } from "@/lib/state/users";
 import { Member } from "@/lib/types";
-import { addMember, removeMember, useMembers } from "@/lib/state/membership";
 import { useLoggedInUser } from "@/lib/BackendContext";
 import toast from "react-hot-toast";
 import { Spinner } from "@/components/Spinner";
+import { initialGroups, initialMembers, initialUsers } from "@/lib/exampleData";
 
 export default function GroupPage() {
   const params = useParams();
   const router = useRouter();
   const user = useLoggedInUser();
   const groupId = params.groupId as string;
-  const members = useMembers({ type: "group", groupId });
-  const users = useUsers();
-  const groups = useGroups(user.id);
+
+  const members = initialMembers.filter(
+    (member) =>
+      member.object.type === "group" && member.object.groupId === groupId
+  );
+  const users = initialUsers;
+  const groups = initialGroups;
 
   if (members === undefined || users === undefined || groups === undefined) {
     return <Spinner />;
@@ -44,34 +44,16 @@ export default function GroupPage() {
   const [showMembershipModal, setShowMembershipModal] = useState(false);
 
   const handleUpdateName = async () => {
-    if (!editedName.trim()) return;
-    try {
-      await updateGroupName(user.id, groupId, editedName.trim());
-      setIsEditingName(false);
-    } catch (error) {
-      toast.error(`Failed to update group name: ${error}`);
-    }
+    throw new Error("Not implemented");
   };
-
   const handleDeleteGroup = async () => {
-    try {
-      await removeGroup(user.id, groupId);
-      router.push("/workspace-admin/groups");
-    } catch (error) {
-      toast.error(`Failed to delete group: ${error}`);
-    }
+    throw new Error("Not implemented");
   };
-
   const addMemberToGroup = async (
     groupId: string,
     subject: Member["subject"]
   ) => {
-    try {
-      await addMember(user.id, subject, { type: "group", groupId });
-      setShowMembershipModal(false);
-    } catch (error) {
-      toast.error(`Failed to add member: ${error}`);
-    }
+    throw new Error("Not implemented");
   };
 
   return (
@@ -192,8 +174,11 @@ function UserRow({
   member: Member;
   memberUserId: string;
 }) {
-  const user = useUser(memberUserId);
-  if (!user) {
+  const user = initialUsers.find((user) => user.id === memberUserId) ?? null;
+  if (user === undefined) {
+    return <Spinner />;
+  }
+  if (user === null) {
     throw new Error("User not found");
   }
   return (
@@ -208,7 +193,7 @@ function UserRow({
       <div className="flex items-center space-x-2">
         <button
           onClick={() => {
-            void removeMember(user.id, member.id);
+            throw new Error("Not implemented");
           }}
           className="text-slate-400 hover:text-red-400 ml-4"
           title="Remove Member"
@@ -227,9 +212,12 @@ function GroupRow({
   member: Member;
   memberGroupId: string;
 }) {
-  const user = useLoggedInUser();
-  const subgroup = useGroup(user.id, memberGroupId);
-  if (!subgroup) {
+  const subgroup =
+    initialGroups.find((group) => group.id === memberGroupId) ?? null;
+  if (subgroup === undefined) {
+    return <Spinner />;
+  }
+  if (subgroup === null) {
     throw new Error("Subgroup not found");
   }
   return (
@@ -244,7 +232,7 @@ function GroupRow({
       <div className="flex items-center space-x-2">
         <button
           onClick={() => {
-            void removeMember(user.id, member.id);
+            throw new Error("Not implemented");
           }}
           className="text-slate-400 hover:text-red-400 ml-4"
           title="Remove Member"

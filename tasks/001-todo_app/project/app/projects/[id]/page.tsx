@@ -25,7 +25,7 @@ export default function ProjectPage() {
   const user = useLoggedInUser();
 
   const projects = initialProjects;
-  const projectTasks = initialTasks;
+  const projectTasks = initialTasks.filter((t) => t.projectId === projectId);
 
   if (projects === undefined || projectTasks === undefined) {
     return <Spinner />;

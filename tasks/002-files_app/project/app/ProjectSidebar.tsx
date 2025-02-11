@@ -3,19 +3,24 @@
 import Sidebar from "@/components/Sidebar";
 import { Spinner } from "@/components/Spinner";
 import { useLoggedInUser } from "@/lib/BackendContext";
-import { useSidebarQuery } from "@/lib/state/users";
+import {
+  initialGroups,
+  initialProjects,
+  initialUserPermissions,
+} from "@/lib/exampleData";
 
 export function ProjectSidebar() {
   const user = useLoggedInUser();
-  const sidebarQuery = useSidebarQuery(user?.id);
-  if (!sidebarQuery) {
+  const isAdmin = initialUserPermissions.some(
+    (p) => p.userId === user.id && p.isAdmin
+  );
+  if (isAdmin === undefined) {
     return <Spinner />;
   }
-  const { isAdmin, projects, groups } = sidebarQuery;
   return (
     <Sidebar
-      projects={projects}
-      groups={groups}
+      projects={initialProjects}
+      groups={initialGroups}
       user={user}
       isAdmin={isAdmin}
     />

@@ -2,19 +2,21 @@
 
 import { notFound, useParams } from "next/navigation";
 import { UserIcon } from "@heroicons/react/24/outline";
-import { useGroup } from "@/lib/state/groups";
-import { useMembers } from "@/lib/state/membership";
 import { Member } from "@/lib/types";
-import { useUser } from "@/lib/state/users";
 import { useLoggedInUser } from "@/lib/BackendContext";
 import { Spinner } from "@/components/Spinner";
+import { initialGroups, initialUsers } from "@/lib/exampleData";
+import { initialMembers } from "@/lib/exampleData";
 
 export default function GroupPage() {
   const params = useParams();
   const user = useLoggedInUser();
   const groupId = params.groupId as string;
-  const group = useGroup(user.id, groupId);
-  const members = useMembers({ type: "group", groupId });
+  const group = initialGroups.find((group) => group.id === groupId);
+  const members = initialMembers.filter(
+    (member) =>
+      member.object.type === "group" && member.object.groupId === groupId
+  );
 
   if (group === undefined || members === undefined) {
     return <Spinner />;
@@ -59,9 +61,12 @@ function GroupMemberRow({ member }: { member: Member }) {
 }
 
 function UserRow({ userId }: { userId: string }) {
-  const user = useUser(userId);
+  const user = initialUsers.find((user) => user.id === userId) ?? null;
   if (user === undefined) {
     return <Spinner />;
+  }
+  if (user === null) {
+    throw new Error("User not found");
   }
   return (
     <div className="px-6 py-4 flex items-center justify-between">
@@ -74,10 +79,12 @@ function UserRow({ userId }: { userId: string }) {
 }
 
 function GroupRow({ groupId }: { groupId: string }) {
-  const user = useLoggedInUser();
-  const group = useGroup(user.id, groupId);
+  const group = initialGroups.find((group) => group.id === groupId) ?? null;
   if (group === undefined) {
     return <Spinner />;
+  }
+  if (group === null) {
+    throw new Error("Group not found");
   }
   return (
     <div className="px-6 py-4 flex items-center justify-between">

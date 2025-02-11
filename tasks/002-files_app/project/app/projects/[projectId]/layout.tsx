@@ -4,14 +4,16 @@ import { useState, useEffect } from "react";
 import { notFound, useParams } from "next/navigation";
 import ProjectHeader from "@/components/ProjectHeader";
 import ProjectSettingsModal from "@/components/ProjectSettingsModal";
-import { updateProjectMetadata, useProject } from "@/lib/state/projects";
-import { addMember, removeMember, useMembers } from "@/lib/state/membership";
-import { useGroups } from "@/lib/state/groups";
-import { useUsers } from "@/lib/state/users";
 import { Member } from "@/lib/types";
 import { useLoggedInUser } from "@/lib/BackendContext";
 import toast from "react-hot-toast";
 import { Spinner } from "@/components/Spinner";
+import {
+  initialGroups,
+  initialMembers,
+  initialProjects,
+  initialUsers,
+} from "@/lib/exampleData";
 
 export default function ProjectLayout({
   children,
@@ -21,10 +23,15 @@ export default function ProjectLayout({
   const params = useParams();
   const projectId = params.projectId as string;
   const user = useLoggedInUser();
-  const project = useProject(user.id, projectId);
-  const projectMembers = useMembers({ type: "project", projectId });
-  const users = useUsers();
-  const groups = useGroups(user.id);
+
+  const project = initialProjects.find((project) => project.id === projectId);
+  const projectMembers = initialMembers.filter(
+    (member) =>
+      member.object.type === "project" && member.object.projectId === projectId
+  );
+  const users = initialUsers;
+  const groups = initialGroups;
+
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [settingsModalTab, setSettingsModalTab] = useState<
     "details" | "members"
@@ -63,22 +70,11 @@ export default function ProjectLayout({
   }
 
   const addMemberToProject = async (subject: Member["subject"]) => {
-    try {
-      await addMember(user.id, subject, {
-        type: "project",
-        projectId: project.id,
-      });
-    } catch (error) {
-      toast.error(`Failed to add member: ${error}`);
-    }
+    throw new Error("Not implemented");
   };
 
   const removeMemberFromProject = async (memberId: string) => {
-    try {
-      await removeMember(user.id, memberId);
-    } catch (error) {
-      toast.error(`Failed to remove member: ${error}`);
-    }
+    throw new Error("Not implemented");
   };
 
   const updateProject = async (
@@ -86,17 +82,7 @@ export default function ProjectLayout({
     description?: string,
     emoji?: string
   ) => {
-    try {
-      await updateProjectMetadata(
-        user.id,
-        project.id,
-        name,
-        description,
-        emoji
-      );
-    } catch (error) {
-      toast.error(`Failed to update project: ${error}`);
-    }
+    throw new Error("Not implemented");
   };
 
   return (
