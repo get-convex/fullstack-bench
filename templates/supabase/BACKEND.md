@@ -15,11 +15,12 @@ You MUST keep all visual styling the same.
 Make sure all changes are reflected immediately in the UI without a refresh,
 even if they've happened in another browser.
 
-The existing app is currently set up using in-memory state with Jotai
-in the `lib/state` directory. Remove this directory ENTIRELY and reimplement it
-using Supabase. Since the Supabase deployment is empty (other than auth),
-make sure the app handles empty states gracefully. Keep the types in `lib/types.ts`
-the same.
+The existing app is currently set up using in-memory state with example data in
+`lib/exampleData.ts`. Start by DELETING this file and then reimplementing its
+behavior using Supabase.
+
+Since the Supabase deployment is empty (other than auth), make sure the app handles empty states
+gracefully. Keep the types in `lib/types.ts` the same.
 
 User authentication with Supabase is already fully set up in `middleware.ts`
 and with the `app/login` and `app/auth` routes. Do NOT modify this code. Supabase auth provides the following `users` table:

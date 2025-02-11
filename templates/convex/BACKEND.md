@@ -15,9 +15,11 @@ necessary. You MUST keep all visual styling the same.
 Make sure all changes are reflected immediately in the UI without a refresh,
 even if they've happened in another browser.
 
-The existing app is currently set up using in-memory state with Jotai
-in the `lib/state` directory. Reimplement its behavior using Convex and be sure
-to remove it ENTIRELY. Since the Convex deployment is empty (other than auth), make sure the
+The existing app is currently set up using in-memory state with example data in
+`lib/exampleData.ts`. Start by DELETING this file and then reimplementing its
+behavior using Convex.
+
+Since the Convex deployment is empty (other than auth), make sure the
 app handles empty states gracefully. Keep the types in `lib/types.ts` the same except
 for ID types, which you should change from `id: string` to `_id: Id<"example">`
 for the appropriate table, and creation times, which you should change from
@@ -70,4 +72,7 @@ Use Next client components for the UI: do not bother with server rendering.
 Run `bunx tsc -noEmit` to check for type errors across all files. Be sure to run
 this command and fix all errors before considering yourself done.
 
-Run `bunx convex dev --once` to deploy the `convex/` folder to the backend.
+Run `bunx convex dev --once` after making changes to the `convex/` folder to
+push code to the backend. This will also regenerate the `convex/_generated`
+folder, so if you're seeing type errors related to the `api` object, you may
+need to re-run this command.
