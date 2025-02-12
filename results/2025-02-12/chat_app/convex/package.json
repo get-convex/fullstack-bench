@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "convex": "^1.19.1",
     "jotai": "^2.11.3",
     "next": "15.1.6",
     "react": "^19.0.0",
