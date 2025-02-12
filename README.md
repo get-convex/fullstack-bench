@@ -67,9 +67,13 @@ mkdir -p results/2025-01-31/todo_app
 pdm run python -m tangle templates/supabase tasks/001-todo_app/project results/2025-01-31/todo_app/supabase
 ```
 
-Then, start a Cursor Composer session, using the `TASK.md` in the task directory and including the
-backend-specific guidelines copied into the test directory.
+Then:
 
-I usually record my screen during this session and intervene as little as possible.
+1. Open a new Cursor window to your results directory (e.g. `results/2025-01-31/todo_app/supabase`). 
+2. Open Composer make sure you have it running in in agent mode. 
+3. Copy the contents of `TASK.md` from this window for the task you are doing (e.g. `tasks/001-todo_app/TASK.md`) and paste that into composer in the other window.
+4. Make sure to inclide the `BACKEND.md` in the context
+5. Record my screen during this session and intervene as little as possible.
+6. As composer is going keep a record of what you are doing in a `GRADING.txt` file in your results directory (e.g. `results/2025-01-31/todo_app/supabase/GRADING.txt`) see other results for examples on how this should look
 
-Then, after grading, I usually write a `GRADING.txt` file into the result directory. This is all still very manual and takes ~30m per test.
+This is all still very manual and takes ~30m per test.
