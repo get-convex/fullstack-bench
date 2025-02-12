@@ -1,16 +1,30 @@
-import { initialUsers } from "@/lib/state/init";
-import { useUserByEmail } from "./state";
-import { User } from "./types";
-const loggedInEmail = initialUsers[0].email;
+"use client";
 
-export function BackendContext(props: { children: React.ReactNode }) {
-  return <>{props.children}</>;
+import { ConvexProvider, ConvexReactClient } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { useEffect } from "react";
+
+const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+
+function EnsureTestUser({ children }: { children: React.ReactNode }) {
+  const ensureTestUser = useMutation(api.auth.ensureTestUser);
+
+  useEffect(() => {
+    ensureTestUser();
+  }, [ensureTestUser]);
+
+  return <>{children}</>;
 }
 
-export function useLoggedInUser(): User {
-  const user = useUserByEmail(loggedInEmail);
-  if (!user) {
-    throw new Error("User not found");
-  }
-  return user;
+export function BackendContext(props: { children: React.ReactNode }) {
+  return (
+    <ConvexProvider client={convex}>
+      <EnsureTestUser>{props.children}</EnsureTestUser>
+    </ConvexProvider>
+  );
+}
+
+export function useLoggedInUser() {
+  return useQuery(api.auth.getLoggedInUser);
 }

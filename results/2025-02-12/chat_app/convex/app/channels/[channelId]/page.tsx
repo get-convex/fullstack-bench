@@ -1,41 +1,30 @@
 "use client";
 
-import { use } from "react";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { MessageList } from "@/components/MessageList";
 import { MessageInput } from "@/components/MessageInput";
-import { useChannel, sendMessage, useMessages } from "@/lib/state";
-import { notFound } from "next/navigation";
-import { useLoggedInUser } from "@/lib/BackendContext";
-import { Spinner } from "@/components/Spinner";
+import { WithSidebar } from "@/app/WithSidebar";
+import { Id } from "@/convex/_generated/dataModel";
 
 export default function ChannelPage({
-  params,
+  params: { channelId },
 }: {
-  params: Promise<{ channelId: string }>;
+  params: { channelId: Id<"channels"> };
 }) {
-  const resolvedParams = use(params);
-  const messages = useMessages(resolvedParams.channelId);
-  const user = useLoggedInUser();
-  const channel = useChannel(resolvedParams.channelId);
-  if (messages === undefined || channel === undefined) {
-    return <Spinner />;
-  }
-  if (channel === null) {
-    notFound();
-  }
-  const handleSendMessage = (content: string) => {
-    void sendMessage(user.id, content, resolvedParams.channelId);
-  };
+  const channel = useQuery(api.channels.get, { id: channelId });
+
+  if (!channel) return null;
+
   return (
-    <div className="flex flex-col h-screen">
-      <div className="px-6 py-4 border-b border-slate-800">
-        <div className="flex items-center text-2xl">
-          <span className="text-slate-400 mr-1">#</span>
-          <h2 className="text-white font-bold">{channel?.name}</h2>
+    <WithSidebar currentChannel={channelId}>
+      <div className="flex flex-col h-full">
+        <div className="px-6 py-4 border-b border-slate-800">
+          <h1 className="text-lg font-medium text-white">#{channel.name}</h1>
         </div>
+        <MessageList channelId={channelId} />
+        <MessageInput channelId={channelId} channelName={channel.name} />
       </div>
-      <MessageList messages={messages} />
-      <MessageInput channel={channel} onSendMessage={handleSendMessage} />
-    </div>
+    </WithSidebar>
   );
 }

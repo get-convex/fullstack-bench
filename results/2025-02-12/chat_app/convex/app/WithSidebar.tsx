@@ -1,28 +1,27 @@
 "use client";
 
 import { Sidebar } from "@/components/Sidebar";
-import { Spinner } from "@/components/Spinner";
 import { useLoggedInUser } from "@/lib/BackendContext";
-import { createChannel, useChannels } from "@/lib/state";
-import { usePathname } from "next/navigation";
+import { Id } from "@/convex/_generated/dataModel";
+import { Spinner } from "@/components/Spinner";
 
-export function WithSidebar(props: { children: React.ReactNode }) {
-  const pathname = usePathname();
+interface WithSidebarProps {
+  children: React.ReactNode;
+  currentChannel?: Id<"channels">;
+}
+
+export function WithSidebar({ children, currentChannel }: WithSidebarProps) {
   const user = useLoggedInUser();
-  const currentChannel = pathname?.split("/").pop();
-  const channels = useChannels();
-  if (!channels) {
-    return <Spinner />;
-  }
+
+  if (user === undefined) return <Spinner />;
+
+  if (user === null)
+    return <div className="p-4 text-white">Please sign in</div>;
+
   return (
     <div className="h-screen flex bg-slate-950">
-      <Sidebar
-        email={user?.email}
-        currentChannel={currentChannel}
-        channels={channels}
-        onCreateChannel={createChannel}
-      />
-      <div className="flex-1 bg-slate-950">{props.children}</div>
+      <Sidebar currentChannel={currentChannel} />
+      <div className="flex-1 bg-slate-950">{children}</div>
     </div>
   );
 }

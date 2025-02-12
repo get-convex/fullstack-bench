@@ -3,31 +3,30 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { Channel } from "@/lib/types";
+import { useCreateChannel } from "@/lib/hooks";
 
 interface CreateChannelProps {
-  channels: Channel[];
-  createChannel: (channelName: string) => Promise<string>;
+  channels: any[];
   setIsCreatingChannel: (isCreatingChannel: boolean) => void;
 }
 
-export function CreateChannel(props: CreateChannelProps) {
+export function CreateChannel({ setIsCreatingChannel }: CreateChannelProps) {
   const router = useRouter();
   const [newChannelName, setNewChannelName] = useState("");
+  const createChannel = useCreateChannel();
 
   const handleCreateChannel = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newChannelName.trim()) {
-      // Add new channel
-      try {
-        await props.createChannel(newChannelName.trim());
-        toast.success("Channel created successfully");
-        setNewChannelName("");
-        props.setIsCreatingChannel(false);
-      } catch (error) {
-        toast.error(`Failed to create channel: ${error}`);
-        return;
-      }
+    if (!newChannelName.trim()) return;
+
+    try {
+      const channelId = await createChannel({ name: newChannelName.trim() });
+      toast.success("Channel created successfully");
+      setNewChannelName("");
+      setIsCreatingChannel(false);
+      router.push(`/channels/${channelId}`);
+    } catch (error) {
+      toast.error(`Failed to create channel: ${error}`);
     }
   };
 
@@ -51,7 +50,7 @@ export function CreateChannel(props: CreateChannelProps) {
         <button
           type="button"
           onClick={() => {
-            props.setIsCreatingChannel(false);
+            setIsCreatingChannel(false);
             setNewChannelName("");
           }}
           className="flex-1 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded text-sm font-medium text-slate-200 transition-colors"

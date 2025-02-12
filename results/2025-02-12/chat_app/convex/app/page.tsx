@@ -1,22 +1,28 @@
 "use client";
 
+import { useChannels } from "@/lib/hooks";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { WithSidebar } from "./WithSidebar";
 import { Spinner } from "@/components/Spinner";
-import { useChannels } from "@/lib/state";
-import { redirect } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const channels = useChannels();
-  if (channels === undefined) {
-    return <Spinner />;
-  }
-  if (channels.length === 0) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <div className="p-8 text-center text-slate-400">Create a channel!</div>
+
+  useEffect(() => {
+    if (!channels?.length) return;
+
+    router.replace(`/channels/${channels[0]._id}`);
+  }, [channels, router]);
+
+  if (channels === undefined) return <Spinner />;
+
+  return (
+    <WithSidebar>
+      <div className="flex-1 flex items-center justify-center">
+        <div className="text-slate-400">Create your first channel!</div>
       </div>
-    );
-  } else {
-    const channelId = channels[0].id;
-    redirect(`/channels/${channelId}`);
-  }
+    </WithSidebar>
+  );
 }

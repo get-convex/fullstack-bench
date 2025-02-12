@@ -1,2 +1,21 @@
+I had to upgrade the task to:
+
+```
+Up to now this project has been all local state with jotai. I now want to use @Convex to make the state run on the server.
+
+To do this we are first going to create the schema, please look at the existing state in the app and work out what the the types that need to go into the schema. 
+
+Before designing the schema please take a look at the core functionality for the app.
+
+We are then going to create the functions. That is queries, mutation and actions as needed.
+
+We are then going to upgrade the React client code to use those new queries mutation and actions. 
+
+- The chat app supports authentication
+- There are multiple channels, and all users have access to all channels. Channels have unique names.
+- Channels can have messages, and users can post messages into any channel.
+```
+
 # Interventions
 
+- many

@@ -3,28 +3,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import { CreateChannel } from "./CreateChannel";
-import { Channel } from "@/lib/types";
+import { useChannels } from "@/lib/hooks";
+import { useLoggedInUser } from "@/lib/BackendContext";
 
-interface SidebarProps {
-  email?: string;
-  currentChannel?: string;
-  channels: Channel[];
-  onCreateChannel: (name: string) => Promise<string>;
-}
-
-export function Sidebar({
-  email,
-  currentChannel,
-  channels,
-  onCreateChannel,
-}: SidebarProps) {
+export function Sidebar({ currentChannel }: { currentChannel?: string }) {
   const [isCreatingChannel, setIsCreatingChannel] = useState(false);
+  const channels = useChannels();
+  const user = useLoggedInUser();
+
+  if (!channels) return null;
 
   return (
     <div className="w-[280px] border-r border-slate-800 bg-slate-950 text-slate-200 p-4">
       <div className="mb-8">
         <h2 className="text-sm font-medium text-slate-400">Welcome,</h2>
-        <h1 className="text-lg font-medium text-white">{email ?? ""}</h1>
+        <h1 className="text-lg font-medium text-white">{user?.email ?? ""}</h1>
       </div>
 
       <div className="flex justify-between items-center mb-3 group">
@@ -53,7 +46,6 @@ export function Sidebar({
             </div>
             <CreateChannel
               channels={channels}
-              createChannel={onCreateChannel}
               setIsCreatingChannel={setIsCreatingChannel}
             />
           </div>
@@ -62,11 +54,11 @@ export function Sidebar({
 
       <ul className="space-y-0.5">
         {channels.map((channel) => (
-          <li key={channel.id}>
+          <li key={channel._id}>
             <Link
-              href={`/channels/${channel.id}`}
+              href={`/channels/${channel._id}`}
               className={`flex items-center px-3 py-1.5 rounded text-sm transition-colors ${
-                currentChannel === channel.id
+                currentChannel === channel._id
                   ? "bg-slate-800 text-white font-medium"
                   : "text-slate-400 hover:text-white hover:bg-slate-900"
               }`}

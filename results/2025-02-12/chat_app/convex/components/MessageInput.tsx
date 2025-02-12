@@ -1,21 +1,27 @@
 "use client";
 
-import { Channel } from "@/lib/types";
-import React, { useState } from "react";
+import { useState } from "react";
+import { Id } from "@/convex/_generated/dataModel";
+import { useSendMessage } from "@/lib/hooks";
 
 interface MessageInputProps {
-  channel: Channel;
-  onSendMessage: (content: string) => void;
+  channelId: Id<"channels">;
+  channelName: string;
 }
 
-export function MessageInput({ channel, onSendMessage }: MessageInputProps) {
+export function MessageInput({ channelId, channelName }: MessageInputProps) {
   const [newMessage, setNewMessage] = useState("");
-  const handleSubmit = (e: React.FormEvent) => {
+  const sendMessage = useSendMessage();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newMessage.trim()) {
-      onSendMessage(newMessage);
-      setNewMessage("");
-    }
+    if (!newMessage.trim()) return;
+
+    await sendMessage({
+      channelId,
+      content: newMessage.trim(),
+    });
+    setNewMessage("");
   };
 
   return (
@@ -27,7 +33,7 @@ export function MessageInput({ channel, onSendMessage }: MessageInputProps) {
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             className="flex-1 bg-slate-800 text-white placeholder-slate-400 px-4 py-2 rounded-l text-sm border border-plum focus:outline-none border-r-0"
-            placeholder={`Message #${channel.name}`}
+            placeholder={`Message #${channelName}`}
           />
           <button
             type="submit"
