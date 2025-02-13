@@ -39,5 +39,6 @@ The Supabase client is already set up in `lib/browserClient.ts`. Do NOT modify t
 
 Use Next client components for the UI: do not bother with server rendering.
 
-Run `bunx tsc -noEmit` to check for type errors across all files. Be sure to run
-this command and fix all errors before considering yourself done.
+Run `bun typecheck` from the app's root directory to check for type errors
+across all files. Be sure to run this command and fix all errors before considering
+yourself done.

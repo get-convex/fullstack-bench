@@ -2,10 +2,9 @@ import json
 import os
 import shutil
 import subprocess
-from datetime import datetime
 from pathlib import Path
 
-ignore_list = [".git", "node_modules", "bun.lockb", "bun.lockb", ".next", "package.json", "BACKEND.md", "TASK.md"]
+ignore_list = [".git", "node_modules", "bun.lockb", "bun.lockb", ".next", "package.json", "BACKEND.md", "TASK.md", ".venv", "__pycache__"]
 template_override = {
     "lib/BackendContext.tsx",
 }
@@ -54,6 +53,7 @@ def tangle(template_dir: Path, task_dir: Path, output_dir: Path) -> None:
     # Merge the dependencies and devDependencies fields.
     merged_package_json["dependencies"] = {**template_package_json["dependencies"], **task_package_json["dependencies"]}
     merged_package_json["devDependencies"] = {**template_package_json["devDependencies"], **task_package_json["devDependencies"]}
+    merged_package_json["scripts"] = {**template_package_json["scripts"], **task_package_json["scripts"]}
 
     with open(output_dir / "package.json", "w") as f:
         json.dump(merged_package_json, f)
@@ -85,8 +85,7 @@ if __name__ == "__main__":
     task_name = sys.argv[2].split("/")[-1].split('-')[-1]
     assert task_name in ["chat_app", "todo_app", "files_app"]
 
-    date = datetime.now().strftime("%Y-%m-%d")
-    output_dir = Path(f"results/{date}/{task_name}/{template_name}")
+    output_dir = Path(f"{task_name}-{template_name}")
     output_dir.mkdir(parents=True, exist_ok=False)
     print(f"Tangling {template_name} and {task_name} into {output_dir}")
 

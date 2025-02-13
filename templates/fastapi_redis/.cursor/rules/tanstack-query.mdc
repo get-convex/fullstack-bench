@@ -1,0 +1,29 @@
+---
+description: Coding rules for using TanStack Query with React (optimistic updates)
+globs: **/*.jsx, **/*.tsx
+---
+
+# Using TanStack Query with React
+
+You're an expert in React development using **TanStack Query** (React Query) for managing server state. Generate React code that follows these best practices, including proper usage of queries, mutations, and optimistic updates:
+
+## General Usage
+
+- **Setup**: Initialize a `QueryClient` and wrap your app with `<QueryClientProvider client={queryClient}>` at the root to enable TanStack Query.
+- **Fetching Data**: Use the `useQuery` hook to fetch data, e.g. `useQuery(['todos', userId], fetchTodos)`. Provide a stable, unique query key for each distinct resource or dataset. Adjust options like `staleTime` (how long fetched data stays fresh) and `cacheTime` (how long unused data stays cached) to balance freshness vs. performance.
+- **Mutations**: Use `useMutation` for creating/updating data on the server. On success, update relevant parts of the cache (via `queryClient.setQueryData`) or trigger refetch by invalidating queries (`queryClient.invalidateQueries`) for any affected query keys.
+
+## Optimistic Updates
+
+- **Immediate UI Update**: Implement optimistic updates by using the `onMutate` callback in `useMutation`. In `onMutate`, cancel any ongoing refetches (using `queryClient.cancelQueries`) to avoid interference, then use `queryClient.setQueryData` to update the cached data as if the mutation succeeded. Return the previous cache value so it can be restored if needed.
+- **Error Rollback**: In the `onError` callback of `useMutation`, use the value returned from `onMutate` to restore the previous state. This rolls back the optimistic update if the server operation fails, keeping the UI consistent with the actual data.
+- **Finalize on Success**: In `onSettled` (or `onSuccess`), ensure the UI reflects the real server state. For example, call `invalidateQueries` for the affected data or use `setQueryData` to replace the optimistic data with the data returned by the server.
+
+## Best Practices
+
+- **Stable Keys**: Define query keys as arrays (e.g., `['resource', id]`) that uniquely identify the data. Stable, consistent keys prevent cache collisions and unintended cache sharing between different queries.
+- **Cache Updates**: After a successful mutation, prefer using TanStack Query's utilities to update the cache rather than manual state management. This could mean invalidating related queries to fetch fresh data, or updating query results with `setQueryData` for immediate UI reflection.
+- **Avoid Redundant State**: Do not duplicate server state in global or local state. Rely on TanStack Query for caching and sharing server data across components, which reduces bugs and ensures a single source of truth.
+- **Tune Caching**: Use `staleTime` to reduce unnecessary refetches for data that doesn't change often, and use `cacheTime` to drop data you no longer need from memory. This improves performance and memory usage.
+- **Use DevTools in Development**: Leverage React Query Devtools (if available) to monitor query and mutation behavior, making it easier to debug and optimize your usage of TanStack Query.
+- **Encapsulate Logic**: Organize repetitive query logic into custom hooks (for example, a `useTodos` hook that internally uses `useQuery`). This keeps components clean and promotes reuse of fetching logic.

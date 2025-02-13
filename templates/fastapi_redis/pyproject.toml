@@ -1,0 +1,15 @@
+[project]
+name = "fastapi_redis"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "Sujay Jayakar", email = "sujayakar@convex.dev"},
+]
+dependencies = ["fastapi[standard]>=0.115.8", "redis>=5.2.1", "pyjwt[crypto]>=2.10.1", "passlib[bcrypt]>=1.7.4"]
+requires-python = "==3.9.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false

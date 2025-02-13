@@ -1,6 +1,6 @@
 # Files Workspace App
 
-We've sketched out the frontend for a files workspace app using Next.js and Jotai and would like to fill out the backend. Here is the app's data model:
+We've sketched out the frontend for a files workspace app using Next.js and would like to fill out the backend. Here is the app's data model:
 
 - There is a single top-level workspace.
 - The workspace has some number of users.

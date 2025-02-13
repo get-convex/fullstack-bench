@@ -61,6 +61,8 @@ if (!user) {
 }
 ```
 
+Do NOT modify the setup in `convex/auth.ts` or the `authTables` in `convex/schema.ts`.
+
 Within the app, use the `lib/BackendContext:useLoggedInUser` hook to get the current user. Do NOT modify this code.
 
 The Convex client is already set up in `lib/BackendContext.tsx` and wired into `app/layout.tsx`. You can use `useQuery` and `useMutation` directly from `convex/react` along with the generated `api` object from `@/convex/_generated/api`. Do NOT modify this code.
@@ -69,10 +71,11 @@ Use Next client components for the UI: do not bother with server rendering.
 
 # Typechecking and deployment
 
-Run `bunx tsc -noEmit` to check for type errors across all files. Be sure to run
-this command and fix all errors before considering yourself done.
+Run `bun typecheck` from the app's root directory to check for type errors
+across all files. Be sure to run this command and fix all errors before considering
+yourself done.
 
-Run `bunx convex dev --once` after making changes to the `convex/` folder to
+Run `bun push-convex` after making changes to the `convex/` folder to
 push code to the backend. This will also regenerate the `convex/_generated`
 folder, so if you're seeing type errors related to the `api` object, you may
 need to re-run this command.
