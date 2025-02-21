@@ -4,9 +4,10 @@ import { useState } from "react";
 import { notFound, useParams } from "next/navigation";
 import { Sidebar } from "../../../components/Sidebar";
 import { CreateTask } from "../../../components/CreateTask";
-import { addProject, addTask, useTasks, useProjects } from "@/lib/state";
 import { useLoggedInUser } from "@/lib/BackendContext";
 import { Spinner } from "@/components/Spinner";
+import { initialTasks } from "@/lib/exampleData";
+import { initialProjects } from "@/lib/exampleData";
 
 const statusColors = {
   Todo: "bg-gray-400",
@@ -23,8 +24,8 @@ export default function ProjectPage() {
 
   const user = useLoggedInUser();
 
-  const projects = useProjects();
-  const projectTasks = useTasks(projectId);
+  const projects = initialProjects;
+  const projectTasks = initialTasks.filter((t) => t.projectId === projectId);
 
   if (projects === undefined || projectTasks === undefined) {
     return <Spinner />;
@@ -49,7 +50,9 @@ export default function ProjectPage() {
         user={user}
         currentProjectId={projectId}
         projects={projects}
-        onCreateProject={addProject}
+        onCreateProject={() => {
+          throw new Error("Not implemented");
+        }}
       />
       <main className="flex-1 overflow-auto">
         <div className="p-6">
@@ -74,7 +77,9 @@ export default function ProjectPage() {
           {isCreatingTask && (
             <CreateTask
               project={currentProject}
-              createTask={addTask}
+              createTask={() => {
+                throw new Error("Not implemented");
+              }}
               setIsCreatingTask={setIsCreatingTask}
             />
           )}

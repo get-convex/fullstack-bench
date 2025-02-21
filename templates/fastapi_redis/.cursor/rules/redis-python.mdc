@@ -1,0 +1,21 @@
+---
+description: Coding rules for using Redis with Python (redis-py)
+globs: **/*.py
+---
+# Using Redis with Python (redis-py)
+
+You're an expert in Redis and Python development. Generate clean, efficient Python code that utilizes Redis (via redis-py) following these guidelines:
+
+## Common Usage & API Methods
+
+- Connecting: Use redis.Redis(...) (or Redis.from_url()) to connect to a Redis instance with proper host, port, and credentials. Enable decode_responses=True if you need string results instead of bytes.
+- Basic Commands: Use high-level methods corresponding to Redis commands. For example, set(name, value) to store a string, get(name) to retrieve it, hset/hget for hash fields, lpush/lpop for list operations, and sadd/smembers for set operations.
+- Pipelines: Use Redis.pipeline() to batch multiple commands when executing many operations at once, reducing network round-trips​
+
+## Best Practices
+
+- Reuse Connections: Create a single Redis client instance (which manages a connection pool) and reuse it throughout your application. Avoid instantiating new clients repeatedly to reduce overhead​.
+- Key Management: Use clear naming conventions for keys (e.g., prefixes like user:123:\* for grouping related keys) to avoid collisions. Set expiration (expire or setex) on keys that hold temporary data to automatically evict stale data.
+- Atomic Operations: Leverage atomic Redis features for operations that must be executed together. For example, use a pipeline or Redis transactions (MULTI/EXEC via pipeline) when performing a set of dependent operations to ensure consistency.
+- Error Handling: Handle exceptions such as connection errors or timeouts gracefully (e.g., retry on failure or fall back to degraded functionality). Wrap Redis calls in try/except blocks where appropriate to keep the application robust.
+- Data Serialization: Serialize complex Python objects to a string format (JSON, pickle, etc.) before storing them, and deserialize upon retrieval. This ensures non-primitive data structures are stored in Redis in a compatible format.

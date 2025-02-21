@@ -2,8 +2,8 @@
 
 import { Spinner } from "@/components/Spinner";
 import { useLoggedInUser } from "@/lib/BackendContext";
-import { useIsAdmin } from "@/lib/state/userPermissions";
-import { redirect } from "next/navigation";
+import { initialUserPermissions } from "@/lib/exampleData";
+import { notFound } from "next/navigation";
 
 export default function WorkspaceAdminLayout({
   children,
@@ -11,12 +11,15 @@ export default function WorkspaceAdminLayout({
   children: React.ReactNode;
 }) {
   const user = useLoggedInUser();
-  const isAdmin = useIsAdmin(user?.id);
+  const isAdmin = initialUserPermissions.some(
+    (p) => p.userId === user.id && p.isAdmin
+  );
   if (isAdmin === undefined) {
     return <Spinner />;
   }
   if (!isAdmin) {
-    redirect("/");
+    notFound();
   }
-  return <div>{children}</div>;
+
+  return <>{children}</>;
 }

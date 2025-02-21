@@ -2,10 +2,9 @@ import json
 import os
 import shutil
 import subprocess
-from datetime import datetime
 from pathlib import Path
 
-ignore_list = [".git", "node_modules", "bun.lockb", "bun.lockb", ".next", "package.json", "BACKEND.md", "TASK.md", ".env.local"]
+ignore_list = [".git", "node_modules", "bun.lockb", "bun.lockb", ".next", "package.json", "BACKEND.md", "TASK.md", ".venv", "__pycache__"]
 template_override = {
     "lib/BackendContext.tsx",
 }
@@ -13,11 +12,15 @@ template_override = {
 def tangle(template_dir: Path, task_dir: Path, output_dir: Path) -> None:
     task_project_dir = task_dir / "project"
 
+    tangle_ignore = ignore_list
+    if template_dir == Path("templates/convex"):
+        tangle_ignore.append(".env.local")
+
     os.makedirs(output_dir, exist_ok=True)
     shutil.copytree(
         template_dir,
         output_dir,
-        ignore=lambda dir, contents: ignore_list,
+        ignore=lambda dir, contents: tangle_ignore,
         dirs_exist_ok=True,
     )
 
@@ -36,7 +39,7 @@ def tangle(template_dir: Path, task_dir: Path, output_dir: Path) -> None:
     shutil.copytree(
         task_project_dir,
         output_dir,
-        ignore=lambda dir, contents: ignore_list,
+        ignore=lambda dir, contents: tangle_ignore,
         copy_function=copy_function,
         dirs_exist_ok=True,
     )
@@ -50,6 +53,7 @@ def tangle(template_dir: Path, task_dir: Path, output_dir: Path) -> None:
     # Merge the dependencies and devDependencies fields.
     merged_package_json["dependencies"] = {**template_package_json["dependencies"], **task_package_json["dependencies"]}
     merged_package_json["devDependencies"] = {**template_package_json["devDependencies"], **task_package_json["devDependencies"]}
+    merged_package_json["scripts"] = {**template_package_json["scripts"], **task_package_json["scripts"]}
 
     with open(output_dir / "package.json", "w") as f:
         json.dump(merged_package_json, f)
@@ -77,12 +81,11 @@ if __name__ == "__main__":
         sys.exit(1)
 
     template_name = sys.argv[1].split("/")[-1]
-    assert template_name in ["supabase", "convex"]
+    assert template_name in ["supabase", "convex", "fastapi_redis"]
     task_name = sys.argv[2].split("/")[-1].split('-')[-1]
     assert task_name in ["chat_app", "todo_app", "files_app"]
 
-    date = datetime.now().strftime("%Y-%m-%d")
-    output_dir = Path(f"results/{date}/{task_name}/{template_name}")
+    output_dir = Path(f"{task_name}-{template_name}")
     output_dir.mkdir(parents=True, exist_ok=False)
     print(f"Tangling {template_name} and {task_name} into {output_dir}")
 

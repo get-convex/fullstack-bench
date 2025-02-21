@@ -1,4 +1,4 @@
-We've sketched out the frontend for a basic TODO app in @project using Next.js and Jotai and would like to fill out the backend.
+We've sketched out the frontend for a basic TODO app in @project using Next.js and would like to fill out the backend.
 
 - The TODO app supports authentication
 - There are multiple projects, and users can create projects.

@@ -1,11 +1,11 @@
 "use client";
 
 import { Spinner } from "@/components/Spinner";
-import { useChannels } from "@/lib/state";
+import { initialChannels } from "@/lib/exampleData";
 import { redirect } from "next/navigation";
 
 export default function Home() {
-  const channels = useChannels();
+  const channels = initialChannels;
   if (channels === undefined) {
     return <Spinner />;
   }

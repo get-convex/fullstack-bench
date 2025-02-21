@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "push-convex": "convex dev --once"
   },
   "dependencies": {
     "@auth/core": "0.37.0",

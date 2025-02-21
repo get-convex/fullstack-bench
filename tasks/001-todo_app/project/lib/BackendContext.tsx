@@ -1,5 +1,4 @@
-import { initialUsers } from "@/lib/state/init";
-import { useUserByEmail } from "./state";
+import { initialUsers } from "@/lib/exampleData";
 import { User } from "./types";
 
 const loggedInEmail = initialUsers[0].email;
@@ -9,9 +8,5 @@ export function BackendContext(props: { children: React.ReactNode }) {
 }
 
 export function useLoggedInUser(): User {
-  const user = useUserByEmail(loggedInEmail);
-  if (!user) {
-    throw new Error("User not found");
-  }
-  return user;
+  return initialUsers[0];
 }

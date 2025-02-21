@@ -4,17 +4,15 @@ import { useState } from "react";
 import { UserGroupIcon } from "@heroicons/react/24/outline";
 import CreateGroupModal from "@/components/CreateGroupModal";
 import Link from "next/link";
-import { createGroup } from "@/lib/state/groups";
-import { useGroups } from "@/lib/state/groups";
 import { Group } from "@/lib/types";
-import { useMembers } from "@/lib/state/membership";
 import { useLoggedInUser } from "@/lib/BackendContext";
 import toast from "react-hot-toast";
 import { Spinner } from "@/components/Spinner";
+import { initialGroups, initialMembers } from "@/lib/exampleData";
 
 export default function GroupsPage() {
   const user = useLoggedInUser();
-  const groups = useGroups(user.id);
+  const groups = initialGroups;
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   if (groups === undefined) {
@@ -22,12 +20,7 @@ export default function GroupsPage() {
   }
 
   const handleCreateGroup = async (name: string) => {
-    try {
-      await createGroup(user.id, name);
-      setShowCreateModal(false);
-    } catch (error) {
-      toast.error(`Failed to create group: ${error}`);
-    }
+    throw new Error("Not implemented");
   };
 
   return (
@@ -93,7 +86,10 @@ export default function GroupsPage() {
 }
 
 function GroupRow({ group }: { group: Group }) {
-  const members = useMembers({ type: "group", groupId: group.id });
+  const members = initialMembers.filter(
+    (member) =>
+      member.object.type === "group" && member.object.groupId === group.id
+  );
   if (members === undefined) {
     return <Spinner />;
   }

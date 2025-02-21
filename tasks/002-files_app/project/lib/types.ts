@@ -19,17 +19,22 @@ export interface Project {
   rootDirectoryId: string;
 }
 
-export interface File {
-  id: string;
-  createdAt: number;
-  parentEdge: { directoryId: string, name: string },
-  content?: string;
+export interface ParentEdge {
+  directoryId: string;
+  name: string;
 }
 
 export interface Directory {
   id: string;
   createdAt: number;
-  parentEdge?: { directoryId: string, name: string };
+  parentEdge?: ParentEdge;
+}
+
+export interface File {
+  id: string;
+  createdAt: number;
+  parentEdge: ParentEdge;
+  content: string;
 }
 
 export interface Group {
@@ -51,4 +56,6 @@ export interface Member {
   | { type: "group"; groupId: string }
 }
 
-export type Node = ({ type: "file"; } & File) | ({ type: "directory"; } & Directory);
+export type Node =
+  | ({ type: "file" } & File)
+  | ({ type: "directory"; children: Node[] } & Directory);

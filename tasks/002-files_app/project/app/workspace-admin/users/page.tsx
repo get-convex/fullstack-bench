@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useUsers } from "@/lib/state/users";
-import { setIsAdmin, useAdminUsers } from "@/lib/state/userPermissions";
+import { initialUserPermissions, initialUsers } from "@/lib/exampleData";
 import { Spinner } from "@/components/Spinner";
 
 export default function UsersPage() {
-  const users = useUsers();
-  const adminUsers = useAdminUsers();
+  const users = initialUsers;
+  const adminUsers = initialUserPermissions
+    .filter((permission) => permission.isAdmin)
+    .map((permission) => permission.userId);
 
   if (users === undefined || adminUsers === undefined) {
     return <Spinner />;
@@ -17,7 +18,7 @@ export default function UsersPage() {
     userId: string,
     newRole: "member" | "admin"
   ) => {
-    await setIsAdmin(userId, newRole === "admin");
+    throw new Error("Not implemented");
   };
 
   return (

@@ -4,20 +4,12 @@ import { notFound, useParams } from "next/navigation";
 import { Sidebar } from "@/components/Sidebar";
 import { TaskDetails } from "@/components/TaskDetails";
 import { CommentList } from "@/components/CommentList";
-import {
-  addProject,
-  addComment,
-  updateTaskStatus,
-  updateTaskAssignee,
-  updateTaskDueDate,
-  useTask,
-  useComments,
-  useUserByEmail,
-  useProjects,
-  useUsers,
-} from "@/lib/state";
 import { useLoggedInUser } from "@/lib/BackendContext";
 import { Spinner } from "@/components/Spinner";
+import { initialUsers } from "@/lib/exampleData";
+import { initialProjects } from "@/lib/exampleData";
+import { initialTasks } from "@/lib/exampleData";
+import { initialComments } from "@/lib/exampleData";
 
 export default function TaskPage() {
   const params = useParams();
@@ -26,10 +18,21 @@ export default function TaskPage() {
 
   const user = useLoggedInUser();
 
-  const currentTask = useTask(taskId);
-  const taskComments = useComments(taskId);
-  const projects = useProjects();
-  const users = useUsers();
+  const currentTask = initialTasks.find((t) => t.id === taskId);
+  const taskComments = initialComments
+    .filter((c) => c.taskId === taskId)
+    .map((task) => {
+      const user = initialUsers.find((u) => u.id === task.authorId);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      return {
+        ...task,
+        authorEmail: user?.email,
+      };
+    });
+  const projects = initialProjects;
+  const users = initialUsers;
 
   if (
     currentTask === undefined ||
@@ -45,20 +48,15 @@ export default function TaskPage() {
     notFound();
   }
 
-  const postComment = async (content: string) => {
-    if (!user) {
-      throw new Error("User not found");
-    }
-    return addComment(taskId, content, user.id);
-  };
-
   return (
     <div className="flex h-screen bg-slate-950">
       <Sidebar
         user={user}
         currentProjectId={projectId}
         projects={projects}
-        onCreateProject={addProject}
+        onCreateProject={() => {
+          throw new Error("Not implemented");
+        }}
       />
       <main className="flex-1 overflow-auto flex">
         <div className="flex-1 p-6">
@@ -78,17 +76,26 @@ export default function TaskPage() {
               </p>
             </div>
 
-            <CommentList comments={taskComments} onAddComment={postComment} />
+            <CommentList
+              comments={taskComments}
+              onAddComment={() => {
+                throw new Error("Not implemented");
+              }}
+            />
           </div>
         </div>
         <TaskDetails
           task={currentTask}
           users={users}
-          updateTaskStatus={(status) => updateTaskStatus(taskId, status)}
-          updateTaskAssignee={(assigneeId) =>
-            updateTaskAssignee(taskId, assigneeId)
-          }
-          updateTaskDueDate={(dueDate) => updateTaskDueDate(taskId, dueDate)}
+          updateTaskStatus={(status) => {
+            throw new Error("Not implemented");
+          }}
+          updateTaskAssignee={(assigneeId) => {
+            throw new Error("Not implemented");
+          }}
+          updateTaskDueDate={(dueDate) => {
+            throw new Error("Not implemented");
+          }}
         />
       </main>
     </div>

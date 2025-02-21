@@ -4,11 +4,10 @@ import { useState } from "react";
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import EmojiPicker from "@/components/EmojiPicker";
-import { useProjects } from "@/lib/state/projects";
-import { addProject, deleteProject } from "@/lib/state/projects";
 import { useLoggedInUser } from "@/lib/BackendContext";
 import toast from "react-hot-toast";
 import { Spinner } from "@/components/Spinner";
+import { initialProjects } from "@/lib/exampleData";
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -103,8 +102,7 @@ function CreateProjectModal({
 
 export default function ProjectsPage() {
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const user = useLoggedInUser();
-  const projects = useProjects(user.id);
+  const projects = initialProjects;
 
   if (projects === undefined) {
     return <Spinner />;
@@ -115,20 +113,11 @@ export default function ProjectsPage() {
     description: string,
     emoji: string
   ) => {
-    try {
-      await addProject(user.id, name, description, emoji);
-      setShowCreateModal(false);
-    } catch (error) {
-      toast.error(`Failed to create project: ${error}`);
-    }
+    throw new Error("Not implemented");
   };
 
   const handleDeleteProject = async (projectId: string) => {
-    try {
-      await deleteProject(user.id, projectId);
-    } catch (error) {
-      toast.error(`Failed to delete project: ${error}`);
-    }
+    throw new Error("Not implemented");
   };
 
   return (

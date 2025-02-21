@@ -22,7 +22,6 @@ export const initialUsers = [
   },
 ];
 
-
 const channelId1 = '8905e7e1-2a36-4264-8f55-4539f77cf3bf';
 const channelId2 = '2037d2ed-c0be-4a65-b948-2dfcb2627403';
 export const initialChannels = [

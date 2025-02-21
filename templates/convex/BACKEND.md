@@ -10,16 +10,17 @@ modifying that state.
 
 Then, connect the queries and mutations to the existing app's UI. Do NOT
 refactor or modify the existing UI code in `components/` unless absolutely
-necessary.
+necessary. You MUST keep all visual styling the same.
 
 Make sure all changes are reflected immediately in the UI without a refresh,
 even if they've happened in another browser.
 
-The existing app is currently set up using in-memory state with Jotai
-in the `lib/state` directory. Remove ALL of this code in this directory, along with the
-test data in `lib/state/init.ts`, and reimplement it using Convex. Since
-the Convex deployment is empty (other than auth), make sure the app handles
-empty states gracefully. Keep the types in `lib/types.ts` the same except
+The existing app is currently set up using in-memory state with example data in
+`lib/exampleData.ts`. Start by DELETING this file and then reimplementing its
+behavior using Convex.
+
+Since the Convex deployment is empty (other than auth), make sure the
+app handles empty states gracefully. Keep the types in `lib/types.ts` the same except
 for ID types, which you should change from `id: string` to `_id: Id<"example">`
 for the appropriate table, and creation times, which you should change from
 `createdAt: number` to `_creationTime: number`.
@@ -60,6 +61,8 @@ if (!user) {
 }
 ```
 
+Do NOT modify the setup in `convex/auth.ts` or the `authTables` in `convex/schema.ts`.
+
 Within the app, use the `lib/BackendContext:useLoggedInUser` hook to get the current user. Do NOT modify this code.
 
 The Convex client is already set up in `lib/BackendContext.tsx` and wired into `app/layout.tsx`. You can use `useQuery` and `useMutation` directly from `convex/react` along with the generated `api` object from `@/convex/_generated/api`. Do NOT modify this code.
@@ -68,7 +71,11 @@ Use Next client components for the UI: do not bother with server rendering.
 
 # Typechecking and deployment
 
-Run `bunx tsc -noEmit` to check for type errors across all files. Be sure to run
-this command and fix all errors before considering yourself done.
+Run `bun typecheck` from the app's root directory to check for type errors
+across all files. Be sure to run this command and fix all errors before considering
+yourself done.
 
-Run `bunx convex dev --once` to deploy the `convex/` folder to the backend.
+Run `bun push-convex` after making changes to the `convex/` folder to
+push code to the backend. This will also regenerate the `convex/_generated`
+folder, so if you're seeing type errors related to the `api` object, you may
+need to re-run this command.

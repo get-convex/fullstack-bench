@@ -10,15 +10,17 @@ will do it for you.
 
 Then, connect these tables to the existing app's UI. Do NOT refactor or
 modify the existing UI code in `components/` unless absolutely necessary.
+You MUST keep all visual styling the same.
 
 Make sure all changes are reflected immediately in the UI without a refresh,
 even if they've happened in another browser.
 
-The existing app is currently set up using in-memory state with Jotai
-in the `lib/state` directory. Remove ALL of this code in this directory, along with the
-test data in `lib/state/init.ts`, and reimplement it using Supabase. Since
-the Supabase deployment is empty (other than auth), make sure the app handles
-empty states gracefully. Keep the types in `lib/types.ts` the same.
+The existing app is currently set up using in-memory state with example data in
+`lib/exampleData.ts`. Start by DELETING this file and then reimplementing its
+behavior using Supabase.
+
+Since the Supabase deployment is empty (other than auth), make sure the app handles empty states
+gracefully. Keep the types in `lib/types.ts` the same.
 
 User authentication with Supabase is already fully set up in `middleware.ts`
 and with the `app/login` and `app/auth` routes. Do NOT modify this code. Supabase auth provides the following `users` table:
@@ -37,5 +39,6 @@ The Supabase client is already set up in `lib/browserClient.ts`. Do NOT modify t
 
 Use Next client components for the UI: do not bother with server rendering.
 
-Run `bunx tsc -noEmit` to check for type errors across all files. Be sure to run
-this command and fix all errors before considering yourself done.
+Run `bun typecheck` from the app's root directory to check for type errors
+across all files. Be sure to run this command and fix all errors before considering
+yourself done.
