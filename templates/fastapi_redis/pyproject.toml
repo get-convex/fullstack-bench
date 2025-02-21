@@ -5,7 +5,7 @@ description = "Default template for PDM package"
 authors = [
     {name = "Sujay Jayakar", email = "sujayakar@convex.dev"},
 ]
-dependencies = ["fastapi[standard]>=0.115.8", "redis>=5.2.1", "pyjwt[crypto]>=2.10.1", "passlib[bcrypt]>=1.7.4"]
+dependencies = ["fastapi[standard]>=0.115.8", "pyjwt[crypto]>=2.10.1", "passlib[bcrypt]>=1.7.4", "sse-starlette>=2.2.1", "aioredis>=2.0.1"]
 requires-python = "==3.9.*"
 readme = "README.md"
 license = {text = "MIT"}

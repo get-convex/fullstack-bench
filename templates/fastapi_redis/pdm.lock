@@ -5,10 +5,25 @@
 groups = ["default"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:916a2ac9fa4f8e9fa3e290ac7532838dc34847974482af11bc0b1c35302231e8"
+content_hash = "sha256:466f506e9df3a3e1a4be5341462c15377e47976a88e502fa76a0b121620e4fb4"
 
 [[metadata.targets]]
 requires_python = "==3.9.*"
+
+[[package]]
+name = "aioredis"
+version = "2.0.1"
+requires_python = ">=3.6"
+summary = "asyncio (PEP 3156) Redis support"
+groups = ["default"]
+dependencies = [
+    "async-timeout",
+    "typing-extensions",
+]
+files = [
+    {file = "aioredis-2.0.1-py3-none-any.whl", hash = "sha256:9ac0d0b3b485d293b8ca1987e6de8658d7dafcca1cddfcd1d506cae8cdebfdd6"},
+    {file = "aioredis-2.0.1.tar.gz", hash = "sha256:eaa51aaf993f2d71f54b70527c440437ba65340588afeb786cd87c55c89cd98e"},
+]
 
 [[package]]
 name = "annotated-types"
@@ -47,7 +62,6 @@ version = "5.0.1"
 requires_python = ">=3.8"
 summary = "Timeout context manager for asyncio programs"
 groups = ["default"]
-marker = "python_full_version < \"3.11.3\""
 files = [
     {file = "async_timeout-5.0.1-py3-none-any.whl", hash = "sha256:39e3809566ff85354557ec2398b55e096c8364bacac9405a7a1fa429e77fe76c"},
     {file = "async_timeout-5.0.1.tar.gz", hash = "sha256:d9321a7a3d5a6a5e187e824d2fa0793ce379a202935782d555d6e9d2735677d3"},
@@ -592,20 +606,6 @@ files = [
 ]
 
 [[package]]
-name = "redis"
-version = "5.2.1"
-requires_python = ">=3.8"
-summary = "Python client for Redis database and key-value store"
-groups = ["default"]
-dependencies = [
-    "async-timeout>=4.0.3; python_full_version < \"3.11.3\"",
-]
-files = [
-    {file = "redis-5.2.1-py3-none-any.whl", hash = "sha256:ee7e1056b9aea0f04c6c2ed59452947f34c4940ee025f5dd83e6a6418b6989e4"},
-    {file = "redis-5.2.1.tar.gz", hash = "sha256:16f2e22dff21d5125e8481515e386711a34cbec50f0e44413dd7d9c060a54e0f"},
-]
-
-[[package]]
 name = "rich"
 version = "13.9.4"
 requires_python = ">=3.8.0"
@@ -657,6 +657,21 @@ groups = ["default"]
 files = [
     {file = "sniffio-1.3.1-py3-none-any.whl", hash = "sha256:2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2"},
     {file = "sniffio-1.3.1.tar.gz", hash = "sha256:f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc"},
+]
+
+[[package]]
+name = "sse-starlette"
+version = "2.2.1"
+requires_python = ">=3.9"
+summary = "SSE plugin for Starlette"
+groups = ["default"]
+dependencies = [
+    "anyio>=4.7.0",
+    "starlette>=0.41.3",
+]
+files = [
+    {file = "sse_starlette-2.2.1-py3-none-any.whl", hash = "sha256:6410a3d3ba0c89e7675d4c273a301d64649c03a5ef1ca101f10b47f895fd0e99"},
+    {file = "sse_starlette-2.2.1.tar.gz", hash = "sha256:54470d5f19274aeed6b2d473430b08b4b379ea851d953b11d7f1c4a2c118b419"},
 ]
 
 [[package]]

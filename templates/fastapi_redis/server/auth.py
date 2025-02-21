@@ -41,32 +41,32 @@ def verify_password(plain_password, hashed_password):
 def get_password_hash(password):
     return pwd_context.hash(password)
 
-def get_user_by_email(email: str):
-    row = redis_client.get(f'user:{email}')
+async def get_user_by_email(email: str):
+    row = await redis_client.get(f'user:{email}')
     if not row:
         return None
     user_dict = json.loads(row)
     return UserInDB(**user_dict)
 
-def get_user_by_id(user_id: str):
-    email = redis_client.get(f'user_by_id:{user_id}')
+async def get_user_by_id(user_id: str):
+    email = await redis_client.get(f'user_by_id:{user_id}')
     if not email:
         return None
-    return get_user_by_email(email)
+    return await get_user_by_email(email)
 
-def insert_user(email: str, password: str):
-    user_id = str(redis_client.incr('next_user_id'))
+async def insert_user(email: str, password: str):
+    user_id = str(await redis_client.incr('next_user_id'))
     user_dict = {
         "id": user_id,
         "email": email,
         "hashed_password": get_password_hash(password)
     }
-    redis_client.setnx(f'user:{email}', json.dumps(user_dict))
-    redis_client.setnx(f'user_by_id:{user_id}', email)
+    await redis_client.setnx(f'user:{email}', json.dumps(user_dict))
+    await redis_client.setnx(f'user_by_id:{user_id}', email)
     return UserInDB(**user_dict)
 
-def authenticate_user(email: str, password: str):
-    user = get_user_by_email(email)
+async def authenticate_user(email: str, password: str):
+    user = await get_user_by_email(email)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -96,7 +96,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         token_data = TokenData(email=email)
     except InvalidTokenError:
         raise credentials_exception
-    user = get_user_by_email(email=token_data.email)
+    user = await get_user_by_email(email=token_data.email)
     if user is None:
         raise credentials_exception
     return user

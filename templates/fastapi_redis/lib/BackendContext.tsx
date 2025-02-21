@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { User } from "./types";
 import { Spinner } from "@/components/Spinner";
@@ -15,6 +9,7 @@ import {
   QueryClientProvider,
   useQuery,
 } from "@tanstack/react-query";
+import { createEventSource } from "eventsource-client";
 
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 if (!BACKEND_URL) {
@@ -26,6 +21,7 @@ export async function backendFetch(
   options?: {
     method?: "GET" | "POST";
     headers?: Record<string, string>;
+    body?: any;
   }
 ) {
   const method = options?.method ?? "GET";
@@ -37,6 +33,7 @@ export async function backendFetch(
   const resp = await fetch(`${BACKEND_URL}${path}`, {
     headers,
     method,
+    body: options?.body,
   });
   if (!resp.ok) {
     if (resp.status === 401 && accessToken) {
@@ -48,6 +45,22 @@ export async function backendFetch(
   }
   const json = await resp.json();
   return json;
+}
+
+export function subscribeSSE(path: string, onMessage: (data: any) => void) {
+  const headers: Record<string, string> = {};
+  const accessToken = localStorage.getItem("access_token");
+  if (accessToken) {
+    headers["Authorization"] = `Bearer ${accessToken}`;
+  }
+  const es = createEventSource({
+    url: `${BACKEND_URL}${path}`,
+    headers,
+    onMessage: ({ data }) => {
+      onMessage(JSON.parse(data));
+    },
+  });
+  return () => es.close();
 }
 
 const UserEmailContext = createContext<User | null>(null);

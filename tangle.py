@@ -81,7 +81,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     template_name = sys.argv[1].split("/")[-1]
-    assert template_name in ["supabase", "convex"]
+    assert template_name in ["supabase", "convex", "fastapi_redis"]
     task_name = sys.argv[2].split("/")[-1].split('-')[-1]
     assert task_name in ["chat_app", "todo_app", "files_app"]
 

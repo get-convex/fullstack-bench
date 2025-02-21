@@ -13,11 +13,17 @@ from fastapi.security import OAuth2PasswordRequestForm
 from typing_extensions import Annotated
 
 app = FastAPI()
-app.add_middleware(CORSMiddleware, allow_origins='*', allow_methods=('GET', 'POST'), allow_headers='*', allow_credentials=True)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['http://localhost:3000'],
+    allow_methods=['GET', 'POST'],
+    allow_headers=['*'],
+    allow_credentials=True,
+)
 
 @app.post("/auth/signup")
 async def signup(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]) -> Token:
-    user = insert_user(form_data.username, form_data.password)
+    user = await insert_user(form_data.username, form_data.password)
     return issue_access_token(user)
 
 @app.post("/auth/login")
@@ -25,7 +31,7 @@ async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
     email = form_data.username
-    user = authenticate_user(email, form_data.password)
+    user = await authenticate_user(email, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -40,10 +46,3 @@ async def current_user(
     current_user: Annotated[User, Depends(get_current_user)],
 ):
     return current_user
-
-
-@app.get("/users/me/items/")
-async def read_own_items(
-    current_user: Annotated[User, Depends(get_current_user)],
-):
-    return [{"item_id": "Foo", "owner": current_user.username}]
