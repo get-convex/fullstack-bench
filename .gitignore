@@ -42,5 +42,6 @@ next-env.d.ts
 
 .ruff_cache
 .venv
+.pdm-python
 
 **/__pycache__
